@@ -9,9 +9,8 @@
       "author": "krwg",
       "description": "Shows current weather in your garden. Powered by Open-Meteo API.",
       "icon": "🌤️",
-      "downloadUrl": "downloadUrl": "https://raw.githubusercontent.com/krwg/CultivaPlugins/main/weather.plugin",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/CultivaPlugins/main/weather",
       "minAppVersion": "0.3.5",
-      "size": 45000,
       "tags": ["widget", "weather", "garden"]
     }
   ]
