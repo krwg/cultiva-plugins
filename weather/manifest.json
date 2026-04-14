@@ -1,0 +1,36 @@
+{
+  "id": "weather",
+  "name": "Weather Widget",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Shows current weather in your garden",
+  "icon": "🌤️",
+  "entry": "index.js",
+  "styles": ["styles.css"],
+  "permissions": ["network", "storage", "ui"],
+  "minAppVersion": "0.3.5",
+  "settings": [
+    {
+      "key": "city",
+      "label": "City",
+      "type": "text",
+      "default": "Moscow"
+    },
+    {
+      "key": "units",
+      "label": "Units",
+      "type": "select",
+      "options": [
+        { "value": "celsius", "label": "Celsius (°C)" },
+        { "value": "fahrenheit", "label": "Fahrenheit (°F)" }
+      ],
+      "default": "celsius"
+    },
+    {
+      "key": "showInGarden",
+      "label": "Show in garden",
+      "type": "boolean",
+      "default": true
+    }
+  ]
+}
