@@ -1,4 +1,4 @@
-// Cultiva Weather Plugin [1.0.0]
+// Cultiva Weather Plugin v1.0.0
 // Powered by Open-Meteo API (free, no API key required)
 
 class WeatherPlugin {
@@ -27,6 +27,9 @@ class WeatherPlugin {
   async onEnable() {
     console.log('[Weather] Plugin enabled');
     
+    // Загружаем стили
+    await this.loadStyles();
+    
     const saved = await this.context.storage.get('settings');
     if (saved) {
       this.settings = { ...this.settings, ...saved };
@@ -54,11 +57,30 @@ class WeatherPlugin {
     });
   }
   
+  async loadStyles() {
+    // Проверяем, не загружены ли уже стили
+    if (document.getElementById('weather-plugin-styles')) return;
+    
+    try {
+      const css = await window.electron.readPluginFile('weather/styles.css');
+      if (css) {
+        const style = document.createElement('style');
+        style.id = 'weather-plugin-styles';
+        style.textContent = css;
+        document.head.appendChild(style);
+      }
+    } catch (e) {
+      console.warn('[Weather] Failed to load styles:', e);
+    }
+  }
+  
   async onDisable() {
     console.log('[Weather] Plugin disabled');
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
     }
+    // Удаляем стили
+    document.getElementById('weather-plugin-styles')?.remove();
   }
   
   async fetchWeather() {
@@ -88,8 +110,7 @@ class WeatherPlugin {
       console.log('[Weather] Updated:', this.weatherData);
       
       this.updateHeaderIcon();
-      
-      this.checkExtremeWeather();
+      this.updateGardenWidget();
       
     } catch (e) {
       console.error('[Weather] Failed to fetch:', e);
@@ -101,16 +122,16 @@ class WeatherPlugin {
     
     const code = this.weatherData.weatherCode;
     
-    if (code === 0) return '☀️'; // Clear sky
-    if (code === 1 || code === 2) return '🌤️'; // Partly cloudy
-    if (code === 3) return '☁️'; // Cloudy
-    if (code >= 45 && code <= 48) return '🌫️'; // Fog
-    if (code >= 51 && code <= 57) return '🌧️'; // Drizzle
-    if (code >= 61 && code <= 67) return '🌧️'; // Rain
-    if (code >= 71 && code <= 77) return '❄️'; // Snow
-    if (code >= 80 && code <= 82) return '🌦️'; // Rain showers
-    if (code >= 85 && code <= 86) return '🌨️'; // Snow showers
-    if (code >= 95) return '⛈️'; // Thunderstorm
+    if (code === 0) return '☀️';
+    if (code === 1 || code === 2) return '🌤️';
+    if (code === 3) return '☁️';
+    if (code >= 45 && code <= 48) return '🌫️';
+    if (code >= 51 && code <= 57) return '🌧️';
+    if (code >= 61 && code <= 67) return '🌧️';
+    if (code >= 71 && code <= 77) return '❄️';
+    if (code >= 80 && code <= 82) return '🌦️';
+    if (code >= 85 && code <= 86) return '🌨️';
+    if (code >= 95) return '⛈️';
     
     return '🌡️';
   }
@@ -140,14 +161,28 @@ class WeatherPlugin {
     
     const headerItems = document.querySelectorAll('.header-plugin-item');
     headerItems.forEach(item => {
-      if (item.querySelector('.header-plugin-icon')?.textContent === '🌤️' ||
-          item.querySelector('.header-plugin-icon')?.textContent === '☀️') {
+      const iconEl = item.querySelector('.header-plugin-icon');
+      if (iconEl && (iconEl.textContent === '🌤️' || iconEl.textContent === '☀️' || iconEl.textContent === '🌡️')) {
         item.innerHTML = `
           <span class="header-plugin-icon">${icon}</span>
           <span>${temp}${this.weatherData?.units || '°C'}</span>
         `;
       }
     });
+  }
+  
+  updateGardenWidget() {
+    const widget = document.getElementById('weather-garden-widget');
+    if (!widget || !this.weatherData) return;
+    
+    widget.innerHTML = `
+      <div class="weather-widget-content">
+        <span class="weather-icon">${this.getWeatherIcon()}</span>
+        <span class="weather-temp">${Math.round(this.weatherData.temp)}${this.weatherData.units}</span>
+        <span class="weather-desc">${this.getWeatherDescription()}</span>
+        <span class="weather-location">${this.settings.city}</span>
+      </div>
+    `;
   }
   
   renderGardenWidget(container) {
@@ -183,9 +218,13 @@ class WeatherPlugin {
   
   openWeatherModal() {
     if (!this.weatherData) {
+      // +++ ИСПРАВЛЕНО: иконка первым аргументом +++
       this.context.ui.showNotification('🌤️', 'Weather data not available');
       return;
     }
+    
+    // Удаляем старый модал если есть
+    document.querySelector('.weather-modal')?.remove();
     
     const modal = document.createElement('div');
     modal.className = 'weather-modal';
@@ -225,8 +264,20 @@ class WeatherPlugin {
     
     document.body.appendChild(modal);
     
-    modal.querySelector('.weather-modal-close').onclick = () => modal.remove();
-    modal.querySelector('.weather-modal-overlay').onclick = () => modal.remove();
+    const closeBtn = modal.querySelector('.weather-modal-close');
+    const overlay = modal.querySelector('.weather-modal-overlay');
+    
+    closeBtn.onclick = () => modal.remove();
+    overlay.onclick = () => modal.remove();
+    
+    // Закрытие по Escape
+    const escHandler = (e) => {
+      if (e.key === 'Escape') {
+        modal.remove();
+        document.removeEventListener('keydown', escHandler);
+      }
+    };
+    document.addEventListener('keydown', escHandler);
     
     setTimeout(() => modal.classList.add('active'), 10);
   }
