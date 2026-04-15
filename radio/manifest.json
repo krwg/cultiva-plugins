@@ -3,8 +3,8 @@
   "name": "Radio Widget",
   "version": "1.0.0",
   "author": "krwg",
-  "description": "Ambient radio stations for your garden",
-  "icon": "📻",
+  "description": "Ambient radio stations for your garden. Requires [0.3.6+]",
+  "icon": "",
   "entry": "index.js",
   "permissions": ["storage", "ui"],
   "minAppVersion": "0.3.6"
