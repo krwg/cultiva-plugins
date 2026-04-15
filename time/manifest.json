@@ -1,0 +1,38 @@
+{
+  "id": "time",
+  "name": "Time Widget",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Live clock in header with customizable colors",
+  "icon": "⏰",
+  "entry": "index.js",
+  "permissions": ["storage", "ui"],
+  "minAppVersion": "0.3.5",
+  "settings": [
+    {
+      "key": "format",
+      "label": "Time Format",
+      "type": "select",
+      "options": [
+        { "value": "HH:MM:SS", "label": "23:59:59" },
+        { "value": "HH:MM", "label": "23:59" },
+        { "value": "hh:MM:SS A", "label": "11:59:59 PM" }
+      ],
+      "default": "HH:MM:SS"
+    },
+    {
+      "key": "color",
+      "label": "Color",
+      "type": "select",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "green", "label": "Green" },
+        { "value": "blue", "label": "Blue" },
+        { "value": "purple", "label": "Purple" },
+        { "value": "orange", "label": "Orange" },
+        { "value": "rainbow", "label": "Rainbow" }
+      ],
+      "default": "default"
+    }
+  ]
+}
