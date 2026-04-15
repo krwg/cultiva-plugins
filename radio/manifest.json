@@ -1,0 +1,11 @@
+{
+  "id": "radio",
+  "name": "Radio Widget",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Ambient radio stations for your garden",
+  "icon": "📻",
+  "entry": "index.js",
+  "permissions": ["storage", "ui"],
+  "minAppVersion": "0.3.5"
+}
