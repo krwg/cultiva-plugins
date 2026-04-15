@@ -5,13 +5,13 @@
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "1.5.1",
+      "version": "1.6.0",
       "author": "krwg",
-      "description": "Shows current weather in your garden. Powered by Open-Meteo API.",
+      "description": "Shows current weather in your garden. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide.",
       "icon": "🌤️",
       "baseUrl": "https://raw.githubusercontent.com/krwg/CultivaPlugins/main/weather",
       "minAppVersion": "0.3.5",
-      "tags": ["widget", "weather", "garden"]
+      "tags": ["widget", "weather", "garden", "russia"]
     }
   ]
 }
