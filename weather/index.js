@@ -1,5 +1,5 @@
-// Cultiva Weather Plugin v1.0.0
-// Powered by Open-Meteo API (free, no API key required)
+// Cultiva Weather Plugin v1.5.0
+// Weather: Open-Meteo · Geocoding: OpenStreetMap Nominatim
 
 class WeatherPlugin {
   constructor(context, hooks) {
@@ -15,7 +15,7 @@ class WeatherPlugin {
     this.weatherData = null;
     this.updateInterval = null;
     this.searchTimeout = null;
-    this.searchResults = [];
+    this.lastSearchTime = 0;
     
     this.popularCities = [
       { name: 'Moscow', country: 'Russia', lat: 55.7558, lon: 37.6173 },
@@ -29,10 +29,7 @@ class WeatherPlugin {
       { name: 'Madrid', country: 'Spain', lat: 40.4168, lon: -3.7038 },
       { name: 'Beijing', country: 'China', lat: 39.9042, lon: 116.4074 },
       { name: 'Sydney', country: 'Australia', lat: -33.8688, lon: 151.2093 },
-      { name: 'Dubai', country: 'UAE', lat: 25.2048, lon: 55.2708 },
-      { name: 'Istanbul', country: 'Turkey', lat: 41.0082, lon: 28.9784 },
-      { name: 'Rio de Janeiro', country: 'Brazil', lat: -22.9068, lon: -43.1729 },
-      { name: 'Cairo', country: 'Egypt', lat: 30.0444, lon: 31.2357 }
+      { name: 'Dubai', country: 'UAE', lat: 25.2048, lon: 55.2708 }
     ];
   }
   
@@ -95,21 +92,52 @@ class WeatherPlugin {
   async searchCity(query) {
     if (!query || query.length < 2) return [];
     
+    const now = Date.now();
+    const timeSinceLast = now - this.lastSearchTime;
+    if (timeSinceLast < 1100) {
+      await new Promise(resolve => setTimeout(resolve, 1100 - timeSinceLast));
+    }
+    
     try {
-      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`;
-      const response = await fetch(url);
+      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=10&addressdetails=1`;
+      
+      const response = await fetch(url, {
+        headers: {
+          'Accept-Language': 'en,ru',
+          'User-Agent': 'Cultiva-Weather-Plugin/1.5'
+        }
+      });
+      
+      this.lastSearchTime = Date.now();
       const data = await response.json();
       
-      return (data.results || []).map(r => ({
-        name: r.name,
-        country: r.country,
-        admin1: r.admin1,
-        lat: r.latitude,
-        lon: r.longitude
-      }));
+      return data.map(r => {
+        const cityName = r.address?.city || r.address?.town || r.address?.village || r.display_name.split(',')[0];
+        return {
+          name: cityName,
+          fullName: r.display_name,
+          country: r.address?.country || '',
+          lat: parseFloat(r.lat),
+          lon: parseFloat(r.lon)
+        };
+      });
     } catch (e) {
-      console.error('[Weather] Search failed:', e);
-      return [];
+      console.error('[Weather] Nominatim search failed:', e);
+      
+      try {
+        const fallbackUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=5&language=en&format=json`;
+        const response = await fetch(fallbackUrl);
+        const data = await response.json();
+        
+        return (data.results || []).map(r => ({
+          name: r.name,
+          country: r.country,
+          lat: r.latitude,
+          lon: r.longitude
+        }));
+      } catch {
+        return [];
+      }
     }
   }
   
@@ -286,11 +314,14 @@ class WeatherPlugin {
           </div>
           
           <div class="weather-city-search" style="margin-top: 16px;">
-            <label style="font-size: 12px; color: var(--text-tertiary);">Search city</label>
-            <input type="text" class="weather-search-input" placeholder="Type city name..." 
+            <label style="font-size: 12px; color: var(--text-tertiary);">Search any city or village</label>
+            <input type="text" class="weather-search-input" placeholder="e.g., Maykop, Курганинск..." 
                    style="width: 100%; padding: 10px; border-radius: 8px; background: var(--bg-secondary); 
                           color: var(--text-primary); border: 1px solid var(--border-light); margin-top: 4px;">
             <div class="weather-search-results" style="max-height: 200px; overflow-y: auto; margin-top: 8px;"></div>
+            <p style="font-size: 10px; color: var(--text-tertiary); margin-top: 4px;">
+              🌍 Search powered by OpenStreetMap
+            </p>
           </div>
           
           <div class="weather-popular" style="margin-top: 12px;">
@@ -315,7 +346,7 @@ class WeatherPlugin {
           </div>
           
           <div class="weather-credit">
-            Powered by Open-Meteo
+            Weather: Open-Meteo · Search: OpenStreetMap
           </div>
         </div>
       </div>
@@ -341,13 +372,13 @@ class WeatherPlugin {
         return;
       }
       
-      searchResults.innerHTML = '<div style="padding: 8px; color: var(--text-tertiary);">Searching...</div>';
+      searchResults.innerHTML = '<div style="padding: 8px; color: var(--text-tertiary);">🔍 Searching OpenStreetMap...</div>';
       
       this.searchTimeout = setTimeout(async () => {
         const results = await this.searchCity(query);
         
         if (results.length === 0) {
-          searchResults.innerHTML = '<div style="padding: 8px; color: var(--text-tertiary);">No cities found</div>';
+          searchResults.innerHTML = '<div style="padding: 8px; color: var(--text-tertiary);">❌ No places found</div>';
           return;
         }
         
@@ -356,11 +387,11 @@ class WeatherPlugin {
                style="padding: 8px; cursor: pointer; border-radius: 6px; margin-bottom: 2px;"
                onmouseover="this.style.background='var(--bg-tertiary)'" 
                onmouseout="this.style.background='transparent'">
-            ${r.name}${r.admin1 ? ', ' + r.admin1 : ''} (${r.country})
+            <div style="font-weight: 500;">${r.name}</div>
+            <div style="font-size: 11px; color: var(--text-tertiary);">${r.fullName || r.country}</div>
           </div>
         `).join('');
         
-
         searchResults.querySelectorAll('.weather-search-item').forEach(item => {
           item.onclick = async () => {
             const lat = parseFloat(item.dataset.lat);
@@ -379,10 +410,9 @@ class WeatherPlugin {
             this.fetchWeather();
           };
         });
-      }, 500);
+      }, 600);
     };
     
-
     modal.querySelectorAll('.weather-city-btn').forEach(btn => {
       btn.onclick = async () => {
         const lat = parseFloat(btn.dataset.lat);
