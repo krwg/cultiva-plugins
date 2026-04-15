@@ -1287,11 +1287,15 @@ class WeatherPlugin {
     `;
   }
   
-  renderGardenWidget(container) {
-    if (!container) return;
-    const widget = document.createElement('div');
-    widget.className = 'weather-widget';
-    widget.id = 'weather-garden-widget';
+renderGardenWidget(container) {
+  if (!container) return;
+  
+  const oldWidget = document.getElementById('weather-garden-widget');
+  if (oldWidget) oldWidget.remove();
+  
+  const widget = document.createElement('div');
+  widget.className = 'weather-widget';
+  widget.id = 'weather-garden-widget';
     if (this.weatherData) {
       widget.innerHTML = `
         <div class="weather-widget-content">
