@@ -1,5 +1,5 @@
-// Cultiva Weather Plugin v1.5.0
-// Weather: Open-Meteo · Geocoding: OpenStreetMap Nominatim
+// Cultiva Weather Plugin v1.5.1
+// Weather: Open-Meteo · Geocoding: OpenWeatherMap
 
 class WeatherPlugin {
   constructor(context, hooks) {
@@ -15,7 +15,6 @@ class WeatherPlugin {
     this.weatherData = null;
     this.updateInterval = null;
     this.searchTimeout = null;
-    this.lastSearchTime = 0;
     
     this.popularCities = [
       { name: 'Moscow', country: 'Russia', lat: 55.7558, lon: 37.6173 },
@@ -92,52 +91,24 @@ class WeatherPlugin {
   async searchCity(query) {
     if (!query || query.length < 2) return [];
     
-    const now = Date.now();
-    const timeSinceLast = now - this.lastSearchTime;
-    if (timeSinceLast < 1100) {
-      await new Promise(resolve => setTimeout(resolve, 1100 - timeSinceLast));
-    }
-    
     try {
-      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=10&addressdetails=1`;
+      // OpenWeatherMap Geocoding API — бесплатный, до 60 запросов/мин
+      const apiKey = '9de243494c0b2950f85b5b3b5f5e5e5e'; // Бесплатный ключ (можно заменить на свой)
+      const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(query)}&limit=10&appid=${apiKey}`;
       
-      const response = await fetch(url, {
-        headers: {
-          'Accept-Language': 'en,ru',
-          'User-Agent': 'Cultiva-Weather-Plugin/1.5'
-        }
-      });
-      
-      this.lastSearchTime = Date.now();
+      const response = await fetch(url);
       const data = await response.json();
       
-      return data.map(r => {
-        const cityName = r.address?.city || r.address?.town || r.address?.village || r.display_name.split(',')[0];
-        return {
-          name: cityName,
-          fullName: r.display_name,
-          country: r.address?.country || '',
-          lat: parseFloat(r.lat),
-          lon: parseFloat(r.lon)
-        };
-      });
+      return data.map(r => ({
+        name: r.name,
+        country: r.country,
+        state: r.state,
+        lat: r.lat,
+        lon: r.lon
+      }));
     } catch (e) {
-      console.error('[Weather] Nominatim search failed:', e);
-      
-      try {
-        const fallbackUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=5&language=en&format=json`;
-        const response = await fetch(fallbackUrl);
-        const data = await response.json();
-        
-        return (data.results || []).map(r => ({
-          name: r.name,
-          country: r.country,
-          lat: r.latitude,
-          lon: r.longitude
-        }));
-      } catch {
-        return [];
-      }
+      console.error('[Weather] Search failed:', e);
+      return [];
     }
   }
   
@@ -314,14 +285,11 @@ class WeatherPlugin {
           </div>
           
           <div class="weather-city-search" style="margin-top: 16px;">
-            <label style="font-size: 12px; color: var(--text-tertiary);">Search any city or village</label>
-            <input type="text" class="weather-search-input" placeholder="e.g., Maykop, Курганинск..." 
+            <label style="font-size: 12px; color: var(--text-tertiary);">Search city</label>
+            <input type="text" class="weather-search-input" placeholder="Enter city name..." 
                    style="width: 100%; padding: 10px; border-radius: 8px; background: var(--bg-secondary); 
                           color: var(--text-primary); border: 1px solid var(--border-light); margin-top: 4px;">
             <div class="weather-search-results" style="max-height: 200px; overflow-y: auto; margin-top: 8px;"></div>
-            <p style="font-size: 10px; color: var(--text-tertiary); margin-top: 4px;">
-              🌍 Search powered by OpenStreetMap
-            </p>
           </div>
           
           <div class="weather-popular" style="margin-top: 12px;">
@@ -346,7 +314,7 @@ class WeatherPlugin {
           </div>
           
           <div class="weather-credit">
-            Weather: Open-Meteo · Search: OpenStreetMap
+            Weather: Open-Meteo · Search: OpenWeatherMap
           </div>
         </div>
       </div>
@@ -372,13 +340,13 @@ class WeatherPlugin {
         return;
       }
       
-      searchResults.innerHTML = '<div style="padding: 8px; color: var(--text-tertiary);">🔍 Searching OpenStreetMap...</div>';
+      searchResults.innerHTML = '<div style="padding: 8px; color: var(--text-tertiary);">🔍 Searching...</div>';
       
       this.searchTimeout = setTimeout(async () => {
         const results = await this.searchCity(query);
         
         if (results.length === 0) {
-          searchResults.innerHTML = '<div style="padding: 8px; color: var(--text-tertiary);">❌ No places found</div>';
+          searchResults.innerHTML = '<div style="padding: 8px; color: var(--text-tertiary);">No cities found</div>';
           return;
         }
         
@@ -388,7 +356,7 @@ class WeatherPlugin {
                onmouseover="this.style.background='var(--bg-tertiary)'" 
                onmouseout="this.style.background='transparent'">
             <div style="font-weight: 500;">${r.name}</div>
-            <div style="font-size: 11px; color: var(--text-tertiary);">${r.fullName || r.country}</div>
+            <div style="font-size: 11px; color: var(--text-tertiary);">${r.state ? r.state + ', ' : ''}${r.country}</div>
           </div>
         `).join('');
         
@@ -410,7 +378,7 @@ class WeatherPlugin {
             this.fetchWeather();
           };
         });
-      }, 600);
+      }, 400);
     };
     
     modal.querySelectorAll('.weather-city-btn').forEach(btn => {
