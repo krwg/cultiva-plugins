@@ -5,7 +5,7 @@
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "1.0.0",
+      "version": "1.5.0",
       "author": "krwg",
       "description": "Shows current weather in your garden. Powered by Open-Meteo API.",
       "icon": "🌤️",
