@@ -1109,8 +1109,8 @@ class WeatherPlugin {
 
   async onEnable() {
     console.log('[Weather] Plugin enabled');
-    await this.loadStyles();
-    
+    /* Styles are injected into the main window from manifest.styles by the app (sandbox has no window.electron). */
+
     const saved = await this.context.storage.get('settings');
     if (saved) {
       this.settings = { ...this.settings, ...saved };
@@ -1137,25 +1137,9 @@ class WeatherPlugin {
     });
   }
   
-  async loadStyles() {
-    if (document.getElementById('weather-plugin-styles')) return;
-    try {
-      const css = await window.electron.readPluginFile('weather/styles.css');
-      if (css) {
-        const style = document.createElement('style');
-        style.id = 'weather-plugin-styles';
-        style.textContent = css;
-        document.head.appendChild(style);
-      }
-    } catch (e) {
-      console.warn('[Weather] Failed to load styles:', e);
-    }
-  }
-  
   async onDisable() {
     console.log('[Weather] Plugin disabled');
     if (this.updateInterval) clearInterval(this.updateInterval);
-    document.getElementById('weather-plugin-styles')?.remove();
   }
   
 
