@@ -1,216 +1,201 @@
-// Cultiva Radio Plugin v1.0.1 (store bundle)
+// Cultiva Radio Plugin v2.0.0 — SomaFM streams, sleep timer, glass sheet UI (main window bridge)
 
 class RadioPlugin {
   constructor(context, hooks) {
     this.context = context;
     this.hooks = hooks;
     this.settings = {
-      station: 'lofi',
-      volume: 0.3,
-      playing: false
+      station: 'groovesalad',
+      volume: 0.45,
+      playing: false,
+      sleepMinutes: 0
     };
     this.audio = null;
-    
+    this.sleepTimer = null;
     this.stations = {
-      lofi: {
-        name: 'Lofi Girl',
-        url: 'https://stream.lofi.co/stream/lofi',
-        icon: '🎧'
-      },
-      jazz: {
-        name: 'Smooth Jazz',
-        url: 'https://jazz.stream.ouifm.fr/ouifm-jazz.mp3',
-        icon: '🎷'
-      },
-      classical: {
-        name: 'Classical Radio',
-        url: 'https://stream.classicalradio.com/classical',
-        icon: '🎻'
-      },
-      nature: {
-        name: 'Nature Sounds',
-        url: 'https://stream.naturefm.com/nature',
-        icon: '🌿'
-      },
-      rain: {
-        name: 'Rain Ambient',
-        url: 'https://stream.rainfm.com/rain',
-        icon: '🌧️'
-      }
+      groovesalad: { name: 'Groove Salad', tag: 'Chillout', url: 'https://ice6.somafm.com/groovesalad-256-mp3' },
+      fluid: { name: 'Fluid', tag: 'Downtempo', url: 'https://ice4.somafm.com/fluid-256-mp3' },
+      beatblender: { name: 'Beat Blender', tag: 'Beats', url: 'https://ice2.somafm.com/beatblender-256-mp3' },
+      dronezone: { name: 'Drone Zone', tag: 'Ambient', url: 'https://ice1.somafm.com/dronezone-256-mp3' },
+      defcon: { name: 'DEF CON Radio', tag: 'Electronic', url: 'https://ice2.somafm.com/defcon-128-mp3' }
     };
   }
-  
+
+  _escapeHtml(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  _headerLabel() {
+    if (!this.settings.playing) return 'Radio';
+    const s = this.stations[this.settings.station];
+    return s ? s.name : 'On air';
+  }
+
+  _updateHeader() {
+    this.context.ui.updateMainHeader({ label: this._headerLabel(), icon: '' });
+  }
+
+  _armSleep() {
+    if (this.sleepTimer) {
+      clearTimeout(this.sleepTimer);
+      this.sleepTimer = null;
+    }
+    const m = this.settings.sleepMinutes | 0;
+    if (m <= 0) return;
+    this.sleepTimer = setTimeout(() => {
+      this.stopRadio();
+      this.context.ui.showNotification('', 'Sleep timer ended — playback stopped.');
+    }, m * 60 * 1000);
+  }
+
   async onEnable() {
-    console.log('[Radio] Plugin enabled');
-    
     const saved = await this.context.storage.get('settings');
     if (saved) {
       this.settings = { ...this.settings, ...saved };
     }
-    
     this.context.ui.registerHeaderItem({
-      label: this.settings.playing ? '🔊' : '📻',
-      icon: this.stations[this.settings.station]?.icon || '📻',
+      label: this._headerLabel(),
+      icon: '',
       onClick: () => this.openRadioModal()
     });
-    
     if (this.settings.playing) {
-      this.playStation(this.settings.station);
+      this.playStation(this.settings.station, false);
     }
+    this._armSleep();
   }
-  
+
   onDisable() {
-    console.log('[Radio] Plugin disabled');
     if (this.audio) {
       this.audio.pause();
       this.audio = null;
     }
+    if (this.sleepTimer) {
+      clearTimeout(this.sleepTimer);
+      this.sleepTimer = null;
+    }
   }
-  
-  playStation(stationId) {
+
+  playStation(stationId, notify) {
     const station = this.stations[stationId];
     if (!station) return;
-    
     if (this.audio) {
       this.audio.pause();
+      this.audio = null;
     }
-    
     try {
       this.audio = new Audio(station.url);
       this.audio.volume = this.settings.volume;
-      this.audio.play().catch(e => {
-        console.warn('[Radio] Playback failed:', e);
-        this.context.ui.showNotification('📻', 'Station unavailable. Try another.');
+      this.audio.play().catch(() => {
+        this.context.ui.showNotification('', 'Stream unavailable — try another station.');
       });
-      
       this.settings.station = stationId;
       this.settings.playing = true;
-      this.updateHeaderIcon('🔊', station.icon);
+      this._updateHeader();
+      this._armSleep();
+      if (notify !== false) {
+        this.context.ui.showNotification('', `Playing: ${station.name}`);
+      }
+      this.context.storage.set('settings', this.settings);
     } catch (e) {
-      console.error('[Radio] Failed to play:', e);
+      console.error('[Radio]', e);
     }
   }
-  
+
   stopRadio() {
     if (this.audio) {
       this.audio.pause();
       this.audio = null;
     }
     this.settings.playing = false;
-    this.updateHeaderIcon('📻', this.stations[this.settings.station]?.icon || '📻');
-  }
-  
-  updateHeaderIcon(label, icon) {
-    const headerItems = document.querySelectorAll('.header-plugin-item');
-    headerItems.forEach(item => {
-      const iconEl = item.querySelector('.header-plugin-icon');
-      if (iconEl && (iconEl.textContent === '📻' || iconEl.textContent === '🔊')) {
-        item.innerHTML = `
-          <span class="header-plugin-icon">${icon}</span>
-          <span>${label}</span>
-        `;
-      }
-    });
-  }
-  
-  async openRadioModal() {
-    const modal = document.createElement('div');
-    modal.className = 'radio-modal';
-    
-    const stationEntries = Object.entries(this.stations).map(([id, station]) => `
-      <div class="radio-station ${this.settings.station === id ? 'active' : ''}" data-station="${id}">
-        <span class="radio-station-icon">${station.icon}</span>
-        <span class="radio-station-name">${station.name}</span>
-        ${this.settings.playing && this.settings.station === id ? '<span class="radio-playing">🔊</span>' : ''}
-      </div>
-    `).join('');
-    
-    modal.innerHTML = `
-      <div class="radio-modal-overlay"></div>
-      <div class="radio-modal-content" style="max-width: 360px;">
-        <div class="radio-modal-header">
-          <h2>📻 Radio Stations</h2>
-          <button class="radio-modal-close">&times;</button>
-        </div>
-        <div class="radio-modal-body">
-          <div class="radio-stations-list">
-            ${stationEntries}
-          </div>
-          
-          <div class="radio-volume" style="margin-top: 20px;">
-            <label style="font-size: 12px; color: var(--text-tertiary);">Volume</label>
-            <input type="range" class="radio-volume-slider" min="0" max="1" step="0.05" value="${this.settings.volume}" 
-                   style="width: 100%; margin-top: 8px;">
-            <span style="float: right; font-size: 12px; color: var(--text-tertiary);">${Math.round(this.settings.volume * 100)}%</span>
-          </div>
-          
-          <div class="radio-controls" style="margin-top: 20px; display: flex; gap: 12px;">
-            ${this.settings.playing ? `
-              <button class="radio-btn radio-btn-stop" style="flex: 1; padding: 10px; border-radius: 8px; border: none; background: var(--accent-red); color: white; cursor: pointer;">
-                ⏹ Stop
-              </button>
-            ` : ''}
-          </div>
-          
-          <div class="radio-credit" style="margin-top: 16px; font-size: 11px; color: var(--text-tertiary); text-align: center;">
-            Internet radio streams
-          </div>
-        </div>
-      </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    const closeBtn = modal.querySelector('.radio-modal-close');
-    const overlay = modal.querySelector('.radio-modal-overlay');
-    const volumeSlider = modal.querySelector('.radio-volume-slider');
-    const stopBtn = modal.querySelector('.radio-btn-stop');
-    
-    closeBtn.onclick = () => {
-      this.context.storage.set('settings', this.settings);
-      modal.remove();
-    };
-    overlay.onclick = () => {
-      this.context.storage.set('settings', this.settings);
-      modal.remove();
-    };
-    
-    modal.querySelectorAll('.radio-station').forEach(el => {
-      el.onclick = () => {
-        const stationId = el.dataset.station;
-        this.playStation(stationId);
-        this.context.storage.set('settings', this.settings);
-        modal.remove();
-        this.context.ui.showNotification('📻', `Now playing: ${this.stations[stationId].name}`);
-      };
-    });
-    
-    volumeSlider.oninput = () => {
-      this.settings.volume = parseFloat(volumeSlider.value);
-      if (this.audio) {
-        this.audio.volume = this.settings.volume;
-      }
-      volumeSlider.nextElementSibling.textContent = `${Math.round(this.settings.volume * 100)}%`;
-    };
-    
-    if (stopBtn) {
-      stopBtn.onclick = () => {
-        this.stopRadio();
-        this.context.storage.set('settings', this.settings);
-        modal.remove();
-      };
+    this.context.storage.set('settings', this.settings);
+    this._updateHeader();
+    if (this.sleepTimer) {
+      clearTimeout(this.sleepTimer);
+      this.sleepTimer = null;
     }
-    
-    const escHandler = (e) => {
-      if (e.key === 'Escape') {
-        this.context.storage.set('settings', this.settings);
-        modal.remove();
-        document.removeEventListener('keydown', escHandler);
-      }
-    };
-    document.addEventListener('keydown', escHandler);
-    
-    setTimeout(() => modal.classList.add('active'), 10);
+  }
+
+  openRadioModal() {
+    this.context.ui.openMainSheet(this._buildSheetHtml());
+  }
+
+  _buildSheetHtml() {
+    const vol = Math.round((this.settings.volume || 0) * 100);
+    const sleep = this.settings.sleepMinutes | 0;
+    const rows = Object.entries(this.stations)
+      .map(([id, s]) => {
+        const active = this.settings.station === id && this.settings.playing;
+        return `<button type="button" class="cultiva-radio-row${active ? ' is-active' : ''}" data-cultiva-act="play" data-station="${id}">
+          <span class="cultiva-radio-title">${this._escapeHtml(s.name)}</span>
+          <span class="cultiva-radio-tag">${this._escapeHtml(s.tag)}</span>
+          <span class="cultiva-radio-state"></span>
+        </button>`;
+      })
+      .join('');
+    return `
+<div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
+<div class="cultiva-sheet-card cultiva-sheet-card--radio">
+  <div class="cultiva-sheet-grabber"></div>
+  <div class="cultiva-sheet-head">
+    <div>
+      <div class="cultiva-sheet-title">Radio</div>
+      <div class="cultiva-sheet-sub">Internet streams · SomaFM</div>
+    </div>
+    <button type="button" class="cultiva-sheet-x" data-cultiva-act="close" aria-label="Close">×</button>
+  </div>
+  <div class="cultiva-sheet-body">
+    <div class="radio-toolbar">
+      <button type="button" class="cultiva-sheet-secondary" data-cultiva-act="stop">Stop</button>
+      <button type="button" class="cultiva-sheet-secondary" data-cultiva-act="refreshSheet">Refresh list</button>
+    </div>
+    <label class="cultiva-field-label">Output level</label>
+    <input type="range" name="vol" min="0" max="1" step="0.03" value="${this.settings.volume}" data-cultiva-change-act="volume" />
+    <div class="cultiva-range-meta"><span>${vol}%</span></div>
+    <label class="cultiva-field-label">Sleep timer</label>
+    <div class="cultiva-pill-row">
+      <button type="button" class="cultiva-pill${sleep === 0 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="0">Off</button>
+      <button type="button" class="cultiva-pill${sleep === 15 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="15">15m</button>
+      <button type="button" class="cultiva-pill${sleep === 30 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="30">30m</button>
+      <button type="button" class="cultiva-pill${sleep === 60 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="60">60m</button>
+    </div>
+    <label class="cultiva-field-label">Stations</label>
+    <div class="cultiva-radio-scroll">${rows}</div>
+    <p class="cultiva-sheet-footnote">Streams courtesy of SomaFM. Playback uses your network connection.</p>
+  </div>
+</div>`;
+  }
+
+  async onModalAction(action, payload) {
+    if (action === 'volume' && payload && payload.value != null) {
+      this.settings.volume = parseFloat(payload.value);
+      if (this.audio) this.audio.volume = this.settings.volume;
+      await this.context.storage.set('settings', this.settings);
+      return;
+    }
+    if (action === 'sleep' && payload && payload.minutes != null) {
+      this.settings.sleepMinutes = parseInt(payload.minutes, 10) || 0;
+      await this.context.storage.set('settings', this.settings);
+      this._armSleep();
+      this.context.ui.openMainSheet(this._buildSheetHtml());
+      return;
+    }
+    if (action === 'play' && payload && payload.stationId) {
+      this.playStation(payload.stationId, true);
+      this.context.ui.openMainSheet(this._buildSheetHtml());
+      return;
+    }
+    if (action === 'stop') {
+      this.stopRadio();
+      this.context.ui.openMainSheet(this._buildSheetHtml());
+      return;
+    }
+    if (action === 'refreshSheet') {
+      this.context.ui.openMainSheet(this._buildSheetHtml());
+    }
   }
 }
 
