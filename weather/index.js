@@ -1,4 +1,4 @@
-// Cultiva Weather Plugin v1.7.0 (store bundle — upload to CultivaPlugins repo)
+// Cultiva Weather Plugin v2.0.0 (store bundle — upload to CultivaPlugins repo)
 // Weather: Open-Meteo · Russia: built-in city database · World: Open-Meteo Geocoding
 
 class WeatherPlugin {
@@ -15,6 +15,7 @@ class WeatherPlugin {
     this.weatherData = null;
     this.updateInterval = null;
     this.searchTimeout = null;
+    this._sheetSearchT = null;
 
     this.popularCities = [
       { name: 'Moscow', country: 'Russia', lat: 55.7558, lon: 37.6173 },
@@ -1117,15 +1118,16 @@ class WeatherPlugin {
     }
     
     this.context.ui.registerHeaderItem({
-      label: 'Weather',
-      icon: this.getWeatherIcon() || '🌤️',
+      label: '—',
+      icon: this.getWeatherIcon(),
       onClick: () => this.openWeatherModal()
     });
-    
+
     if (this.settings.showInGarden) {
       this.context.ui.registerGardenWidget({
         render: (container) => this.renderGardenWidget(container),
-        position: 'top'
+        position: 'top',
+        onTapMethod: 'openWeatherModal'
       });
     }
     
@@ -1243,202 +1245,152 @@ class WeatherPlugin {
     return 'Unknown';
   }
   
+  _escapeHtml(s) {
+    return String(s ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  _escapeAttr(s) {
+    return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+  }
+
   updateHeaderIcon() {
     const icon = this.getWeatherIcon();
     const temp = this.weatherData ? Math.round(this.weatherData.temp) : '--';
-    const headerItems = document.querySelectorAll('.header-plugin-item');
-    headerItems.forEach(item => {
-      const iconEl = item.querySelector('.header-plugin-icon');
-      if (iconEl) {
-        item.innerHTML = `
-          <span class="header-plugin-icon">${icon}</span>
-          <span>${temp}${this.weatherData?.units || '°C'}</span>
-        `;
-      }
+    const u = this.weatherData?.units || '°C';
+    this.context.ui.updateMainHeader({
+      label: `${temp}${u}`,
+      icon
     });
   }
-  
+
   updateGardenWidget() {
-    const widget = document.getElementById('weather-garden-widget');
-    if (!widget || !this.weatherData) return;
-    widget.innerHTML = `
-      <div class="weather-widget-content">
+    if (!this.settings.showInGarden) return;
+    this.context.ui.updateGardenHtml(this._gardenInnerHtml());
+  }
+
+  _gardenInnerHtml() {
+    if (!this.weatherData) {
+      return `<div class="weather-widget-content weather-widget--loading"><span class="weather-temp">--</span><span class="weather-desc">Loading</span></div>`;
+    }
+    return `<div class="weather-widget-content cultiva-garden-weather">
         <span class="weather-icon">${this.getWeatherIcon()}</span>
         <span class="weather-temp">${Math.round(this.weatherData.temp)}${this.weatherData.units}</span>
-        <span class="weather-desc">${this.getWeatherDescription()}</span>
-        <span class="weather-location">${this.settings.city}</span>
-      </div>
-    `;
+        <span class="weather-desc">${this._escapeHtml(this.getWeatherDescription())}</span>
+        <span class="weather-location">${this._escapeHtml(this.settings.city)}</span>
+      </div>`;
   }
-  
-renderGardenWidget(container) {
-  if (!container) return;
-  
-  const oldWidget = document.getElementById('weather-garden-widget');
-  if (oldWidget) oldWidget.remove();
-  
-  const widget = document.createElement('div');
-  widget.className = 'weather-widget';
-  widget.id = 'weather-garden-widget';
-    if (this.weatherData) {
-      widget.innerHTML = `
-        <div class="weather-widget-content">
-          <span class="weather-icon">${this.getWeatherIcon()}</span>
-          <span class="weather-temp">${Math.round(this.weatherData.temp)}${this.weatherData.units}</span>
-          <span class="weather-desc">${this.getWeatherDescription()}</span>
-          <span class="weather-location">${this.settings.city}</span>
-        </div>
-      `;
-    } else {
-      widget.innerHTML = `
-        <div class="weather-widget-content">
-          <span class="weather-icon">🌤️</span>
-          <span class="weather-temp">--</span>
-          <span class="weather-desc">Loading...</span>
-        </div>
-      `;
-    }
-    widget.addEventListener('click', () => this.openWeatherModal());
-    container.appendChild(widget);
+
+  renderGardenWidget(container) {
+    if (!container) return;
+    container.innerHTML = this._gardenInnerHtml();
   }
-  
+
   openWeatherModal() {
-    if (!this.weatherData) {
-      this.context.ui.showNotification('🌤️', 'Weather data not available');
+    this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
+  }
+
+  _buildWeatherSheetHtml(searchResultsHtml) {
+    const w = this.weatherData;
+    const city = this._escapeHtml(this.settings.city);
+    const mainTemp = w ? Math.round(w.temp) : '--';
+    const units = w?.units || '°C';
+    const desc = w ? this._escapeHtml(this.getWeatherDescription()) : 'Loading…';
+    const feel = w ? Math.round(w.feelsLike) : '--';
+    const hum = w ? w.humidity : '--';
+    const wind = w ? w.windSpeed : '--';
+    const pills = this.popularCities
+      .slice(0, 8)
+      .map(
+        (c) =>
+          `<button type="button" class="cultiva-pill" data-cultiva-act="pickCity" data-lat="${c.lat}" data-lon="${c.lon}" data-city="${this._escapeAttr(c.name)}">${this._escapeHtml(c.name)}</button>`
+      )
+      .join('');
+    const results = searchResultsHtml || '';
+    return `
+<div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
+<div class="cultiva-sheet-card cultiva-sheet-card--weather">
+  <div class="cultiva-sheet-grabber"></div>
+  <div class="cultiva-sheet-head">
+    <div>
+      <div class="cultiva-sheet-title">${city}</div>
+      <div class="cultiva-sheet-sub">${desc}</div>
+    </div>
+    <button type="button" class="cultiva-sheet-x" data-cultiva-act="close" aria-label="Close">×</button>
+  </div>
+  <div class="cultiva-sheet-body">
+    <div class="weather-hero">
+      <span class="weather-hero-icon">${w ? this.getWeatherIcon() : '…'}</span>
+      <span class="weather-hero-temp">${mainTemp}<span class="weather-hero-unit">${units}</span></span>
+    </div>
+    <div class="weather-metrics">
+      <div><span class="cultiva-muted">Feels</span><strong>${feel}${units}</strong></div>
+      <div><span class="cultiva-muted">Humidity</span><strong>${hum}%</strong></div>
+      <div><span class="cultiva-muted">Wind</span><strong>${wind} km/h</strong></div>
+    </div>
+    <label class="cultiva-field-label">Search city</label>
+    <input type="text" name="citySearch" class="cultiva-sheet-input" data-cultiva-input-act="search" placeholder="Type at least 2 letters…" autocomplete="off" />
+    <div class="cultiva-search-results">${results}</div>
+    <label class="cultiva-field-label">Quick picks</label>
+    <div class="cultiva-pill-row">${pills}</div>
+    <label class="cultiva-field-label">Units</label>
+    <select name="units" class="cultiva-sheet-select" data-cultiva-change-act="unitsChange">
+      <option value="celsius" ${this.settings.units === 'celsius' ? 'selected' : ''}>Celsius °C</option>
+      <option value="fahrenheit" ${this.settings.units === 'fahrenheit' ? 'selected' : ''}>Fahrenheit °F</option>
+    </select>
+    <p class="cultiva-sheet-footnote">Open-Meteo · Local RU + geocoding</p>
+  </div>
+</div>`;
+  }
+
+  async onModalAction(action, payload) {
+    if (action === 'pickCity' && payload && payload.lat != null && payload.lon != null) {
+      this.settings.lat = payload.lat;
+      this.settings.lon = payload.lon;
+      this.settings.city = payload.city || this.settings.city;
+      await this.context.storage.set('settings', this.settings);
+      await this.fetchWeather();
+      this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
       return;
     }
-    document.querySelector('.weather-modal')?.remove();
-    
-    const modal = document.createElement('div');
-    modal.className = 'weather-modal';
-    modal.innerHTML = `
-      <div class="weather-modal-overlay"></div>
-      <div class="weather-modal-content" style="max-width: 420px;">
-        <div class="weather-modal-header">
-          <h2>${this.settings.city}</h2>
-          <button class="weather-modal-close">&times;</button>
-        </div>
-        <div class="weather-modal-body">
-          <div class="weather-main">
-            <span class="weather-main-icon">${this.getWeatherIcon()}</span>
-            <span class="weather-main-temp">${Math.round(this.weatherData.temp)}${this.weatherData.units}</span>
-          </div>
-          <div class="weather-desc">${this.getWeatherDescription()}</div>
-          <div class="weather-details">
-            <div class="weather-detail"><span>Feels like</span><span>${Math.round(this.weatherData.feelsLike)}${this.weatherData.units}</span></div>
-            <div class="weather-detail"><span>Humidity</span><span>${this.weatherData.humidity}%</span></div>
-            <div class="weather-detail"><span>Wind</span><span>${this.weatherData.windSpeed} km/h</span></div>
-          </div>
-          
-          <div class="weather-city-search" style="margin-top: 16px;">
-            <label style="font-size: 12px; color: var(--text-tertiary);">Search city</label>
-            <input type="text" class="weather-search-input" placeholder="Enter city name..." 
-                   style="width: 100%; padding: 10px; border-radius: 8px; background: var(--bg-secondary); 
-                          color: var(--text-primary); border: 1px solid var(--border-light); margin-top: 4px;">
-            <div class="weather-search-results" style="max-height: 200px; overflow-y: auto; margin-top: 8px;"></div>
-          </div>
-          
-          <div class="weather-popular" style="margin-top: 12px;">
-            <label style="font-size: 12px; color: var(--text-tertiary);">Popular cities</label>
-            <div class="weather-popular-list" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
-              ${this.popularCities.slice(0, 6).map(c => 
-                `<button class="weather-city-btn" data-lat="${c.lat}" data-lon="${c.lon}" data-name="${c.name}" 
-                         style="padding: 6px 12px; background: var(--bg-tertiary); border: 1px solid var(--border-light); 
-                                border-radius: 16px; font-size: 12px; cursor: pointer; color: var(--text-primary);">
-                  ${c.name}
-                </button>`
-              ).join('')}
-            </div>
-          </div>
-          
-          <div class="weather-units-selector" style="margin-top: 16px;">
-            <label style="font-size: 12px; color: var(--text-tertiary);">Units</label>
-            <select class="weather-units-select" style="width: 100%; padding: 8px; border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-light); margin-top: 4px;">
-              <option value="celsius" ${this.settings.units === 'celsius' ? 'selected' : ''}>Celsius (°C)</option>
-              <option value="fahrenheit" ${this.settings.units === 'fahrenheit' ? 'selected' : ''}>Fahrenheit (°F)</option>
-            </select>
-          </div>
-          <div class="weather-credit">Weather: Open-Meteo · Search: Local + Open-Meteo</div>
-        </div>
-      </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    const closeBtn = modal.querySelector('.weather-modal-close');
-    const overlay = modal.querySelector('.weather-modal-overlay');
-    const searchInput = modal.querySelector('.weather-search-input');
-    const searchResults = modal.querySelector('.weather-search-results');
-    const unitsSelect = modal.querySelector('.weather-units-select');
-    
-    closeBtn.onclick = () => modal.remove();
-    overlay.onclick = () => modal.remove();
-    
-    searchInput.oninput = async () => {
-      clearTimeout(this.searchTimeout);
-      const query = searchInput.value.trim();
-      if (query.length < 2) { searchResults.innerHTML = ''; return; }
-      searchResults.innerHTML = '<div style="padding: 8px; color: var(--text-tertiary);">🔍 Searching...</div>';
-      
-      this.searchTimeout = setTimeout(async () => {
-        const results = await this.searchCity(query);
-        if (results.length === 0) {
-          searchResults.innerHTML = '<div style="padding: 8px; color: var(--text-tertiary);">No cities found</div>';
-          return;
-        }
-        searchResults.innerHTML = results.map(r => `
-          <div class="weather-search-item" data-lat="${r.lat}" data-lon="${r.lon}" data-name="${r.name}" 
-               style="padding: 8px; cursor: pointer; border-radius: 6px; margin-bottom: 2px;"
-               onmouseover="this.style.background='var(--bg-tertiary)'" 
-               onmouseout="this.style.background='transparent'">
-            <div style="font-weight: 500;">${r.name}</div>
-            <div style="font-size: 11px; color: var(--text-tertiary);">${r.admin1 ? r.admin1 + ', ' : ''}${r.country}</div>
-          </div>
-        `).join('');
-        
-        searchResults.querySelectorAll('.weather-search-item').forEach(item => {
-          item.onclick = async () => {
-            const lat = parseFloat(item.dataset.lat);
-            const lon = parseFloat(item.dataset.lon);
-            const name = item.dataset.name;
-            this.settings.lat = lat;
-            this.settings.lon = lon;
-            this.settings.city = name;
-            await this.context.storage.set('settings', this.settings);
-            modal.querySelector('.weather-modal-header h2').textContent = name;
-            searchResults.innerHTML = '';
-            searchInput.value = '';
-            this.fetchWeather();
-          };
-        });
-      }, 400);
-    };
-    
-    modal.querySelectorAll('.weather-city-btn').forEach(btn => {
-      btn.onclick = async () => {
-        const lat = parseFloat(btn.dataset.lat);
-        const lon = parseFloat(btn.dataset.lon);
-        const name = btn.dataset.name;
-        this.settings.lat = lat;
-        this.settings.lon = lon;
-        this.settings.city = name;
-        await this.context.storage.set('settings', this.settings);
-        modal.querySelector('.weather-modal-header h2').textContent = name;
-        this.fetchWeather();
-      };
-    });
-    
-    unitsSelect.onchange = async () => {
-      this.settings.units = unitsSelect.value;
+    if (action === 'unitsChange' && payload && payload.value) {
+      this.settings.units = payload.value;
       await this.context.storage.set('settings', this.settings);
-      this.fetchWeather();
-    };
-    
-    const escHandler = (e) => { if (e.key === 'Escape') { modal.remove(); document.removeEventListener('keydown', escHandler); } };
-    document.addEventListener('keydown', escHandler);
-    setTimeout(() => modal.classList.add('active'), 10);
+      await this.fetchWeather();
+      this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
+      return;
+    }
+    if (action === 'input:search') {
+      const q = (payload && String(payload.value).trim()) || '';
+      clearTimeout(this._sheetSearchT);
+      if (q.length < 2) {
+        this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
+        return;
+      }
+      this._sheetSearchT = setTimeout(async () => {
+        const results = await this.searchCity(q);
+        let html = '';
+        if (results.length === 0) {
+          html = '<div class="cultiva-muted cultiva-pad">No cities found</div>';
+        } else {
+          html = results
+            .map(
+              (r) =>
+                `<button type="button" class="cultiva-list-row" data-cultiva-act="pickCity" data-lat="${r.lat}" data-lon="${r.lon}" data-city="${this._escapeAttr(r.name)}">
+              <span class="cultiva-list-title">${this._escapeHtml(r.name)}</span>
+              <span class="cultiva-list-sub">${this._escapeHtml([r.admin1, r.country].filter(Boolean).join(', '))}</span>
+            </button>`
+            )
+            .join('');
+        }
+        this.context.ui.openMainSheet(this._buildWeatherSheetHtml(html));
+      }, 380);
+    }
   }
-  
+
   checkExtremeWeather() {
     if (!this.weatherData) return;
     const temp = this.weatherData.temp;

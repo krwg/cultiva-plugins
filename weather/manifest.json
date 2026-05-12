@@ -1,14 +1,14 @@
 {
   "id": "weather",
   "name": "Weather Widget",
-  "version": "1.7.0",
+  "version": "2.0.0",
   "author": "krwg",
-  "description": "Shows current weather in your garden. Cultiva 0.4.0+ (plugin sandbox). Requires [0.3.5+]",
+  "description": "Weather in header and garden, city search, sheet UI in the main window. Cultiva 0.4.0+.",
   "icon": "🌤️",
   "entry": "index.js",
   "styles": ["styles.css"],
   "permissions": ["network", "storage", "ui"],
-  "minAppVersion": "0.3.5",
+  "minAppVersion": "0.4.0",
   "settings": [
     {
       "key": "city",
