@@ -1,38 +1,38 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "plugins": [
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "1.6.1",
+      "version": "2.0.0",
       "author": "krwg",
       "description": "Shows current weather. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide.",
       "icon": "🌤️",
       "baseUrl": "https://raw.githubusercontent.com/krwg/CultivaPlugins/main/weather",
-      "minAppVersion": "0.3.5",
+      "minAppVersion": "0.4.0",
       "tags": ["widget", "weather", "russia"]
     },
     {
       "id": "time",
       "name": "Time Widget",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "author": "krwg",
-      "description": "Live clock in header with customizable format and colors (including rainbow).",
-      "icon": "⏰",
+      "description": "Live clock, time zones, Apple-style sheet.",
+      "icon": "·",
       "baseUrl": "https://raw.githubusercontent.com/krwg/CultivaPlugins/main/time",
-      "minAppVersion": "0.3.5",
-      "tags": ["widget", "clock", "customizable"]
+      "minAppVersion": "0.4.0",
+      "tags": ["widget", "clock", "timezone"]
     },
     {
       "id": "radio",
       "name": "Radio Widget",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "author": "krwg",
-      "description": "Ambient radio stations for your garden. Lofi, Jazz, Classical, Nature sounds.",
-      "icon": "📻",
+      "description": "SomaFM streams, sleep timer, volume, glass UI.",
+      "icon": "·",
       "baseUrl": "https://raw.githubusercontent.com/krwg/CultivaPlugins/main/radio",
-      "minAppVersion": "0.3.5",
+      "minAppVersion": "0.4.0",
       "tags": ["widget", "radio", "music", "ambient"]
     }
   ]
