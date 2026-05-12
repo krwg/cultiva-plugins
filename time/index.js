@@ -1,4 +1,4 @@
-// Cultiva Time Plugin v1.0.0
+// Cultiva Time Plugin v1.0.1 (store bundle)
 
 class TimePlugin {
   constructor(context, hooks) {
