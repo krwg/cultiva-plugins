@@ -1,4 +1,4 @@
-// Cultiva Weather Plugin v1.6.0
+// Cultiva Weather Plugin v1.7.0 (store bundle — upload to CultivaPlugins repo)
 // Weather: Open-Meteo · Russia: built-in city database · World: Open-Meteo Geocoding
 
 class WeatherPlugin {
