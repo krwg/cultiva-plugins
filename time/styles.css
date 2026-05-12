@@ -1,0 +1,208 @@
+/* Cultiva Time Plugin v2 — shared sheet chrome + clock UI */
+
+.cultiva-plugin-sheet-root {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 12px 12px;
+  pointer-events: none;
+}
+.cultiva-plugin-sheet-root > * {
+  pointer-events: auto;
+}
+.cultiva-sheet-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 12, 18, 0.42);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.cultiva-sheet-card {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  max-height: min(86vh, 680px);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 22px 22px 28px 28px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.cultiva-sheet-grabber {
+  width: 40px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--border-light);
+  margin: 10px auto 6px;
+  opacity: 0.85;
+}
+.cultiva-sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 18px 12px;
+  border-bottom: 1px solid var(--border-light);
+}
+.cultiva-sheet-title {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+.cultiva-sheet-sub {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+.cultiva-sheet-x {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.cultiva-sheet-x:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+.cultiva-sheet-body {
+  padding: 14px 18px 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cultiva-field-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+.cultiva-sheet-input,
+.cultiva-sheet-select {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+}
+.cultiva-sheet-input:focus,
+.cultiva-sheet-select:focus {
+  border-color: var(--accent-blue, #0a84ff);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2);
+}
+.cultiva-muted {
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+.cultiva-pad {
+  padding: 10px 4px;
+}
+.cultiva-sheet-primary {
+  margin-top: 8px;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #5ac8fa 0%, #0a84ff 100%);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.cultiva-sheet-primary:hover {
+  filter: brightness(1.05);
+}
+
+.time-hero {
+  text-align: center;
+  padding: 10px 8px 6px;
+  border-radius: 16px;
+  background: linear-gradient(165deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border: 1px solid var(--border-light);
+}
+.time-hero-clock {
+  font-size: 34px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+.time-hero-caption {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
+.cultiva-tz-scroll {
+  max-height: 220px;
+  overflow-y: auto;
+  border-radius: 14px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+}
+.cultiva-tz-row {
+  display: block;
+  width: 100%;
+  padding: 11px 14px;
+  border: none;
+  border-bottom: 1px solid var(--border-light);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.cultiva-tz-row:last-child {
+  border-bottom: none;
+}
+.cultiva-tz-row:hover {
+  background: var(--bg-tertiary);
+}
+.cultiva-tz-row.is-active {
+  background: rgba(10, 132, 255, 0.12);
+  box-shadow: inset 3px 0 0 var(--accent-blue, #0a84ff);
+}
+.cultiva-tz-name {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.cultiva-segmented {
+  display: flex;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 14px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+}
+.cultiva-seg {
+  flex: 1;
+  text-align: center;
+  padding: 9px 6px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.cultiva-seg.is-on {
+  background: var(--bg-primary);
+  border-color: var(--border-light);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}

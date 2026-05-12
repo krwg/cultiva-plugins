@@ -1,13 +1,14 @@
 {
   "id": "time",
   "name": "Time Widget",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "author": "krwg",
-  "description": "Live clock in header with customizable colors. Cultiva 0.4.0+ (plugin sandbox). Requires [0.3.6+]",
-  "icon": "⏰",
+  "description": "Live clock in the header, world time zones, and Apple-style sheet. Cultiva 0.4.0+.",
+  "icon": "·",
   "entry": "index.js",
+  "styles": ["styles.css"],
   "permissions": ["storage", "ui"],
-  "minAppVersion": "0.3.6",
+  "minAppVersion": "0.4.0",
   "settings": [
     {
       "key": "format",
@@ -30,6 +31,7 @@
         { "value": "blue", "label": "Blue" },
         { "value": "purple", "label": "Purple" },
         { "value": "orange", "label": "Orange" },
+        { "value": "graphite", "label": "Graphite" },
         { "value": "rainbow", "label": "Rainbow" }
       ],
       "default": "default"
