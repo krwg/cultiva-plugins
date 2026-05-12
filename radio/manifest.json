@@ -1,10 +1,10 @@
 {
   "id": "radio",
   "name": "Radio Widget",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "krwg",
-  "description": "Ambient radio stations for your garden. Requires [0.3.6+]",
-  "icon": "",
+  "description": "Ambient radio stations for your garden. Cultiva 0.4.0+ (plugin sandbox). Requires [0.3.6+]",
+  "icon": "📻",
   "entry": "index.js",
   "permissions": ["storage", "ui"],
   "minAppVersion": "0.3.6"

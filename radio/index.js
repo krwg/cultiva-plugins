@@ -1,4 +1,4 @@
-// Cultiva Radio Plugin v1.0.0
+// Cultiva Radio Plugin v1.0.1 (store bundle)
 
 class RadioPlugin {
   constructor(context, hooks) {
