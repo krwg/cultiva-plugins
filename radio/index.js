@@ -1,4 +1,4 @@
-// Cultiva Radio Plugin v2.0.0 — SomaFM streams, sleep timer, glass sheet UI (main window bridge)
+
 
 class RadioPlugin {
   constructor(context, hooks) {

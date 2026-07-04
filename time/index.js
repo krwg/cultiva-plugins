@@ -1,4 +1,4 @@
-// Cultiva Time Plugin v2.0.0 — header clock + world times (main window UI bridge)
+
 
 const COMMON_TZS = [
   'UTC',
@@ -28,7 +28,7 @@ function allTimezones() {
       return Intl.supportedValuesOf('timeZone');
     }
   } catch (e) {
-    /* ignore */
+
   }
   return COMMON_TZS.slice();
 }

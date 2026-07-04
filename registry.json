@@ -9,8 +9,8 @@
       "author": "krwg",
       "description": "Shows current weather. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide.",
       "icon": "🌤️",
-      "baseUrl": "https://raw.githubusercontent.com/krwg/CultivaPlugins/main/weather",
-      "minAppVersion": "0.4.0",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
+      "minAppVersion": "1.1.0",
       "tags": ["widget", "weather", "russia"]
     },
     {
@@ -20,8 +20,8 @@
       "author": "krwg",
       "description": "Live clock, time zones, Apple-style sheet.",
       "icon": "·",
-      "baseUrl": "https://raw.githubusercontent.com/krwg/CultivaPlugins/main/time",
-      "minAppVersion": "0.4.0",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/time",
+      "minAppVersion": "1.1.0",
       "tags": ["widget", "clock", "timezone"]
     },
     {
@@ -31,8 +31,8 @@
       "author": "krwg",
       "description": "SomaFM streams, sleep timer, volume, glass UI.",
       "icon": "·",
-      "baseUrl": "https://raw.githubusercontent.com/krwg/CultivaPlugins/main/radio",
-      "minAppVersion": "0.4.0",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/radio",
+      "minAppVersion": "1.1.0",
       "tags": ["widget", "radio", "music", "ambient"]
     }
   ]

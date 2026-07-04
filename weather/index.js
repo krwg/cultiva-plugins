@@ -1,5 +1,4 @@
-// Cultiva Weather Plugin v2.0.0 (store bundle — upload to CultivaPlugins repo)
-// Weather: Open-Meteo · Russia: built-in city database · World: Open-Meteo Geocoding
+
 
 class WeatherPlugin {
   constructor(context, hooks) {
@@ -1107,16 +1106,14 @@ class WeatherPlugin {
     ];
   }
 
-
   async onEnable() {
     console.log('[Weather] Plugin enabled');
-    /* Styles are injected into the main window from manifest.styles by the app (sandbox has no window.electron). */
 
     const saved = await this.context.storage.get('settings');
     if (saved) {
       this.settings = { ...this.settings, ...saved };
     }
-    
+
     this.context.ui.registerHeaderItem({
       label: '—',
       icon: this.getWeatherIcon(),
@@ -1130,24 +1127,23 @@ class WeatherPlugin {
         onTapMethod: 'openWeatherModal'
       });
     }
-    
+
     await this.fetchWeather();
     this.updateInterval = setInterval(() => this.fetchWeather(), 30 * 60 * 1000);
-    
+
     this.hooks.on('onHabitComplete', (habit) => {
       console.log('[Weather] Habit completed:', habit.name);
     });
   }
-  
+
   async onDisable() {
     console.log('[Weather] Plugin disabled');
     if (this.updateInterval) clearInterval(this.updateInterval);
   }
-  
 
   async searchCity(query) {
     if (!query || query.length < 2) return [];
-    
+
     const localResults = this.russianCities
       .filter(c => c.name.toLowerCase().includes(query.toLowerCase()))
       .map(c => ({
@@ -1167,7 +1163,7 @@ class WeatherPlugin {
       const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`;
       const response = await fetch(url);
       const data = await response.json();
-      
+
       return (data.results || []).map(r => ({
         name: r.name,
         country: r.country,
@@ -1180,16 +1176,16 @@ class WeatherPlugin {
       return [];
     }
   }
-  
+
   async fetchWeather() {
     try {
       const lat = this.settings.lat || 55.7558;
       const lon = this.settings.lon || 37.6173;
-      
+
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=auto`;
       const response = await fetch(url);
       const data = await response.json();
-      
+
       this.weatherData = {
         temp: data.current.temperature_2m,
         feelsLike: data.current.apparent_temperature,
@@ -1198,13 +1194,13 @@ class WeatherPlugin {
         weatherCode: data.current.weather_code,
         units: '°C'
       };
-      
+
       if (this.settings.units === 'fahrenheit') {
         this.weatherData.temp = Math.round(this.weatherData.temp * 9/5 + 32);
         this.weatherData.feelsLike = Math.round(this.weatherData.feelsLike * 9/5 + 32);
         this.weatherData.units = '°F';
       }
-      
+
       console.log('[Weather] Updated:', this.weatherData);
       this.updateHeaderIcon();
       this.updateGardenWidget();
@@ -1212,7 +1208,7 @@ class WeatherPlugin {
       console.error('[Weather] Failed to fetch:', e);
     }
   }
-  
+
   getWeatherIcon() {
     if (!this.weatherData) return '🌤️';
     const code = this.weatherData.weatherCode;
@@ -1228,7 +1224,7 @@ class WeatherPlugin {
     if (code >= 95) return '⛈️';
     return '🌡️';
   }
-  
+
   getWeatherDescription() {
     if (!this.weatherData) return 'Loading...';
     const code = this.weatherData.weatherCode;
@@ -1244,7 +1240,7 @@ class WeatherPlugin {
     if (code >= 95) return 'Thunderstorm';
     return 'Unknown';
   }
-  
+
   _escapeHtml(s) {
     return String(s ?? '')
       .replace(/&/g, '&amp;')
