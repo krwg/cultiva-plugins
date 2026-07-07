@@ -1,0 +1,12 @@
+{
+  "id": "quote",
+  "name": "Quote of the Day",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Daily inspiration widget in your garden.",
+  "icon": "💬",
+  "entry": "index.js",
+  "styles": ["styles.css"],
+  "permissions": ["storage", "ui"],
+  "minAppVersion": "1.8.0"
+}

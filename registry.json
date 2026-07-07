@@ -1,16 +1,16 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "plugins": [
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "author": "krwg",
       "description": "Shows current weather. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide.",
       "icon": "🌤️",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
-      "minAppVersion": "1.7.0",
+      "minAppVersion": "1.8.0",
       "tags": ["widget", "weather", "russia"]
     },
     {
@@ -19,9 +19,9 @@
       "version": "2.0.0",
       "author": "krwg",
       "description": "Live clock, time zones, Apple-style sheet.",
-      "icon": "·",
+      "icon": "🕐",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/time",
-      "minAppVersion": "1.7.0",
+      "minAppVersion": "1.8.0",
       "tags": ["widget", "clock", "timezone"]
     },
     {
@@ -30,10 +30,43 @@
       "version": "2.0.0",
       "author": "krwg",
       "description": "SomaFM streams, sleep timer, volume, glass UI.",
-      "icon": "·",
+      "icon": "📻",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/radio",
-      "minAppVersion": "1.7.0",
+      "minAppVersion": "1.8.0",
       "tags": ["widget", "radio", "music", "ambient"]
+    },
+    {
+      "id": "pomodoro",
+      "name": "Pomodoro Timer",
+      "version": "1.0.0",
+      "author": "krwg",
+      "description": "Focus timer in the header — 25/5 pomodoro cycles.",
+      "icon": "🍅",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/pomodoro",
+      "minAppVersion": "1.8.0",
+      "tags": ["widget", "timer", "focus", "productivity"]
+    },
+    {
+      "id": "quote",
+      "name": "Quote of the Day",
+      "version": "1.0.0",
+      "author": "krwg",
+      "description": "Daily inspiration widget in your garden.",
+      "icon": "💬",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/quote",
+      "minAppVersion": "1.8.0",
+      "tags": ["widget", "garden", "quote"]
+    },
+    {
+      "id": "streak",
+      "name": "Streak Celebrator",
+      "version": "1.0.0",
+      "author": "krwg",
+      "description": "Celebrates habit completions with notifications.",
+      "icon": "🎉",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/streak",
+      "minAppVersion": "1.8.0",
+      "tags": ["habits", "streak", "notification"]
     }
   ]
 }

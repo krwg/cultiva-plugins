@@ -1,0 +1,35 @@
+{
+  "id": "pomodoro",
+  "name": "Pomodoro Timer",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Focus timer in the header — 25/5 pomodoro cycles.",
+  "icon": "🍅",
+  "entry": "index.js",
+  "styles": ["styles.css"],
+  "permissions": ["storage", "ui"],
+  "minAppVersion": "1.8.0",
+  "settings": [
+    {
+      "key": "workMinutes",
+      "label": "Work (min)",
+      "type": "select",
+      "options": [
+        { "value": "25", "label": "25" },
+        { "value": "30", "label": "30" },
+        { "value": "45", "label": "45" }
+      ],
+      "default": "25"
+    },
+    {
+      "key": "breakMinutes",
+      "label": "Break (min)",
+      "type": "select",
+      "options": [
+        { "value": "5", "label": "5" },
+        { "value": "10", "label": "10" }
+      ],
+      "default": "5"
+    }
+  ]
+}

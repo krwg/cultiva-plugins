@@ -1,0 +1,12 @@
+{
+  "id": "streak",
+  "name": "Streak Celebrator",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Celebrates habit completions with a garden notification.",
+  "icon": "🎉",
+  "entry": "index.js",
+  "styles": [],
+  "permissions": ["ui"],
+  "minAppVersion": "1.8.0"
+}
