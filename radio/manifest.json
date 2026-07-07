@@ -8,5 +8,5 @@
   "entry": "index.js",
   "styles": ["styles.css"],
   "permissions": ["storage", "ui"],
-  "minAppVersion": "0.4.0"
+  "minAppVersion": "1.7.0"
 }
