@@ -11,7 +11,17 @@
       "icon": "🌤️",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
       "minAppVersion": "1.7.0",
-      "tags": ["widget", "weather", "russia"]
+      "tags": [
+        "widget",
+        "weather",
+        "russia"
+      ],
+      "sha256": {
+        "manifest.json": "9524bd34801327f42a66d3185d7374d7b2f4309ba51f91b57e80efeced9769a6",
+        "index.js": "c3c452001f8d3de429d8ac723b433380d58015ebf9d0d0204cf70fe2f6cebf91",
+        "styles.css": "554df7d0697c429ba9d6bbbf659fdd88fdc858982e18887d8db6bdb5eedc4340",
+        "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
+      }
     },
     {
       "id": "time",
@@ -22,7 +32,16 @@
       "icon": "🕐",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/time",
       "minAppVersion": "1.7.0",
-      "tags": ["widget", "clock", "timezone"]
+      "tags": [
+        "widget",
+        "clock",
+        "timezone"
+      ],
+      "sha256": {
+        "manifest.json": "2b656e955458d2e75680743738c11041152b3e3e240a7b2b1484f7f115d8f120",
+        "index.js": "24cb82990526cafb839c054961483b2d7b7ca5d51a3349212b7bbe87c81b38db",
+        "styles.css": "9310e4450e374125065e93223a36f636b22244c916e3a0ca748fa6bcef1e639e"
+      }
     },
     {
       "id": "radio",
@@ -33,7 +52,17 @@
       "icon": "📻",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/radio",
       "minAppVersion": "1.7.0",
-      "tags": ["widget", "radio", "music", "ambient"]
+      "tags": [
+        "widget",
+        "radio",
+        "music",
+        "ambient"
+      ],
+      "sha256": {
+        "manifest.json": "3e8ad54a71e21242c15f19b249ba3bdff08df0e9174759919d9e02d42c231f67",
+        "index.js": "e465576865afeed3ceae6030393f37d1c7439f3a8342a3172eda57f0cfed8ea7",
+        "styles.css": "02e1cd114a01590a02a6293eb057d3de32a570bc739b225e010d1e7b2f37a37a"
+      }
     },
     {
       "id": "pomodoro",
@@ -44,7 +73,17 @@
       "icon": "🍅",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/pomodoro",
       "minAppVersion": "1.7.0",
-      "tags": ["widget", "timer", "focus", "productivity"]
+      "tags": [
+        "widget",
+        "timer",
+        "focus",
+        "productivity"
+      ],
+      "sha256": {
+        "manifest.json": "c57525f55b397acb225a0f9b5edde7a3e690f22526101093eaa4b1cf545f2665",
+        "index.js": "c216fa7f316799cc19505c22c4465df431cb3aed83154e82865e09632c4fe2ae",
+        "styles.css": "c4c163abc2dd93099900ef6b3dcca3f7ffe777cf0058aa149a9a60d1b09e18d9"
+      }
     },
     {
       "id": "quote",
@@ -55,7 +94,16 @@
       "icon": "💬",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/quote",
       "minAppVersion": "1.7.0",
-      "tags": ["widget", "garden", "quote"]
+      "tags": [
+        "widget",
+        "garden",
+        "quote"
+      ],
+      "sha256": {
+        "manifest.json": "4d79e2725676b2ec883bc597c3b12973d972fcd5b3ff916c913adb798a87d8f3",
+        "index.js": "0888878d747c29dc0465c95defa61815180b60741e3eab563cec7c1bfb3d25ae",
+        "styles.css": "479b3144e0062cc932a8e391f8d6b1b333321a09b0c57d8f7f20b76532cb9d6c"
+      }
     },
     {
       "id": "streak",
@@ -66,7 +114,15 @@
       "icon": "🎉",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/streak",
       "minAppVersion": "1.7.0",
-      "tags": ["habits", "streak", "notification"]
+      "tags": [
+        "habits",
+        "streak",
+        "notification"
+      ],
+      "sha256": {
+        "manifest.json": "75243d26bda2074f6608ae8ea5b8d66dfb53415e1346ca73ffba0e36669c7525",
+        "index.js": "4ead9f0b2f822f7ebe6631f4489c5335cf9bbbac76a603a01ad305044f5b48c3"
+      }
     }
   ]
 }
