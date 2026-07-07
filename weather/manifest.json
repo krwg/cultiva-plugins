@@ -8,7 +8,7 @@
   "entry": "index.js",
   "styles": ["styles.css"],
   "permissions": ["network", "storage", "ui"],
-  "minAppVersion": "1.8.0",
+  "minAppVersion": "1.7.0",
   "data": ["cities-ru.json"],
   "settings": [
     {

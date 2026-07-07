@@ -10,7 +10,7 @@
       "description": "Shows current weather. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide.",
       "icon": "🌤️",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
-      "minAppVersion": "1.8.0",
+      "minAppVersion": "1.7.0",
       "tags": ["widget", "weather", "russia"]
     },
     {
@@ -21,7 +21,7 @@
       "description": "Live clock, time zones, Apple-style sheet.",
       "icon": "🕐",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/time",
-      "minAppVersion": "1.8.0",
+      "minAppVersion": "1.7.0",
       "tags": ["widget", "clock", "timezone"]
     },
     {
@@ -32,7 +32,7 @@
       "description": "SomaFM streams, sleep timer, volume, glass UI.",
       "icon": "📻",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/radio",
-      "minAppVersion": "1.8.0",
+      "minAppVersion": "1.7.0",
       "tags": ["widget", "radio", "music", "ambient"]
     },
     {
@@ -43,7 +43,7 @@
       "description": "Focus timer in the header — 25/5 pomodoro cycles.",
       "icon": "🍅",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/pomodoro",
-      "minAppVersion": "1.8.0",
+      "minAppVersion": "1.7.0",
       "tags": ["widget", "timer", "focus", "productivity"]
     },
     {
@@ -54,7 +54,7 @@
       "description": "Daily inspiration widget in your garden.",
       "icon": "💬",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/quote",
-      "minAppVersion": "1.8.0",
+      "minAppVersion": "1.7.0",
       "tags": ["widget", "garden", "quote"]
     },
     {
@@ -65,7 +65,7 @@
       "description": "Celebrates habit completions with notifications.",
       "icon": "🎉",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/streak",
-      "minAppVersion": "1.8.0",
+      "minAppVersion": "1.7.0",
       "tags": ["habits", "streak", "notification"]
     }
   ]

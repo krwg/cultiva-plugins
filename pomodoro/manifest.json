@@ -8,7 +8,7 @@
   "entry": "index.js",
   "styles": ["styles.css"],
   "permissions": ["storage", "ui"],
-  "minAppVersion": "1.8.0",
+  "minAppVersion": "1.7.0",
   "settings": [
     {
       "key": "workMinutes",
