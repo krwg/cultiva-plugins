@@ -43,18 +43,23 @@ class WeatherPlugin {
       if (this._citiesLoadPromise) {
         return this._citiesLoadPromise;
       }
-      this._citiesLoadPromise = (async () => {
-        try {
+    this._citiesLoadPromise = (async () => {
+      try {
+        if (this.context.data && typeof this.context.data.read === 'function') {
+          const list = await this.context.data.read('cities-ru.json');
+          this.russianCities = Array.isArray(list) ? list : [];
+        } else {
           const res = await fetch('https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather/cities-ru.json', { cache: 'force-cache' });
           if (res.ok) {
             this.russianCities = await res.json();
           }
-        } catch (e) {
-          this.russianCities = [];
         }
-        this._citiesLoaded = true;
-        return this.russianCities;
-      })();
+      } catch (e) {
+        this.russianCities = [];
+      }
+      this._citiesLoaded = true;
+      return this.russianCities;
+    })();
       return this._citiesLoadPromise;
     };
   }
@@ -69,7 +74,7 @@ class WeatherPlugin {
 
     this.context.ui.registerHeaderItem({
       label: '—',
-      icon: this.getWeatherIcon(),
+      icon: '',
       onClick: () => this.openWeatherModal()
     });
 
@@ -82,7 +87,7 @@ class WeatherPlugin {
     }
 
     await this._loadRussianCities();
-    await this.fetchWeather();
+    void this.fetchWeather();
     this.updateInterval = setInterval(() => this.fetchWeather(), 30 * 60 * 1000);
 
     this.hooks.on('onHabitComplete', (habit) => {
@@ -166,19 +171,21 @@ class WeatherPlugin {
   }
 
   getWeatherIcon() {
-    if (!this.weatherData) return '🌤️';
+    return '';
+  }
+
+  getWeatherShortCode() {
+    if (!this.weatherData) return '—';
     const code = this.weatherData.weatherCode;
-    if (code === 0) return '☀️';
-    if (code === 1 || code === 2) return '🌤️';
-    if (code === 3) return '☁️';
-    if (code >= 45 && code <= 48) return '🌫️';
-    if (code >= 51 && code <= 57) return '🌧️';
-    if (code >= 61 && code <= 67) return '🌧️';
-    if (code >= 71 && code <= 77) return '❄️';
-    if (code >= 80 && code <= 82) return '🌦️';
-    if (code >= 85 && code <= 86) return '🌨️';
-    if (code >= 95) return '⛈️';
-    return '🌡️';
+    if (code === 0) return 'CLR';
+    if (code === 1 || code === 2) return 'PTC';
+    if (code === 3) return 'CLD';
+    if (code >= 45 && code <= 48) return 'FOG';
+    if (code >= 51 && code <= 67) return 'RN';
+    if (code >= 71 && code <= 77) return 'SN';
+    if (code >= 80 && code <= 86) return 'SH';
+    if (code >= 95) return 'TS';
+    return '—';
   }
 
   getWeatherDescription() {
@@ -210,12 +217,11 @@ class WeatherPlugin {
   }
 
   updateHeaderIcon() {
-    const icon = this.getWeatherIcon();
     const temp = this.weatherData ? Math.round(this.weatherData.temp) : '--';
     const u = this.weatherData?.units || '°C';
     this.context.ui.updateMainHeader({
       label: `${temp}${u}`,
-      icon
+      icon: ''
     });
   }
 
@@ -229,7 +235,7 @@ class WeatherPlugin {
       return `<div class="weather-widget-content weather-widget--loading"><span class="weather-temp">--</span><span class="weather-desc">Loading</span></div>`;
     }
     return `<div class="weather-widget-content cultiva-garden-weather">
-        <span class="weather-icon">${this.getWeatherIcon()}</span>
+        <span class="weather-code">${this.getWeatherShortCode()}</span>
         <span class="weather-temp">${Math.round(this.weatherData.temp)}${this.weatherData.units}</span>
         <span class="weather-desc">${this._escapeHtml(this.getWeatherDescription())}</span>
         <span class="weather-location">${this._escapeHtml(this.settings.city)}</span>
@@ -275,7 +281,7 @@ class WeatherPlugin {
   </div>
   <div class="cultiva-sheet-body">
     <div class="weather-hero">
-      <span class="weather-hero-icon">${w ? this.getWeatherIcon() : '…'}</span>
+      <span class="weather-hero-code">${w ? this.getWeatherShortCode() : '—'}</span>
       <span class="weather-hero-temp">${mainTemp}<span class="weather-hero-unit">${units}</span></span>
     </div>
     <div class="weather-metrics">
@@ -347,9 +353,9 @@ class WeatherPlugin {
     if (!this.weatherData) return;
     const temp = this.weatherData.temp;
     const weatherCode = this.weatherData.weatherCode;
-    if (temp > 30) this.context.ui.showNotification('🔥', 'Stay hydrated! It\'s hot outside.');
-    if (temp < 0) this.context.ui.showNotification('❄️', 'Bundle up! It\'s freezing.');
-    if (weatherCode >= 95) this.context.ui.showNotification('⛈️', 'Thunderstorm warning! Stay safe.');
+    if (temp > 30) this.context.ui.showNotification('', 'Stay hydrated! It\'s hot outside.');
+    if (temp < 0) this.context.ui.showNotification('', 'Bundle up! It\'s freezing.');
+    if (weatherCode >= 95) this.context.ui.showNotification('', 'Thunderstorm warning! Stay safe.');
   }
 }
 

@@ -4,12 +4,20 @@
   "version": "2.1.0",
   "author": "krwg",
   "description": "Weather in header and garden, city search, sheet UI in the main window. Cultiva 0.4.0+.",
-  "icon": "🌤️",
+  "icon": "",
   "entry": "index.js",
-  "styles": ["styles.css"],
-  "permissions": ["network", "storage", "ui"],
+  "styles": [
+    "styles.css"
+  ],
+  "permissions": [
+    "network",
+    "storage",
+    "ui"
+  ],
   "minAppVersion": "1.7.0",
-  "data": ["cities-ru.json"],
+  "data": [
+    "cities-ru.json"
+  ],
   "settings": [
     {
       "key": "city",
@@ -22,8 +30,14 @@
       "label": "Units",
       "type": "select",
       "options": [
-        { "value": "celsius", "label": "Celsius (°C)" },
-        { "value": "fahrenheit", "label": "Fahrenheit (°F)" }
+        {
+          "value": "celsius",
+          "label": "Celsius (\u00b0C)"
+        },
+        {
+          "value": "fahrenheit",
+          "label": "Fahrenheit (\u00b0F)"
+        }
       ],
       "default": "celsius"
     },
