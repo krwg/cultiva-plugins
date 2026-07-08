@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "krwg",
   "description": "Focus timer in the header — 25/5 pomodoro cycles.",
-  "icon": "🍅",
+  "icon": "",
   "entry": "index.js",
   "styles": ["styles.css"],
   "permissions": ["storage", "ui"],

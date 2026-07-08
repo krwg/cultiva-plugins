@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "krwg",
   "description": "Celebrates habit completions with a garden notification.",
-  "icon": "🎉",
+  "icon": "",
   "entry": "index.js",
   "styles": [],
   "permissions": ["ui"],

@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "krwg",
   "description": "Daily inspiration widget in your garden.",
-  "icon": "💬",
+  "icon": "",
   "entry": "index.js",
   "styles": ["styles.css"],
   "permissions": ["storage", "ui"],
