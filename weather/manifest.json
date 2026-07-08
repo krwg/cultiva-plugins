@@ -1,7 +1,7 @@
 {
   "id": "weather",
   "name": "Weather Widget",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "author": "krwg",
   "description": "Weather in header and garden, city search, sheet UI in the main window. Cultiva 0.4.0+.",
   "icon": "",
@@ -21,29 +21,29 @@
   "settings": [
     {
       "key": "city",
-      "label": "City",
+      "label": "Город",
       "type": "text",
       "default": "Moscow"
     },
     {
       "key": "units",
-      "label": "Units",
+      "label": "Единицы",
       "type": "select",
       "options": [
         {
           "value": "celsius",
-          "label": "Celsius (\u00b0C)"
+          "label": "Цельсий (°C)"
         },
         {
           "value": "fahrenheit",
-          "label": "Fahrenheit (\u00b0F)"
+          "label": "Фаренгейт (°F)"
         }
       ],
       "default": "celsius"
     },
     {
       "key": "showInGarden",
-      "label": "Show in garden",
+      "label": "Показывать в саду",
       "type": "boolean",
       "default": true
     }

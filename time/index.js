@@ -46,6 +46,8 @@ class TimePlugin {
     this.colorInterval = null;
     this.hue = 0;
     this._tzFilter = '';
+    this._sheetDraft = null;
+    this._previewTimer = null;
   }
 
   _escapeHtml(s) {
@@ -60,10 +62,15 @@ class TimePlugin {
     return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
   }
 
-  formatTime(date) {
-    const tz = this.settings.timezone || 'UTC';
+  _activeSettings() {
+    return this._sheetDraft || this.settings;
+  }
+
+  formatTime(date, settingsOverride) {
+    const cfg = settingsOverride || this._activeSettings();
+    const tz = cfg.timezone || 'UTC';
     const d = date || new Date();
-    if (this.settings.format === 'HH:MM') {
+    if (cfg.format === 'HH:MM') {
       return new Intl.DateTimeFormat('en-GB', {
         timeZone: tz,
         hour: '2-digit',
@@ -71,7 +78,7 @@ class TimePlugin {
         hour12: false
       }).format(d);
     }
-    if (this.settings.format === 'hh:MM:SS A') {
+    if (cfg.format === 'hh:MM:SS A') {
       return new Intl.DateTimeFormat('en-US', {
         timeZone: tz,
         hour: 'numeric',
@@ -89,8 +96,9 @@ class TimePlugin {
     }).format(d);
   }
 
-  getColorStyle() {
-    if (this.settings.color === 'rainbow') {
+  getColorStyle(settingsOverride) {
+    const cfg = settingsOverride || this._activeSettings();
+    if (cfg.color === 'rainbow') {
       return `hsl(${this.hue}, 72%, 52%)`;
     }
     const colors = {
@@ -101,7 +109,33 @@ class TimePlugin {
       orange: '#ff9f0a',
       graphite: '#8e8e93'
     };
-    return colors[this.settings.color] || colors.default;
+    return colors[cfg.color] || colors.default;
+  }
+
+  _previewColorStyle() {
+    return this.getColorStyle(this._sheetDraft || this.settings);
+  }
+
+  _startSheetPreviewClock() {
+    if (this._previewTimer) {
+      clearInterval(this._previewTimer);
+    }
+    const tick = () => {
+      if (!this.context.ui.patchMainSheet) {
+        return;
+      }
+      const text = this._escapeHtml(this.formatTime(new Date(), this._sheetDraft || this.settings));
+      this.context.ui.patchMainSheet('.time-hero-clock', text);
+    };
+    tick();
+    this._previewTimer = setInterval(tick, 1000);
+  }
+
+  _stopSheetPreviewClock() {
+    if (this._previewTimer) {
+      clearInterval(this._previewTimer);
+      this._previewTimer = null;
+    }
   }
 
   updateHeaderDisplay() {
@@ -143,16 +177,21 @@ class TimePlugin {
   onDisable() {
     if (this.interval) clearInterval(this.interval);
     if (this.colorInterval) clearInterval(this.colorInterval);
+    this._stopSheetPreviewClock();
     this.interval = null;
     this.colorInterval = null;
+    this._sheetDraft = null;
   }
 
   openSettingsModal() {
     this._tzFilter = '';
+    this._sheetDraft = { ...this.settings };
     this.context.ui.openMainSheet(this._buildSheetHtml());
+    this._startSheetPreviewClock();
   }
 
   _buildSheetHtml() {
+    const draft = this._sheetDraft || this.settings;
     const all = allTimezones();
     const q = (this._tzFilter || '').trim().toLowerCase();
     const pool = q ? all.filter((z) => z.toLowerCase().includes(q)) : COMMON_TZS;
@@ -160,11 +199,14 @@ class TimePlugin {
     const rows = zones
       .map(
         (z) =>
-          `<button type="button" class="cultiva-tz-row${z === this.settings.timezone ? ' is-active' : ''}" data-cultiva-act="pickTz" data-tz="${this._escapeAttr(z)}"><span class="cultiva-tz-name">${this._escapeHtml(z)}</span></button>`
+          `<button type="button" class="cultiva-tz-row${z === draft.timezone ? ' is-active' : ''}" data-cultiva-act="pickTz" data-tz="${this._escapeAttr(z)}"><span class="cultiva-tz-name">${this._escapeHtml(z)}</span></button>`
       )
       .join('');
-    const preview = this._escapeHtml(this.formatTime(new Date()));
-    const tzLine = this._escapeHtml(this.settings.timezone || 'UTC');
+    const preview = this._escapeHtml(this.formatTime(new Date(), draft));
+    const previewColor = this._escapeHtml(this.getColorStyle(draft) || '');
+    const tzLine = this._escapeHtml(draft.timezone || 'UTC');
+    const seg = (value, label) =>
+      `<button type="button" class="cultiva-seg${draft.format === value ? ' is-on' : ''}" data-cultiva-act="pickFormat" data-format="${value}">${label}</button>`;
     return `
 <div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
 <div class="cultiva-sheet-card cultiva-sheet-card--time">
@@ -178,27 +220,27 @@ class TimePlugin {
   </div>
   <div class="cultiva-sheet-body">
     <div class="time-hero">
-      <div class="time-hero-clock">${preview}</div>
+      <div class="time-hero-clock" style="${previewColor ? `color:${previewColor}` : ''}">${preview}</div>
       <div class="time-hero-caption">Live preview</div>
     </div>
     <label class="cultiva-field-label">Time zone</label>
-    <input type="search" class="cultiva-sheet-input" data-cultiva-input-act="tzFilter" placeholder="Filter zones…" value="${this._escapeAttr(this._tzFilter)}" autocomplete="off" />
+    <input type="search" name="tzFilter" class="cultiva-sheet-input" data-cultiva-input-act="tzFilter" placeholder="Filter zones…" value="${this._escapeAttr(this._tzFilter)}" autocomplete="off" />
     <div class="cultiva-tz-scroll">${rows || '<div class="cultiva-muted cultiva-pad">No matches</div>'}</div>
     <label class="cultiva-field-label">Format</label>
     <div class="cultiva-segmented">
-      <label class="cultiva-seg${this.settings.format === 'HH:MM:SS' ? ' is-on' : ''}"><input type="radio" name="format" value="HH:MM:SS" ${this.settings.format === 'HH:MM:SS' ? 'checked' : ''} hidden />24h + sec</label>
-      <label class="cultiva-seg${this.settings.format === 'HH:MM' ? ' is-on' : ''}"><input type="radio" name="format" value="HH:MM" ${this.settings.format === 'HH:MM' ? 'checked' : ''} hidden />24h</label>
-      <label class="cultiva-seg${this.settings.format === 'hh:MM:SS A' ? ' is-on' : ''}"><input type="radio" name="format" value="hh:MM:SS A" ${this.settings.format === 'hh:MM:SS A' ? 'checked' : ''} hidden />12h</label>
+      ${seg('HH:MM:SS', '24h + sec')}
+      ${seg('HH:MM', '24h')}
+      ${seg('hh:MM:SS A', '12h')}
     </div>
     <label class="cultiva-field-label">Accent</label>
-    <select name="color" class="cultiva-sheet-select">
-      <option value="default" ${this.settings.color === 'default' ? 'selected' : ''}>System</option>
-      <option value="green" ${this.settings.color === 'green' ? 'selected' : ''}>Green</option>
-      <option value="blue" ${this.settings.color === 'blue' ? 'selected' : ''}>Blue</option>
-      <option value="purple" ${this.settings.color === 'purple' ? 'selected' : ''}>Purple</option>
-      <option value="orange" ${this.settings.color === 'orange' ? 'selected' : ''}>Orange</option>
-      <option value="graphite" ${this.settings.color === 'graphite' ? 'selected' : ''}>Graphite</option>
-      <option value="rainbow" ${this.settings.color === 'rainbow' ? 'selected' : ''}>Spectrum</option>
+    <select name="color" class="cultiva-sheet-select" data-cultiva-change-act="colorDraft">
+      <option value="default" ${draft.color === 'default' ? 'selected' : ''}>System</option>
+      <option value="green" ${draft.color === 'green' ? 'selected' : ''}>Green</option>
+      <option value="blue" ${draft.color === 'blue' ? 'selected' : ''}>Blue</option>
+      <option value="purple" ${draft.color === 'purple' ? 'selected' : ''}>Purple</option>
+      <option value="orange" ${draft.color === 'orange' ? 'selected' : ''}>Orange</option>
+      <option value="graphite" ${draft.color === 'graphite' ? 'selected' : ''}>Graphite</option>
+      <option value="rainbow" ${draft.color === 'rainbow' ? 'selected' : ''}>Spectrum</option>
     </select>
     <button type="button" class="cultiva-sheet-primary" data-cultiva-act="apply" data-cultiva-collect="1">Save</button>
   </div>
@@ -206,22 +248,60 @@ class TimePlugin {
   }
 
   async onModalAction(action, payload) {
+    if (action === 'close') {
+      this._stopSheetPreviewClock();
+      this._sheetDraft = null;
+      return;
+    }
     if (action === 'input:tzFilter') {
       this._tzFilter = (payload && payload.value) || '';
       this.context.ui.openMainSheet(this._buildSheetHtml());
       return;
     }
     if (action === 'pickTz' && payload && payload.tz) {
+      if (!this._sheetDraft) {
+        this._sheetDraft = { ...this.settings };
+      }
+      this._sheetDraft.timezone = payload.tz;
       this.settings.timezone = payload.tz;
       await this.context.storage.set('settings', this.settings);
       this.startClock();
       this.context.ui.openMainSheet(this._buildSheetHtml());
+      this._startSheetPreviewClock();
+      return;
+    }
+    if (action === 'pickFormat' && payload && payload.format) {
+      if (!this._sheetDraft) {
+        this._sheetDraft = { ...this.settings };
+      }
+      this._sheetDraft.format = payload.format;
+      this.context.ui.openMainSheet(this._buildSheetHtml());
+      this._startSheetPreviewClock();
+      return;
+    }
+    if (action === 'colorDraft' && payload && payload.value) {
+      if (!this._sheetDraft) {
+        this._sheetDraft = { ...this.settings };
+      }
+      this._sheetDraft.color = payload.value;
+      this.context.ui.openMainSheet(this._buildSheetHtml());
+      this._startSheetPreviewClock();
       return;
     }
     if (action === 'apply' && payload) {
-      if (payload.format) this.settings.format = payload.format;
-      if (payload.color) this.settings.color = payload.color;
+      if (!this._sheetDraft) {
+        this._sheetDraft = { ...this.settings };
+      }
+      if (payload.format) {
+        this._sheetDraft.format = payload.format;
+      }
+      if (payload.color) {
+        this._sheetDraft.color = payload.color;
+      }
+      this.settings = { ...this._sheetDraft };
       await this.context.storage.set('settings', this.settings);
+      this._sheetDraft = null;
+      this._stopSheetPreviewClock();
       this.startClock();
       this.context.ui.closeMainSheet();
     }

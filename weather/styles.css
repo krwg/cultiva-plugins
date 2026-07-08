@@ -389,6 +389,70 @@
   font-weight: 600;
   color: var(--text-secondary);
 }
+.weather-hero-icon,
+.weather-garden-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+}
+.weather-svg {
+  width: 44px;
+  height: 44px;
+  display: block;
+}
+.weather-garden-icon .weather-svg {
+  width: 36px;
+  height: 36px;
+}
+.weather-garden-card {
+  cursor: pointer;
+  margin-bottom: 12px;
+  border: 1px solid var(--border-light);
+  transition: transform 0.2s var(--ease-apple), box-shadow 0.2s var(--ease-apple);
+}
+.weather-garden-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+.weather-garden-card--clear {
+  background: linear-gradient(135deg, rgba(255, 214, 102, 0.28) 0%, var(--bg-primary) 72%);
+}
+.weather-garden-card--clear::before { background: #f5b942; }
+.weather-garden-card--partly {
+  background: linear-gradient(135deg, rgba(147, 197, 253, 0.22) 0%, var(--bg-primary) 72%);
+}
+.weather-garden-card--partly::before { background: #60a5fa; }
+.weather-garden-card--cloudy,
+.weather-garden-card--loading {
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.22) 0%, var(--bg-primary) 72%);
+}
+.weather-garden-card--cloudy::before,
+.weather-garden-card--loading::before { background: #94a3b8; }
+.weather-garden-card--fog {
+  background: linear-gradient(135deg, rgba(203, 213, 225, 0.35) 0%, var(--bg-primary) 72%);
+}
+.weather-garden-card--fog::before { background: #cbd5e1; }
+.weather-garden-card--rain,
+.weather-garden-card--showers {
+  background: linear-gradient(135deg, rgba(100, 116, 139, 0.28) 0%, var(--bg-primary) 72%);
+}
+.weather-garden-card--rain::before,
+.weather-garden-card--showers::before { background: #64748b; }
+.weather-garden-card--snow {
+  background: linear-gradient(135deg, rgba(191, 219, 254, 0.35) 0%, var(--bg-primary) 72%);
+}
+.weather-garden-card--snow::before { background: #93c5fd; }
+.weather-garden-card--storm {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.28) 0%, var(--bg-primary) 72%);
+}
+.weather-garden-card--storm::before { background: #6366f1; }
+.weather-sheet--clear .weather-hero-icon { color: #f59e0b; }
+.weather-sheet--rain .weather-hero-icon,
+.weather-sheet--showers .weather-hero-icon { color: #64748b; }
+.weather-sheet--snow .weather-hero-icon { color: #60a5fa; }
+.weather-sheet--storm .weather-hero-icon { color: #6366f1; }
+
 .weather-hero {
   display: flex;
   align-items: center;

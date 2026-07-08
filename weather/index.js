@@ -15,6 +15,8 @@ class WeatherPlugin {
     this.updateInterval = null;
     this.searchTimeout = null;
     this._sheetSearchT = null;
+    this._sheetSearchQuery = '';
+    this._locale = 'en';
 
     this.popularCities = [
       { name: 'Moscow', country: 'Russia', lat: 55.7558, lon: 37.6173 },
@@ -64,8 +66,117 @@ class WeatherPlugin {
     };
   }
 
+  _t(key) {
+    const ru = {
+      loading: 'Загрузка…',
+      feels: 'Ощущается',
+      humidity: 'Влажность',
+      wind: 'Ветер',
+      searchCity: 'Поиск города',
+      searchPlaceholder: 'Введите минимум 2 буквы…',
+      quickPicks: 'Быстрый выбор',
+      units: 'Единицы',
+      celsius: 'Цельсий °C',
+      fahrenheit: 'Фаренгейт °F',
+      footnote: 'Open-Meteo · Локальная база РФ + геокодинг',
+      noCities: 'Города не найдены',
+      clear: 'Ясно',
+      partlyCloudy: 'Переменная облачность',
+      cloudy: 'Облачно',
+      foggy: 'Туман',
+      drizzle: 'Морось',
+      rainy: 'Дождь',
+      snowy: 'Снег',
+      showers: 'Ливни',
+      snowShowers: 'Снегопад',
+      thunderstorm: 'Гроза',
+      unknown: 'Неизвестно',
+      hot: 'Жарко — пейте воду',
+      cold: 'Мороз — оденьтесь теплее',
+      storm: 'Гроза — будьте осторожны'
+    };
+    const en = {
+      loading: 'Loading…',
+      feels: 'Feels',
+      humidity: 'Humidity',
+      wind: 'Wind',
+      searchCity: 'Search city',
+      searchPlaceholder: 'Type at least 2 letters…',
+      quickPicks: 'Quick picks',
+      units: 'Units',
+      celsius: 'Celsius °C',
+      fahrenheit: 'Fahrenheit °F',
+      footnote: 'Open-Meteo · Local RU + geocoding',
+      noCities: 'No cities found',
+      clear: 'Clear',
+      partlyCloudy: 'Partly cloudy',
+      cloudy: 'Cloudy',
+      foggy: 'Foggy',
+      drizzle: 'Drizzle',
+      rainy: 'Rainy',
+      snowy: 'Snowy',
+      showers: 'Showers',
+      snowShowers: 'Snow showers',
+      thunderstorm: 'Thunderstorm',
+      unknown: 'Unknown',
+      hot: 'Stay hydrated! It\'s hot outside.',
+      cold: 'Bundle up! It\'s freezing.',
+      storm: 'Thunderstorm warning! Stay safe.'
+    };
+    const dict = this._locale === 'ru' ? ru : en;
+    return dict[key] || key;
+  }
+
+  _weatherKind() {
+    if (!this.weatherData) return 'loading';
+    const code = this.weatherData.weatherCode;
+    if (code === 0) return 'clear';
+    if (code === 1 || code === 2) return 'partly';
+    if (code === 3) return 'cloudy';
+    if (code >= 45 && code <= 48) return 'fog';
+    if (code >= 51 && code <= 67) return 'rain';
+    if (code >= 71 && code <= 77) return 'snow';
+    if (code >= 80 && code <= 82) return 'showers';
+    if (code >= 85 && code <= 86) return 'snow';
+    if (code >= 95) return 'storm';
+    return 'cloudy';
+  }
+
+  _weatherIconSvg(kind) {
+    const k = kind || this._weatherKind();
+    const common = 'class="weather-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"';
+    const icons = {
+      clear: `<svg ${common}><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2.5v3M12 18.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M2.5 12h3M18.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></g></svg>`,
+      partly: `<svg ${common}><circle cx="8.5" cy="9" r="3.5" fill="currentColor"/><path d="M6.5 18h10.5a4.5 4.5 0 0 0 .4-9 5.5 5.5 0 0 0-10.6 1.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+      cloudy: `<svg ${common}><path d="M6.5 18h11a4.5 4.5 0 0 0 .5-9 6 6 0 0 0-11.3 1.8A4 4 0 0 0 6.5 18z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+      fog: `<svg ${common}><path d="M5 9h14M4 13h16M6 17h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+      rain: `<svg ${common}><path d="M7 14h10a4 4 0 0 0 .3-8 5.5 5.5 0 0 0-10.5 1.5A3.5 3.5 0 0 0 7 14z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 17.5v3M12 16.5v3M15 17.5v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`,
+      snow: `<svg ${common}><path d="M7 13h10a4 4 0 0 0 .3-8 5.5 5.5 0 0 0-10.5 1.5A3.5 3.5 0 0 0 7 13z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 17.5l1.2 1.2M16 17.5l-1.2 1.2M12 16v2.8M10.5 19.5h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      showers: `<svg ${common}><path d="M6 12h12a4 4 0 0 0 .2-8 5.5 5.5 0 0 0-10.4 1.4A3.5 3.5 0 0 0 6 12z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 15.5v2.5M12 14.5v2.5M16 15.5v2.5M10 19v2M14 19v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`,
+      storm: `<svg ${common}><path d="M7 13h10a4 4 0 0 0 .3-8 5.5 5.5 0 0 0-10.5 1.5A3.5 3.5 0 0 0 7 13z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M13.5 15.5H11l1.5 4.5L9 17h2.5L10 13.5h2.5l-1.5 2z" fill="currentColor"/></svg>`,
+      loading: `<svg ${common}><circle cx="12" cy="12" r="7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-dasharray="4 3"/></svg>`
+    };
+    return icons[k] || icons.cloudy;
+  }
+
+  _patchSearchResults(html) {
+    if (this.context.ui.patchMainSheet) {
+      this.context.ui.patchMainSheet('.cultiva-search-results', html);
+      return;
+    }
+    this.context.ui.openMainSheet(this._buildWeatherSheetHtml(html));
+  }
+
   async onEnable() {
     console.log('[Weather] Plugin enabled');
+
+    if (this.context.app && typeof this.context.app.getLocale === 'function') {
+      try {
+        this._locale = await this.context.app.getLocale();
+      } catch {
+        this._locale = 'en';
+      }
+    }
 
     const saved = await this.context.storage.get('settings');
     if (saved) {
@@ -213,33 +324,23 @@ class WeatherPlugin {
   }
 
   getWeatherShortCode() {
-    if (!this.weatherData) return '—';
-    const code = this.weatherData.weatherCode;
-    if (code === 0) return 'CLR';
-    if (code === 1 || code === 2) return 'PTC';
-    if (code === 3) return 'CLD';
-    if (code >= 45 && code <= 48) return 'FOG';
-    if (code >= 51 && code <= 67) return 'RN';
-    if (code >= 71 && code <= 77) return 'SN';
-    if (code >= 80 && code <= 86) return 'SH';
-    if (code >= 95) return 'TS';
-    return '—';
+    return this._weatherKind();
   }
 
   getWeatherDescription() {
-    if (!this.weatherData) return 'Loading...';
+    if (!this.weatherData) return this._t('loading');
     const code = this.weatherData.weatherCode;
-    if (code === 0) return 'Clear';
-    if (code === 1 || code === 2) return 'Partly cloudy';
-    if (code === 3) return 'Cloudy';
-    if (code >= 45 && code <= 48) return 'Foggy';
-    if (code >= 51 && code <= 57) return 'Drizzle';
-    if (code >= 61 && code <= 67) return 'Rainy';
-    if (code >= 71 && code <= 77) return 'Snowy';
-    if (code >= 80 && code <= 82) return 'Showers';
-    if (code >= 85 && code <= 86) return 'Snow showers';
-    if (code >= 95) return 'Thunderstorm';
-    return 'Unknown';
+    if (code === 0) return this._t('clear');
+    if (code === 1 || code === 2) return this._t('partlyCloudy');
+    if (code === 3) return this._t('cloudy');
+    if (code >= 45 && code <= 48) return this._t('foggy');
+    if (code >= 51 && code <= 57) return this._t('drizzle');
+    if (code >= 61 && code <= 67) return this._t('rainy');
+    if (code >= 71 && code <= 77) return this._t('snowy');
+    if (code >= 80 && code <= 82) return this._t('showers');
+    if (code >= 85 && code <= 86) return this._t('snowShowers');
+    if (code >= 95) return this._t('thunderstorm');
+    return this._t('unknown');
   }
 
   _escapeHtml(s) {
@@ -269,15 +370,29 @@ class WeatherPlugin {
   }
 
   _gardenInnerHtml() {
+    const kind = this._weatherKind();
+    const icon = this._weatherIconSvg(kind);
     if (!this.weatherData) {
-      return `<div class="weather-widget-content weather-widget--loading"><span class="weather-temp">--</span><span class="weather-desc">Loading</span></div>`;
+      return `<article class="habit-card weather-garden-card weather-garden-card--${kind}" tabindex="0">
+        <div class="card-header">
+          <div class="plant-visual weather-garden-icon">${icon}</div>
+          <div class="card-info">
+            <div class="card-title">--</div>
+            <div class="card-subtitle">${this._escapeHtml(this._t('loading'))}</div>
+          </div>
+        </div>
+      </article>`;
     }
-    return `<div class="weather-widget-content cultiva-garden-weather">
-        <span class="weather-code">${this.getWeatherShortCode()}</span>
-        <span class="weather-temp">${Math.round(this.weatherData.temp)}${this.weatherData.units}</span>
-        <span class="weather-desc">${this._escapeHtml(this.getWeatherDescription())}</span>
-        <span class="weather-location">${this._escapeHtml(this.settings.city)}</span>
-      </div>`;
+    return `<article class="habit-card weather-garden-card weather-garden-card--${kind}" tabindex="0">
+        <div class="card-header">
+          <div class="plant-visual weather-garden-icon">${icon}</div>
+          <div class="card-info">
+            <div class="card-title">${Math.round(this.weatherData.temp)}${this.weatherData.units}</div>
+            <div class="card-subtitle">${this._escapeHtml(this.getWeatherDescription())}</div>
+            <span class="category-badge">${this._escapeHtml(this.settings.city)}</span>
+          </div>
+        </div>
+      </article>`;
   }
 
   renderGardenWidget(container) {
@@ -286,18 +401,21 @@ class WeatherPlugin {
   }
 
   openWeatherModal() {
+    this._sheetSearchQuery = '';
     this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
   }
 
   _buildWeatherSheetHtml(searchResultsHtml) {
     const w = this.weatherData;
+    const kind = this._weatherKind();
     const city = this._escapeHtml(this.settings.city);
     const mainTemp = w ? Math.round(w.temp) : '--';
     const units = w?.units || '°C';
-    const desc = w ? this._escapeHtml(this.getWeatherDescription()) : 'Loading…';
+    const desc = w ? this._escapeHtml(this.getWeatherDescription()) : this._escapeHtml(this._t('loading'));
     const feel = w ? Math.round(w.feelsLike) : '--';
     const hum = w ? w.humidity : '--';
     const wind = w ? w.windSpeed : '--';
+    const searchVal = this._escapeAttr(this._sheetSearchQuery || '');
     const pills = this.popularCities
       .slice(0, 8)
       .map(
@@ -306,9 +424,10 @@ class WeatherPlugin {
       )
       .join('');
     const results = searchResultsHtml || '';
+    const icon = this._weatherIconSvg(kind);
     return `
 <div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
-<div class="cultiva-sheet-card cultiva-sheet-card--weather">
+<div class="cultiva-sheet-card cultiva-sheet-card--weather weather-sheet--${kind}">
   <div class="cultiva-sheet-grabber"></div>
   <div class="cultiva-sheet-head">
     <div>
@@ -319,25 +438,25 @@ class WeatherPlugin {
   </div>
   <div class="cultiva-sheet-body">
     <div class="weather-hero">
-      <span class="weather-hero-code">${w ? this.getWeatherShortCode() : '—'}</span>
+      <span class="weather-hero-icon">${icon}</span>
       <span class="weather-hero-temp">${mainTemp}<span class="weather-hero-unit">${units}</span></span>
     </div>
     <div class="weather-metrics">
-      <div><span class="cultiva-muted">Feels</span><strong>${feel}${units}</strong></div>
-      <div><span class="cultiva-muted">Humidity</span><strong>${hum}%</strong></div>
-      <div><span class="cultiva-muted">Wind</span><strong>${wind} km/h</strong></div>
+      <div><span class="cultiva-muted">${this._t('feels')}</span><strong>${feel}${units}</strong></div>
+      <div><span class="cultiva-muted">${this._t('humidity')}</span><strong>${hum}%</strong></div>
+      <div><span class="cultiva-muted">${this._t('wind')}</span><strong>${wind} km/h</strong></div>
     </div>
-    <label class="cultiva-field-label">Search city</label>
-    <input type="text" name="citySearch" class="cultiva-sheet-input" data-cultiva-input-act="search" placeholder="Type at least 2 letters…" autocomplete="off" />
+    <label class="cultiva-field-label">${this._t('searchCity')}</label>
+    <input type="text" name="citySearch" class="cultiva-sheet-input" data-cultiva-input-act="search" placeholder="${this._escapeAttr(this._t('searchPlaceholder'))}" value="${searchVal}" autocomplete="off" />
     <div class="cultiva-search-results">${results}</div>
-    <label class="cultiva-field-label">Quick picks</label>
+    <label class="cultiva-field-label">${this._t('quickPicks')}</label>
     <div class="cultiva-pill-row">${pills}</div>
-    <label class="cultiva-field-label">Units</label>
+    <label class="cultiva-field-label">${this._t('units')}</label>
     <select name="units" class="cultiva-sheet-select" data-cultiva-change-act="unitsChange">
-      <option value="celsius" ${this.settings.units === 'celsius' ? 'selected' : ''}>Celsius °C</option>
-      <option value="fahrenheit" ${this.settings.units === 'fahrenheit' ? 'selected' : ''}>Fahrenheit °F</option>
+      <option value="celsius" ${this.settings.units === 'celsius' ? 'selected' : ''}>${this._t('celsius')}</option>
+      <option value="fahrenheit" ${this.settings.units === 'fahrenheit' ? 'selected' : ''}>${this._t('fahrenheit')}</option>
     </select>
-    <p class="cultiva-sheet-footnote">Open-Meteo · Local RU + geocoding</p>
+    <p class="cultiva-sheet-footnote">${this._t('footnote')}</p>
   </div>
 </div>`;
   }
@@ -347,6 +466,7 @@ class WeatherPlugin {
       this.settings.lat = payload.lat;
       this.settings.lon = payload.lon;
       this.settings.city = payload.city || this.settings.city;
+      this._sheetSearchQuery = '';
       await this.context.storage.set('settings', this.settings);
       await this.fetchWeather();
       this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
@@ -361,16 +481,17 @@ class WeatherPlugin {
     }
     if (action === 'input:search') {
       const q = (payload && String(payload.value).trim()) || '';
+      this._sheetSearchQuery = q;
       clearTimeout(this._sheetSearchT);
       if (q.length < 2) {
-        this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
+        this._patchSearchResults('');
         return;
       }
       this._sheetSearchT = setTimeout(async () => {
         const results = await this.searchCity(q);
         let html = '';
         if (results.length === 0) {
-          html = '<div class="cultiva-muted cultiva-pad">No cities found</div>';
+          html = `<div class="cultiva-muted cultiva-pad">${this._escapeHtml(this._t('noCities'))}</div>`;
         } else {
           html = results
             .map(
@@ -382,7 +503,7 @@ class WeatherPlugin {
             )
             .join('');
         }
-        this.context.ui.openMainSheet(this._buildWeatherSheetHtml(html));
+        this._patchSearchResults(html);
       }, 380);
     }
   }
@@ -391,9 +512,9 @@ class WeatherPlugin {
     if (!this.weatherData) return;
     const temp = this.weatherData.temp;
     const weatherCode = this.weatherData.weatherCode;
-    if (temp > 30) this.context.ui.showNotification('', 'Stay hydrated! It\'s hot outside.');
-    if (temp < 0) this.context.ui.showNotification('', 'Bundle up! It\'s freezing.');
-    if (weatherCode >= 95) this.context.ui.showNotification('', 'Thunderstorm warning! Stay safe.');
+    if (temp > 30) this.context.ui.showNotification('', this._t('hot'));
+    if (temp < 0) this.context.ui.showNotification('', this._t('cold'));
+    if (weatherCode >= 95) this.context.ui.showNotification('', this._t('storm'));
   }
 }
 

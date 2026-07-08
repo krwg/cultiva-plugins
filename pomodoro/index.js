@@ -79,16 +79,25 @@ class PomodoroPlugin {
       : `${this.phase === 'work' ? 'Focus' : 'Break'} — ${Math.ceil(this.remaining / 60)} min left`;
     this.context.ui.openMainSheet(`
       <div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
-      <div class="cultiva-sheet-card pomodoro-sheet">
-        <div class="cultiva-sheet-header">
-          <span>🍅 Pomodoro</span>
-          <button type="button" data-cultiva-act="close">✕</button>
+      <div class="cultiva-sheet-card cultiva-sheet-card--pomodoro">
+        <div class="cultiva-sheet-grabber"></div>
+        <div class="cultiva-sheet-head">
+          <div>
+            <div class="cultiva-sheet-title">Pomodoro</div>
+            <div class="cultiva-sheet-sub">${work}m focus · ${brk}m break</div>
+          </div>
+          <button type="button" class="cultiva-sheet-x" data-cultiva-act="close" aria-label="Close">×</button>
         </div>
-        <p class="pomodoro-status">${this._escapeHtml(status)}</p>
-        <div class="pomodoro-actions">
-          <button type="button" class="pomodoro-btn" data-cultiva-act="startWork">Start ${work}m focus</button>
-          <button type="button" class="pomodoro-btn secondary" data-cultiva-act="startBreak">Start ${brk}m break</button>
-          <button type="button" class="pomodoro-btn ghost" data-cultiva-act="stop">Stop</button>
+        <div class="cultiva-sheet-body">
+          <div class="pomodoro-hero">
+            <div class="pomodoro-hero-emoji">🍅</div>
+            <div class="pomodoro-hero-status">${this._escapeHtml(status)}</div>
+          </div>
+          <div class="pomodoro-actions">
+            <button type="button" class="cultiva-sheet-primary pomodoro-btn--focus" data-cultiva-act="startWork">Start ${work}m focus</button>
+            <button type="button" class="cultiva-sheet-secondary pomodoro-btn--break" data-cultiva-act="startBreak">Start ${brk}m break</button>
+            <button type="button" class="cultiva-sheet-secondary pomodoro-btn--ghost" data-cultiva-act="stop">Stop</button>
+          </div>
         </div>
       </div>`);
   }

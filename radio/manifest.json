@@ -1,7 +1,7 @@
 {
   "id": "radio",
   "name": "Radio Widget",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "krwg",
   "description": "SomaFM streams, sleep timer, and glass sheet UI. Cultiva 0.4.0+.",
   "icon": "",
