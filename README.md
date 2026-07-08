@@ -12,7 +12,7 @@
 [![Pages](https://img.shields.io/badge/docs-GitHub%20Pages-0071e3?style=flat-square)](https://krwg.github.io/cultiva-plugins/)
 [![Maintained](https://img.shields.io/badge/maintained-yes-34c759?style=flat-square)](#)
 
-[Browse catalog (Pages)](https://krwg.github.io/cultiva-plugins/) · [Wiki](https://github.com/krwg/cultiva-plugins/tree/main/docs/wiki) · [Cultiva app](https://github.com/krwg/cultiva/releases) · [Author guide](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md) · [Issues · Plugin Hardening](https://github.com/krwg/cultiva-plugins/issues?q=milestone%3A%221.7+Linden+%C2%B7+Plugin+Hardening%22)
+[Browse catalog (Pages)](https://krwg.github.io/cultiva-plugins/) · [Wiki](https://github.com/krwg/cultiva-plugins/wiki) · [Cultiva app](https://github.com/krwg/cultiva/releases) · [Author guide](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md) · [Plugin Hardening](https://github.com/krwg/cultiva-plugins/wiki/Plugin-Hardening)
 
 </div>
 
