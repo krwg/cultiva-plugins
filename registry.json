@@ -1,11 +1,11 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "plugins": [
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "2.1.0",
+      "version": "2.3.0",
       "author": "krwg",
       "description": "Shows current weather. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide.",
       "icon": "",
@@ -17,16 +17,17 @@
         "russia"
       ],
       "sha256": {
-        "manifest.json": "13da2c48ff5daf4c996b2f37a997bdfbfb6b262044a01d389045e0b37e44eb51",
+        "manifest.json": "c5d6e15046a87e9eac5e1dc185ff01a9768802ca7dbaa06615f5e65da802b67e",
         "index.js": "634e22036df5eac2353406120c78d82eada64ccf5df9bd4978e9307dfad722e8",
-        "styles.css": "7b57a6e9abac02bf0d0349ed3dcd1c60f8c4536c20da44a112ef1bfd563f9ae5",
+        "cultiva-sheet-base.css": "182a17a5b484def6f65ebd09bae4f2fc9746d3c456c057586e46683c771ea2ad",
+        "styles.css": "17fea71a4b1b23b2f1c87fb65d384791c48ea107c98bd39da6ca5fe94c02dbd9",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       }
     },
     {
       "id": "time",
       "name": "Time Widget",
-      "version": "2.0.0",
+      "version": "2.2.0",
       "author": "krwg",
       "description": "Live clock, time zones, Apple-style sheet.",
       "icon": "",
@@ -38,15 +39,16 @@
         "timezone"
       ],
       "sha256": {
-        "manifest.json": "b685dd915fabb286321a6ca36c6f347fe860aa8870e60216852ef9f35a9265a6",
+        "manifest.json": "1671a9775472f07d20c75b4d0c8b881ed84b44347c3acd10b2e7549bd6bb365d",
         "index.js": "91000ab92e6649e2b2ce77cbc9b8309cc709296771202df23f2f9c27fbe8c1b6",
-        "styles.css": "74efd395f5e2214414ba3e446b319b6473fa50514693eac86729e5c327755fd3"
+        "cultiva-sheet-base.css": "182a17a5b484def6f65ebd09bae4f2fc9746d3c456c057586e46683c771ea2ad",
+        "styles.css": "632c4f0ba4bf61cd4fd650ceae59d1f7b14009bd14e515479cba0415bba25d39"
       }
     },
     {
       "id": "radio",
       "name": "Radio Widget",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "author": "krwg",
       "description": "SomaFM streams, sleep timer, volume, glass UI.",
       "icon": "",
@@ -59,15 +61,16 @@
         "ambient"
       ],
       "sha256": {
-        "manifest.json": "50d44d4849d8cf82d63972d4d054ab0e48457900806536e003c652ea2eede02c",
+        "manifest.json": "b915fdd9b28f9d5cd1e110518398745021fcf73cd09d33d3bc714cdd2e970fd1",
         "index.js": "53e75e12adc7aa7607fd0bfd83b10623d6b7b3fa6d80c9a8b43d891ea70024ff",
-        "styles.css": "02e1cd114a01590a02a6293eb057d3de32a570bc739b225e010d1e7b2f37a37a"
+        "cultiva-sheet-base.css": "182a17a5b484def6f65ebd09bae4f2fc9746d3c456c057586e46683c771ea2ad",
+        "styles.css": "d16592955a85029e39724166449db36153d5f10e9caa3fd343beed56ceb66968"
       }
     },
     {
       "id": "pomodoro",
       "name": "Pomodoro Timer",
-      "version": "1.0.0",
+      "version": "1.2.0",
       "author": "krwg",
       "description": "Focus timer in the header — 25/5 pomodoro cycles.",
       "icon": "",
@@ -80,9 +83,10 @@
         "productivity"
       ],
       "sha256": {
-        "manifest.json": "4c1941a7de7ede79b66dbe65fd5bd74272a96b2705c63995e23618b6fe9d0af3",
+        "manifest.json": "385471e16b4b6dddd363e8a1fc8377b13e6ddcb48b1021da841baf953bf06ff7",
         "index.js": "ca6bc51f35864706e74246b6897ce037b21ef6fcbe9ce75efc45b221275b848e",
-        "styles.css": "ee79a805c7173c6dca5ecacbcc92f0c0f3f6e7388650ecf0c5cc68a987ee5da3"
+        "cultiva-sheet-base.css": "182a17a5b484def6f65ebd09bae4f2fc9746d3c456c057586e46683c771ea2ad",
+        "styles.css": "7d58f7b96603f108bfe76779066ec216c65469c4cb3c4098efb0464dc864548d"
       }
     },
     {
