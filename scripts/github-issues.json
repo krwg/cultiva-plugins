@@ -1,0 +1,129 @@
+{
+  "repo": "krwg/cultiva-plugins",
+  "issues": [
+    {
+      "action": "close",
+      "title": "chore: registry manifest version drift breaks sha256 installs",
+      "labels": ["bug", "registry", "1.7"],
+      "commit": "16eee6af11f8f734ad17f4134989e537d44eab9f",
+      "body": "## Problem\n\n`registry.json` plugin versions lagged behind `manifest.json` (weather 2.1.0 vs 2.3.0, etc.), causing install hash mismatches.\n\n## Fix\n\nAuto-sync versions in compute script + CI validate workflow.",
+      "closeBody": "Fixed in https://github.com/krwg/cultiva-plugins/commit/16eee6af11f8f734ad17f4134989e537d44eab9f\n\nRegistry bumped to **3.0.1** with synced versions and recomputed sha256."
+    },
+    {
+      "action": "close",
+      "title": "refactor: deduplicate cultiva-sheet CSS across weather/time/radio/pomodoro",
+      "labels": ["enhancement", "maintenance"],
+      "commit": "53278f9266d96f7b01d2c897654a75e84e4cb850",
+      "body": "## Problem\n\nFour plugins each duplicated ~200 lines of sheet modal CSS.\n\n## Solution\n\n`shared/cultiva-sheet-base.css` + `scripts/sync-sheet-css.mjs` copied into plugin folders before hash compute.",
+      "closeBody": "Fixed in https://github.com/krwg/cultiva-plugins/commit/53278f9266d96f7b01d2c897654a75e84e4cb850"
+    },
+    {
+      "action": "open",
+      "title": "plugins: adopt onSettingsChange hook in all six plugins",
+      "labels": ["enhancement", "i18n", "1.7"],
+      "body": "## Context\n\nCultiva 1.7 wires `onSettingsChange` on app settings save. **Zero plugins use it** — locale/theme changes require disable/re-enable.\n\n## Tasks\n\n- [ ] weather, time, quote, radio, pomodoro, streak\n- [ ] Re-read `app.getLocale()` and refresh header/garden/sheet UI"
+    },
+    {
+      "action": "open",
+      "title": "i18n: weather manifest settings labels are Russian-only",
+      "labels": ["i18n", "weather"],
+      "body": "## Problem\n\nManifest settings (`Город`, `Единицы`, `Показывать в саду`) show in Settings → Plugin Settings for all locales.\n\n## Fix\n\nLocale-keyed labels in manifest or Cultiva-side plugin-i18n for settings fields."
+    },
+    {
+      "action": "open",
+      "title": "weather: wire or remove dead checkExtremeWeather and debug onHabitComplete hook",
+      "labels": ["bug", "weather"],
+      "body": "## Dead code\n\n- `checkExtremeWeather()` defined but never called\n- Debug `onHabitComplete` only console.logs\n\n## Decision\n\nWire hot/cold/storm notifications OR delete dead code before next registry bump."
+    },
+    {
+      "action": "open",
+      "title": "pomodoro: replace emoji icon with SVG letter placeholder per style guide",
+      "labels": ["bug", "pomodoro", "ui"],
+      "body": "## Problem\n\nPomodoro uses tomato emoji in header and sheet — violates CONTRIBUTING «no emoji in plugin UI».\n\n## Fix\n\nMatch quote plugin SVG icon pattern; localize completion toasts (currently EN-only)."
+    },
+    {
+      "action": "open",
+      "title": "i18n: streak plugin notifications English-only",
+      "labels": ["i18n", "streak"],
+      "body": "## Problem\n\nStreak Celebrator toasts ignore `app.getLocale()`.\n\n## Also\n\n- Debounce spam on many completions\n- Settings: milestones-only mode, quiet hours"
+    },
+    {
+      "action": "open",
+      "title": "radio: add manifest.settings for default station, volume, sleep timer",
+      "labels": ["enhancement", "radio"],
+      "body": "## Context\n\nAll controls live in sheet only — no Settings modal entry unlike time/pomodoro.\n\n## Tasks\n\n- [ ] manifest.settings schema\n- [ ] Buffering/error state when all stream URLs fail"
+    },
+    {
+      "action": "open",
+      "title": "time: unify manifest vs sheet settings and save UX",
+      "labels": ["enhancement", "time"],
+      "body": "## Problem\n\nFormat/color in manifest settings; timezone only in sheet. Timezone saves immediately; format/color require Save — inconsistent.\n\n## Proposal\n\nAdd timezone to manifest OR remove duplicate format/color from manifest."
+    },
+    {
+      "action": "open",
+      "title": "quote: remove unused storage permission; add onSettingsChange for locale",
+      "labels": ["chore", "quote"],
+      "body": "## Items\n\n- Declares `storage` permission but never uses it\n- Language switch does not refresh quote until midnight\n- Optional: tap action (refresh/favorite), settings for category"
+    },
+    {
+      "action": "open",
+      "title": "docs: update README catalog versions (quote 1.2.0, weather 2.3.0, etc.)",
+      "labels": ["documentation"],
+      "body": "## Drift\n\nREADME catalog table still lists quote 1.0.0, weather 2.1.0, pomodoro 1.0.0.\n\n## Tasks\n\n- [ ] Sync catalog table with registry.json\n- [ ] Badge registry version 3.0.1"
+    },
+    {
+      "action": "open",
+      "title": "registry: schema 3.1 — permissions, surfaces, i18n catalog fields",
+      "labels": ["enhancement", "registry"],
+      "body": "## Proposed fields\n\n- `permissions`, `surfaces: [\"header\",\"garden\",\"hooks\"]`\n- `settings: boolean` badge\n- `i18n: { en: {name, description}, ru: {...} }` — move strings out of Cultiva binary\n- `deprecated`, `replacedBy`, `publishedAt`\n\n## CI\n\nFail PR if manifest version ≠ registry entry (extend validate-registry.mjs)."
+    },
+    {
+      "action": "open",
+      "title": "plugin: Weekly Garden Stats widget (surface Cultiva 1.7 analytics in garden)",
+      "labels": ["plugin-idea", "enhancement"],
+      "body": "## Rationale\n\nStatistics dashboard exists in Settings but not in daily garden view.\n\n## Surface\n\nGarden widget — weekly completion trend mini-chart."
+    },
+    {
+      "action": "open",
+      "title": "plugin: Habit Reflection / micro-journal on onHabitComplete",
+      "labels": ["plugin-idea", "enhancement"],
+      "body": "## Rationale\n\nOne-line reflection after completion builds mindfulness loop beyond streak toasts.\n\n## Depends on\n\nStable `onHabitComplete` payload + optional storage UI."
+    },
+    {
+      "action": "open",
+      "title": "plugin: Morning & Evening Routine checklist widget",
+      "labels": ["plugin-idea", "enhancement"],
+      "body": "## Rationale\n\nOrdered multi-habit ritual widget complements single habit cards."
+    },
+    {
+      "action": "open",
+      "title": "plugin: Gentle Nudge — you have not logged X today",
+      "labels": ["plugin-idea", "enhancement"],
+      "body": "## Rationale\n\nComplements native notifications without cloud.\n\n## Blocked by\n\nCultiva `app.getHabits()` read API (krwg/cultiva issue)."
+    },
+    {
+      "action": "open",
+      "title": "plugin: Focus Session Logger — link pomodoro to Deep Work habit",
+      "labels": ["plugin-idea", "enhancement"],
+      "body": "## Rationale\n\nBridge pomodoro work phase end to `onHabitComplete` for a dedicated habit."
+    },
+    {
+      "action": "open",
+      "title": "plugin: Streak Grace Visualizer for Cultiva 1.7 grace day setting",
+      "labels": ["plugin-idea", "enhancement"],
+      "body": "## Rationale\n\nGrace day exists in app settings but is invisible in garden UI."
+    },
+    {
+      "action": "open",
+      "title": "weather: remove legacy .weather-modal-* dead CSS block",
+      "labels": ["chore", "weather"],
+      "body": "## Context\n\n~180 lines of `.weather-modal-*` rules appear unused; plugin uses `cultiva-sheet-*` markup.\n\n## Task\n\nDelete dead CSS; verify no regression in sheet UI."
+    },
+    {
+      "action": "open",
+      "title": "weather: drop GitHub raw fallback for cities-ru.json",
+      "labels": ["chore", "weather"],
+      "body": "## Problem\n\nFallback `fetch()` to GitHub raw bypasses bundled `context.data.read` intent and fails offline.\n\n## Fix\n\nRely on bundled data only; surface clear error if `data.read` fails."
+    }
+  ]
+}
