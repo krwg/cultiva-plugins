@@ -17,8 +17,8 @@
         "russia"
       ],
       "sha256": {
-        "manifest.json": "4f54159fe1031526b628ef1972a20b6a9f750c868189084302e99681acdab8ed",
-        "index.js": "fe8b799d32626dda7739f09284456bc0db320592cefbead05171f54f4e89c58f",
+        "manifest.json": "13da2c48ff5daf4c996b2f37a997bdfbfb6b262044a01d389045e0b37e44eb51",
+        "index.js": "634e22036df5eac2353406120c78d82eada64ccf5df9bd4978e9307dfad722e8",
         "styles.css": "7b57a6e9abac02bf0d0349ed3dcd1c60f8c4536c20da44a112ef1bfd563f9ae5",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       }
@@ -38,9 +38,9 @@
         "timezone"
       ],
       "sha256": {
-        "manifest.json": "4cce92248975f8a093dedf38327dd0565c27eb88e39a7aac3f72f9f11d83a9ac",
-        "index.js": "fd30a02de79cb5511da3a23e5f6ebf87885ae53cefc6d68af6028a8ce74bef34",
-        "styles.css": "1042b381b4cc837f2cc752f5145f42d96f6b537cffd1f8f36afccc34a3115743"
+        "manifest.json": "b685dd915fabb286321a6ca36c6f347fe860aa8870e60216852ef9f35a9265a6",
+        "index.js": "91000ab92e6649e2b2ce77cbc9b8309cc709296771202df23f2f9c27fbe8c1b6",
+        "styles.css": "74efd395f5e2214414ba3e446b319b6473fa50514693eac86729e5c327755fd3"
       }
     },
     {
@@ -59,8 +59,8 @@
         "ambient"
       ],
       "sha256": {
-        "manifest.json": "ae9eab913a26280b74dba3104f0a70bee4694c55f52e778fa181568dd7fa7726",
-        "index.js": "e465576865afeed3ceae6030393f37d1c7439f3a8342a3172eda57f0cfed8ea7",
+        "manifest.json": "50d44d4849d8cf82d63972d4d054ab0e48457900806536e003c652ea2eede02c",
+        "index.js": "53e75e12adc7aa7607fd0bfd83b10623d6b7b3fa6d80c9a8b43d891ea70024ff",
         "styles.css": "02e1cd114a01590a02a6293eb057d3de32a570bc739b225e010d1e7b2f37a37a"
       }
     },
@@ -80,9 +80,9 @@
         "productivity"
       ],
       "sha256": {
-        "manifest.json": "c33fa4a7b2efb4354a4a025118b077586b098d94114faaf6ce51bdbbf625b243",
-        "index.js": "6e33b96d814bfc20bfa785c2b2cd5eb45d6fb2df6f23126f1a8dcbf2fd691a65",
-        "styles.css": "7f990b8b6caf53a282e905feb13e473a36de483a3060200e96a9d99f084c900a"
+        "manifest.json": "4c1941a7de7ede79b66dbe65fd5bd74272a96b2705c63995e23618b6fe9d0af3",
+        "index.js": "ca6bc51f35864706e74246b6897ce037b21ef6fcbe9ce75efc45b221275b848e",
+        "styles.css": "ee79a805c7173c6dca5ecacbcc92f0c0f3f6e7388650ecf0c5cc68a987ee5da3"
       }
     },
     {
@@ -100,8 +100,8 @@
         "quote"
       ],
       "sha256": {
-        "manifest.json": "9b83184b3a9612b74731af288b2ef43b448924852a3a6924b38962dc67ca10b9",
-        "index.js": "257dc7575dcd164a58239dc89dd54703adc4bc5ac26250ea0eec453cb400b384",
+        "manifest.json": "da42df21fb7a98a93c9be4eab5828749457104e5e9ada612deb78cbe7d2d1924",
+        "index.js": "267a50720c4e7dfcd7b5ace4a2c5b5b867de46572897decde1e1f0e5176a7c19",
         "styles.css": "ef8eaac48e6eb69ee55c7d06c3fc2066c570644b38aa6448100ba8d699c9ebe7"
       }
     },

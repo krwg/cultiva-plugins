@@ -19,18 +19,16 @@ class WeatherPlugin {
     this._locale = 'en';
 
     this.popularCities = [
-      { name: 'Moscow', country: 'Russia', lat: 55.7558, lon: 37.6173 },
-      { name: 'Saint Petersburg', country: 'Russia', lat: 59.9343, lon: 30.3351 },
-      { name: 'London', country: 'UK', lat: 51.5074, lon: -0.1278 },
-      { name: 'New York', country: 'USA', lat: 40.7128, lon: -74.0060 },
-      { name: 'Tokyo', country: 'Japan', lat: 35.6762, lon: 139.6503 },
-      { name: 'Berlin', country: 'Germany', lat: 52.5200, lon: 13.4050 },
-      { name: 'Paris', country: 'France', lat: 48.8566, lon: 2.3522 },
-      { name: 'Rome', country: 'Italy', lat: 41.9028, lon: 12.4964 },
-      { name: 'Madrid', country: 'Spain', lat: 40.4168, lon: -3.7038 },
-      { name: 'Beijing', country: 'China', lat: 39.9042, lon: 116.4074 },
-      { name: 'Sydney', country: 'Australia', lat: -33.8688, lon: 151.2093 },
-      { name: 'Dubai', country: 'UAE', lat: 25.2048, lon: 55.2708 }
+      { name: 'Moscow', nameRu: 'Москва', country: 'Russia', lat: 55.7558, lon: 37.6173 },
+      { name: 'Saint Petersburg', nameRu: 'Санкт-Петербург', country: 'Russia', lat: 59.9343, lon: 30.3351 },
+      { name: 'London', nameRu: 'Лондон', country: 'UK', lat: 51.5074, lon: -0.1278 },
+      { name: 'Paris', nameRu: 'Париж', country: 'France', lat: 48.8566, lon: 2.3522 },
+      { name: 'Berlin', nameRu: 'Берлин', country: 'Germany', lat: 52.5200, lon: 13.4050 },
+      { name: 'Rome', nameRu: 'Рим', country: 'Italy', lat: 41.9028, lon: 12.4964 },
+      { name: 'Madrid', nameRu: 'Мадрид', country: 'Spain', lat: 40.4168, lon: -3.7038 },
+      { name: 'Tokyo', nameRu: 'Токио', country: 'Japan', lat: 35.6762, lon: 139.6503 },
+      { name: 'Beijing', nameRu: 'Пекин', country: 'China', lat: 39.9042, lon: 116.4074 },
+      { name: 'New York', nameRu: 'Нью-Йорк', country: 'USA', lat: 40.7128, lon: -74.0060 }
     ];
 
      this.russianCities = [];
@@ -159,6 +157,26 @@ class WeatherPlugin {
     return icons[k] || icons.cloudy;
   }
 
+  _cityLabel(name) {
+    if (this._locale !== 'ru') {
+      return name;
+    }
+    const hit = this.popularCities.find((c) => c.name === name);
+    if (hit && hit.nameRu) {
+      return hit.nameRu;
+    }
+    const local = this.russianCities.find((c) => String(c.name || '').toLowerCase() === String(name || '').toLowerCase());
+    return local ? local.name : name;
+  }
+
+  _geoLang() {
+    return this._locale === 'ru' ? 'ru' : 'en';
+  }
+
+  _windUnit() {
+    return this._locale === 'ru' ? 'км/ч' : 'km/h';
+  }
+
   _patchSearchResults(html) {
     if (this.context.ui.patchMainSheet) {
       this.context.ui.patchMainSheet('.cultiva-search-results', html);
@@ -235,7 +253,7 @@ class WeatherPlugin {
 
     console.log('[Weather] Searching via Open-Meteo API...');
     try {
-      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=en&format=json`;
+      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=${this._geoLang()}&format=json`;
       const response = await fetch(url);
       const data = await response.json();
 
@@ -263,7 +281,7 @@ class WeatherPlugin {
       return { city: local.name, lat: local.lat, lon: local.lon };
     }
     try {
-      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=en&format=json`;
+      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=${this._geoLang()}&format=json`;
       const res = await fetch(url);
       const data = await res.json();
       const hit = Array.isArray(data.results) ? data.results[0] : null;
@@ -373,7 +391,7 @@ class WeatherPlugin {
     const kind = this._weatherKind();
     const icon = this._weatherIconSvg(kind);
     if (!this.weatherData) {
-      return `<article class="habit-card weather-garden-card weather-garden-card--${kind}" tabindex="0">
+      return `<article class="habit-card garden-plugin-card weather-garden-card weather-garden-card--${kind}" tabindex="0">
         <div class="card-header">
           <div class="plant-visual weather-garden-icon">${icon}</div>
           <div class="card-info">
@@ -383,13 +401,13 @@ class WeatherPlugin {
         </div>
       </article>`;
     }
-    return `<article class="habit-card weather-garden-card weather-garden-card--${kind}" tabindex="0">
+    return `<article class="habit-card garden-plugin-card weather-garden-card weather-garden-card--${kind}" tabindex="0">
         <div class="card-header">
           <div class="plant-visual weather-garden-icon">${icon}</div>
           <div class="card-info">
             <div class="card-title">${Math.round(this.weatherData.temp)}${this.weatherData.units}</div>
             <div class="card-subtitle">${this._escapeHtml(this.getWeatherDescription())}</div>
-            <span class="category-badge">${this._escapeHtml(this.settings.city)}</span>
+            <span class="category-badge">${this._escapeHtml(this._cityLabel(this.settings.city))}</span>
           </div>
         </div>
       </article>`;
@@ -408,7 +426,7 @@ class WeatherPlugin {
   _buildWeatherSheetHtml(searchResultsHtml) {
     const w = this.weatherData;
     const kind = this._weatherKind();
-    const city = this._escapeHtml(this.settings.city);
+    const city = this._escapeHtml(this._cityLabel(this.settings.city));
     const mainTemp = w ? Math.round(w.temp) : '--';
     const units = w?.units || '°C';
     const desc = w ? this._escapeHtml(this.getWeatherDescription()) : this._escapeHtml(this._t('loading'));
@@ -420,7 +438,7 @@ class WeatherPlugin {
       .slice(0, 8)
       .map(
         (c) =>
-          `<button type="button" class="cultiva-pill" data-cultiva-act="pickCity" data-lat="${c.lat}" data-lon="${c.lon}" data-city="${this._escapeAttr(c.name)}">${this._escapeHtml(c.name)}</button>`
+          `<button type="button" class="cultiva-pill" data-cultiva-act="pickCity" data-lat="${c.lat}" data-lon="${c.lon}" data-city="${this._escapeAttr(c.name)}">${this._escapeHtml(this._locale === 'ru' ? (c.nameRu || c.name) : c.name)}</button>`
       )
       .join('');
     const results = searchResultsHtml || '';
@@ -444,7 +462,7 @@ class WeatherPlugin {
     <div class="weather-metrics">
       <div><span class="cultiva-muted">${this._t('feels')}</span><strong>${feel}${units}</strong></div>
       <div><span class="cultiva-muted">${this._t('humidity')}</span><strong>${hum}%</strong></div>
-      <div><span class="cultiva-muted">${this._t('wind')}</span><strong>${wind} km/h</strong></div>
+      <div><span class="cultiva-muted">${this._t('wind')}</span><strong>${wind} ${this._windUnit()}</strong></div>
     </div>
     <label class="cultiva-field-label">${this._t('searchCity')}</label>
     <input type="text" name="citySearch" class="cultiva-sheet-input" data-cultiva-input-act="search" placeholder="${this._escapeAttr(this._t('searchPlaceholder'))}" value="${searchVal}" autocomplete="off" />

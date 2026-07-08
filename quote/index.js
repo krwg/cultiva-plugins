@@ -36,7 +36,15 @@ class QuotePlugin {
 
   _html() {
     const q = QUOTES[dayIndex()];
-    return `<div class="quote-widget"><div class="quote-text">“${this._escapeHtml(q.text)}”</div><div class="quote-author">— ${this._escapeHtml(q.author)}</div></div>`;
+    return `<article class="habit-card garden-plugin-card garden-plugin-card--quote" data-category="mindfulness">
+      <div class="card-header">
+        <div class="plant-visual">💬</div>
+        <div class="card-info">
+          <div class="card-title">"${this._escapeHtml(q.text)}"</div>
+          <div class="card-subtitle">— ${this._escapeHtml(q.author)}</div>
+        </div>
+      </div>
+    </article>`;
   }
 
   async onEnable() {

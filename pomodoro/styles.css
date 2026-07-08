@@ -96,6 +96,14 @@
   font-size: 34px;
   line-height: 1;
 }
+.pomodoro-hero-timer {
+  margin-top: 6px;
+  font-size: 36px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
 .pomodoro-hero-status {
   margin-top: 8px;
   font-size: 15px;

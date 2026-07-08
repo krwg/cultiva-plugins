@@ -12,13 +12,129 @@ class RadioPlugin {
     };
     this.audio = null;
     this.sleepTimer = null;
+    this._locale = 'en';
     this.stations = {
-      groovesalad: { name: 'Groove Salad', tag: 'Chillout', url: 'https://ice6.somafm.com/groovesalad-256-mp3' },
-      fluid: { name: 'Fluid', tag: 'Downtempo', url: 'https://ice4.somafm.com/fluid-256-mp3' },
-      beatblender: { name: 'Beat Blender', tag: 'Beats', url: 'https://ice2.somafm.com/beatblender-256-mp3' },
-      dronezone: { name: 'Drone Zone', tag: 'Ambient', url: 'https://ice1.somafm.com/dronezone-256-mp3' },
-      defcon: { name: 'DEF CON Radio', tag: 'Electronic', url: 'https://ice2.somafm.com/defcon-128-mp3' }
+      groovesalad: {
+        name: 'Groove Salad',
+        tag: 'Chillout',
+        urls: [
+          'https://ice6.somafm.com/groovesalad-256-mp3',
+          'https://ice5.somafm.com/groovesalad-128-mp3',
+          'https://ice1.somafm.com/groovesalad-128-mp3'
+        ]
+      },
+      fluid: {
+        name: 'Fluid',
+        tag: 'Downtempo',
+        urls: [
+          'https://ice6.somafm.com/fluid-128-mp3',
+          'https://ice4.somafm.com/fluid-128-mp3',
+          'https://ice2.somafm.com/fluid-128-mp3'
+        ]
+      },
+      beatblender: {
+        name: 'Beat Blender',
+        tag: 'Beats',
+        urls: [
+          'https://ice6.somafm.com/beatblender-128-mp3',
+          'https://ice2.somafm.com/beatblender-128-mp3',
+          'https://ice1.somafm.com/beatblender-128-mp3'
+        ]
+      },
+      dronezone: {
+        name: 'Drone Zone',
+        tag: 'Ambient',
+        urls: [
+          'https://ice1.somafm.com/dronezone-256-mp3',
+          'https://ice3.somafm.com/dronezone-128-mp3'
+        ]
+      },
+      lush: {
+        name: 'Lush',
+        tag: 'Sensual',
+        urls: [
+          'https://ice2.somafm.com/lush-128-mp3',
+          'https://ice1.somafm.com/lush-128-mp3'
+        ]
+      },
+      spacestation: {
+        name: 'Space Station',
+        tag: 'Ambient',
+        urls: [
+          'https://ice1.somafm.com/spacestation-128-mp3',
+          'https://ice6.somafm.com/spacestation-128-mp3'
+        ]
+      },
+      secretagent: {
+        name: 'Secret Agent',
+        tag: 'Lounge',
+        urls: [
+          'https://ice1.somafm.com/secretagent-128-mp3',
+          'https://ice6.somafm.com/secretagent-128-mp3'
+        ]
+      },
+      radioparadise: {
+        name: 'Radio Paradise',
+        tag: 'Eclectic',
+        urls: [
+          'https://stream.radioparadise.com/aac-128',
+          'https://stream.radioparadise.com/mp3-128'
+        ]
+      },
+      chillhop: {
+        name: 'Chillhop Radio',
+        tag: 'Lo-fi',
+        urls: [
+          'https://stream.chillhop.com/chillhop-radio',
+          'https://www.chillhop.com/listen/chillhop-radio'
+        ]
+      },
+      defcon: {
+        name: 'DEF CON Radio',
+        tag: 'Electronic',
+        urls: [
+          'https://ice2.somafm.com/defcon-128-mp3',
+          'https://ice6.somafm.com/defcon-128-mp3'
+        ]
+      }
     };
+  }
+
+  _t(key) {
+    const ru = {
+      radio: 'Радио',
+      onAir: 'В эфире',
+      title: 'Радио',
+      sub: 'Интернет-станции · SomaFM и др.',
+      stop: 'Стоп',
+      refresh: 'Обновить',
+      output: 'Громкость',
+      sleep: 'Таймер сна',
+      off: 'Выкл',
+      stations: 'Станции',
+      footnote: 'Потоки SomaFM, Radio Paradise, Chillhop. Нужен интернет.',
+      playing: 'Играет',
+      unavailable: 'Поток недоступен — попробуйте другую станцию.',
+      sleepDone: 'Таймер сна завершён — воспроизведение остановлено.'
+    };
+    const en = {
+      radio: 'Radio',
+      onAir: 'On air',
+      title: 'Radio',
+      sub: 'Internet streams · SomaFM & more',
+      stop: 'Stop',
+      refresh: 'Refresh',
+      output: 'Output level',
+      sleep: 'Sleep timer',
+      off: 'Off',
+      stations: 'Stations',
+      footnote: 'Streams from SomaFM, Radio Paradise, Chillhop. Requires network.',
+      playing: 'Playing',
+      unavailable: 'Stream unavailable — try another station.',
+      sleepDone: 'Sleep timer ended — playback stopped.'
+    };
+    const dict = this._locale === 'ru' ? ru : en;
+    return dict[key] || key;
   }
 
   _escapeHtml(s) {
@@ -30,9 +146,9 @@ class RadioPlugin {
   }
 
   _headerLabel() {
-    if (!this.settings.playing) return 'Radio';
+    if (!this.settings.playing) return this._t('radio');
     const s = this.stations[this.settings.station];
-    return s ? s.name : 'On air';
+    return s ? s.name : this._t('onAir');
   }
 
   _updateHeader() {
@@ -48,11 +164,18 @@ class RadioPlugin {
     if (m <= 0) return;
     this.sleepTimer = setTimeout(() => {
       this.stopRadio();
-      this.context.ui.showNotification('', 'Sleep timer ended — playback stopped.');
+      this.context.ui.showNotification('', this._t('sleepDone'));
     }, m * 60 * 1000);
   }
 
   async onEnable() {
+    if (this.context.app && typeof this.context.app.getLocale === 'function') {
+      try {
+        this._locale = await this.context.app.getLocale();
+      } catch {
+        this._locale = 'en';
+      }
+    }
     const saved = await this.context.storage.get('settings');
     if (saved) {
       this.settings = { ...this.settings, ...saved };
@@ -79,29 +202,55 @@ class RadioPlugin {
     }
   }
 
+  _stationUrls(stationId) {
+    const station = this.stations[stationId];
+    if (!station) return [];
+    if (Array.isArray(station.urls) && station.urls.length) {
+      return station.urls;
+    }
+    return station.url ? [station.url] : [];
+  }
+
   playStation(stationId, notify) {
     const station = this.stations[stationId];
-    if (!station) return;
+    const urls = this._stationUrls(stationId);
+    if (!station || !urls.length) return;
     if (this.audio) {
       this.audio.pause();
       this.audio = null;
     }
-    try {
-      this.audio = new Audio(station.url);
-      this.audio.volume = this.settings.volume;
-      this.audio.play().catch(() => {
-        this.context.ui.showNotification('', 'Stream unavailable — try another station.');
-      });
+    this._tryPlayUrls(stationId, station, urls, 0, notify);
+  }
+
+  _tryPlayUrls(stationId, station, urls, index, notify) {
+    if (index >= urls.length) {
+      this.context.ui.showNotification('', this._t('unavailable'));
+      return;
+    }
+    const audio = new Audio(urls[index]);
+    audio.preload = 'none';
+    audio.volume = this.settings.volume;
+    const fail = () => {
+      audio.pause();
+      this._tryPlayUrls(stationId, station, urls, index + 1, notify);
+    };
+    const succeed = () => {
+      this.audio = audio;
       this.settings.station = stationId;
       this.settings.playing = true;
       this._updateHeader();
       this._armSleep();
       if (notify !== false) {
-        this.context.ui.showNotification('', `Playing: ${station.name}`);
+        this.context.ui.showNotification('', `${this._t('playing')}: ${station.name}`);
       }
       this.context.storage.set('settings', this.settings);
-    } catch (e) {
-      console.error('[Radio]', e);
+    };
+    audio.addEventListener('error', fail, { once: true });
+    const playPromise = audio.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise.then(succeed).catch(fail);
+    } else {
+      succeed();
     }
   }
 
@@ -142,29 +291,29 @@ class RadioPlugin {
   <div class="cultiva-sheet-grabber"></div>
   <div class="cultiva-sheet-head">
     <div>
-      <div class="cultiva-sheet-title">Radio</div>
-      <div class="cultiva-sheet-sub">Internet streams · SomaFM</div>
+      <div class="cultiva-sheet-title">${this._t('title')}</div>
+      <div class="cultiva-sheet-sub">${this._t('sub')}</div>
     </div>
     <button type="button" class="cultiva-sheet-x" data-cultiva-act="close" aria-label="Close">×</button>
   </div>
   <div class="cultiva-sheet-body">
     <div class="radio-toolbar">
-      <button type="button" class="cultiva-sheet-secondary" data-cultiva-act="stop">Stop</button>
-      <button type="button" class="cultiva-sheet-secondary" data-cultiva-act="refreshSheet">Refresh list</button>
+      <button type="button" class="cultiva-sheet-secondary" data-cultiva-act="stop">${this._t('stop')}</button>
+      <button type="button" class="cultiva-sheet-secondary" data-cultiva-act="refreshSheet">${this._t('refresh')}</button>
     </div>
-    <label class="cultiva-field-label">Output level</label>
+    <label class="cultiva-field-label">${this._t('output')}</label>
     <input type="range" name="vol" min="0" max="1" step="0.03" value="${this.settings.volume}" data-cultiva-change-act="volume" />
     <div class="cultiva-range-meta"><span>${vol}%</span></div>
-    <label class="cultiva-field-label">Sleep timer</label>
+    <label class="cultiva-field-label">${this._t('sleep')}</label>
     <div class="cultiva-pill-row">
-      <button type="button" class="cultiva-pill${sleep === 0 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="0">Off</button>
+      <button type="button" class="cultiva-pill${sleep === 0 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="0">${this._t('off')}</button>
       <button type="button" class="cultiva-pill${sleep === 15 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="15">15m</button>
       <button type="button" class="cultiva-pill${sleep === 30 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="30">30m</button>
       <button type="button" class="cultiva-pill${sleep === 60 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="60">60m</button>
     </div>
-    <label class="cultiva-field-label">Stations</label>
+    <label class="cultiva-field-label">${this._t('stations')}</label>
     <div class="cultiva-radio-scroll">${rows}</div>
-    <p class="cultiva-sheet-footnote">Streams courtesy of SomaFM. Playback uses your network connection.</p>
+    <p class="cultiva-sheet-footnote">${this._t('footnote')}</p>
   </div>
 </div>`;
   }

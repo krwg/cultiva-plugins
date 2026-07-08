@@ -33,6 +33,120 @@ function allTimezones() {
   return COMMON_TZS.slice();
 }
 
+const TZ_CITY_RU = {
+  'UTC': 'Всемирное',
+  'Europe/London': 'Лондон',
+  'Europe/Dublin': 'Дублин',
+  'Europe/Lisbon': 'Лиссабон',
+  'Europe/Paris': 'Париж',
+  'Europe/Berlin': 'Берлин',
+  'Europe/Rome': 'Рим',
+  'Europe/Madrid': 'Мадрид',
+  'Europe/Amsterdam': 'Амстердам',
+  'Europe/Brussels': 'Брюссель',
+  'Europe/Vienna': 'Вена',
+  'Europe/Prague': 'Прага',
+  'Europe/Warsaw': 'Варшава',
+  'Europe/Budapest': 'Будапешт',
+  'Europe/Athens': 'Афины',
+  'Europe/Helsinki': 'Хельсинки',
+  'Europe/Kiev': 'Киев',
+  'Europe/Kyiv': 'Киев',
+  'Europe/Bucharest': 'Бухарест',
+  'Europe/Sofia': 'София',
+  'Europe/Istanbul': 'Стамбул',
+  'Europe/Moscow': 'Москва',
+  'Europe/Minsk': 'Минск',
+  'Europe/Riga': 'Рига',
+  'Europe/Tallinn': 'Таллин',
+  'Europe/Vilnius': 'Вильнюс',
+  'Asia/Dubai': 'Дубай',
+  'Asia/Tbilisi': 'Тбилиси',
+  'Asia/Yerevan': 'Ереван',
+  'Asia/Baku': 'Баку',
+  'Asia/Almaty': 'Алматы',
+  'Asia/Tashkent': 'Ташкент',
+  'Asia/Kolkata': 'Индия',
+  'Asia/Bangkok': 'Бангкок',
+  'Asia/Singapore': 'Сингапур',
+  'Asia/Shanghai': 'Шанхай',
+  'Asia/Hong_Kong': 'Гонконг',
+  'Asia/Tokyo': 'Токио',
+  'Asia/Seoul': 'Сеул',
+  'Australia/Sydney': 'Сидней',
+  'Australia/Melbourne': 'Мельбурн',
+  'Pacific/Auckland': 'Окленд',
+  'America/New_York': 'Нью-Йорк',
+  'America/Chicago': 'Чикаго',
+  'America/Denver': 'Денвер',
+  'America/Los_Angeles': 'Лос-Анджелес',
+  'America/Toronto': 'Торонто',
+  'America/Sao_Paulo': 'Сан-Паулу',
+  'America/Mexico_City': 'Мехико',
+  'Africa/Cairo': 'Каир',
+  'Africa/Johannesburg': 'Йоханнесбург'
+};
+
+function getOffsetMinutes(timeZone, date = new Date()) {
+  try {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      timeZoneName: 'shortOffset'
+    }).formatToParts(date);
+    const raw = parts.find((p) => p.type === 'timeZoneName')?.value || 'GMT';
+    const m = raw.match(/GMT([+-])(\d{1,2})(?::(\d{2}))?/);
+    if (!m) {
+      return 0;
+    }
+    const sign = m[1] === '-' ? -1 : 1;
+    return sign * (parseInt(m[2], 10) * 60 + (m[3] ? parseInt(m[3], 10) : 0));
+  } catch {
+    return 0;
+  }
+}
+
+function offsetLabel(mins) {
+  if (mins === 0) {
+    return 'UTC±0';
+  }
+  const sign = mins > 0 ? '+' : '-';
+  const abs = Math.abs(mins);
+  const h = Math.floor(abs / 60);
+  const m = abs % 60;
+  if (m === 0) {
+    return `UTC${sign}${h}`;
+  }
+  return `UTC${sign}${h}:${String(m).padStart(2, '0')}`;
+}
+
+function cityLabel(timeZone, locale) {
+  if (locale === 'ru' && TZ_CITY_RU[timeZone]) {
+    return TZ_CITY_RU[timeZone];
+  }
+  if (timeZone === 'UTC') {
+    return locale === 'ru' ? 'Всемирное' : 'Universal';
+  }
+  return timeZone.split('/').pop().replace(/_/g, ' ');
+}
+
+function buildTimezoneGroups(locale) {
+  const grouped = new Map();
+  for (const tz of allTimezones()) {
+    const off = getOffsetMinutes(tz);
+    if (!grouped.has(off)) {
+      grouped.set(off, []);
+    }
+    grouped.get(off).push({ tz, city: cityLabel(tz, locale) });
+  }
+  return Array.from(grouped.entries())
+    .sort((a, b) => a[0] - b[0])
+    .map(([off, zones]) => ({
+      offset: off,
+      label: offsetLabel(off),
+      zones: zones.sort((a, b) => a.city.localeCompare(b.city, locale === 'ru' ? 'ru' : 'en'))
+    }));
+}
+
 class TimePlugin {
   constructor(context, hooks) {
     this.context = context;
@@ -48,6 +162,36 @@ class TimePlugin {
     this._tzFilter = '';
     this._sheetDraft = null;
     this._previewTimer = null;
+    this._locale = 'en';
+    this._themeAccent = null;
+    this._tzGroups = null;
+  }
+
+  _t(key) {
+    const ru = {
+      clock: 'Часы',
+      preview: 'Предпросмотр',
+      timezone: 'Часовой пояс',
+      filter: 'Фильтр поясов…',
+      format: 'Формат',
+      accent: 'Акцент',
+      system: 'Системный',
+      save: 'Сохранить',
+      noMatches: 'Ничего не найдено'
+    };
+    const en = {
+      clock: 'Clock',
+      preview: 'Live preview',
+      timezone: 'Time zone',
+      filter: 'Filter zones…',
+      format: 'Format',
+      accent: 'Accent',
+      system: 'System',
+      save: 'Save',
+      noMatches: 'No matches'
+    };
+    const dict = this._locale === 'ru' ? ru : en;
+    return dict[key] || key;
   }
 
   _escapeHtml(s) {
@@ -138,20 +282,42 @@ class TimePlugin {
     }
   }
 
+  async _syncThemeAccent() {
+    if (this.settings.color !== 'default' || !this.context.app?.getThemeColor) {
+      this._themeAccent = null;
+      return;
+    }
+    try {
+      this._themeAccent = await this.context.app.getThemeColor('text-primary');
+    } catch {
+      this._themeAccent = null;
+    }
+  }
+
   updateHeaderDisplay() {
     const timeStr = this.formatTime(new Date());
-    const color = this.getColorStyle();
+    let color = null;
+    if (this.settings.color === 'default') {
+      color = this._themeAccent || null;
+    } else {
+      color = this.getColorStyle() || null;
+    }
     this.context.ui.updateMainHeader({
       label: timeStr,
       icon: '',
-      labelColor: color || undefined
+      labelColor: color
     });
   }
 
   startClock() {
     this.updateHeaderDisplay();
     if (this.interval) clearInterval(this.interval);
-    this.interval = setInterval(() => this.updateHeaderDisplay(), 1000);
+    this.interval = setInterval(() => {
+      this.updateHeaderDisplay();
+      if (this.settings.color === 'default') {
+        void this._syncThemeAccent();
+      }
+    }, 1000);
     if (this.colorInterval) clearInterval(this.colorInterval);
     if (this.settings.color === 'rainbow') {
       this.colorInterval = setInterval(() => {
@@ -162,10 +328,18 @@ class TimePlugin {
   }
 
   async onEnable() {
+    if (this.context.app && typeof this.context.app.getLocale === 'function') {
+      try {
+        this._locale = await this.context.app.getLocale();
+      } catch {
+        this._locale = 'en';
+      }
+    }
     const saved = await this.context.storage.get('settings');
     if (saved) {
       this.settings = { ...this.settings, ...saved };
     }
+    await this._syncThemeAccent();
     this.context.ui.registerHeaderItem({
       label: this.formatTime(new Date()),
       icon: '',
@@ -190,21 +364,43 @@ class TimePlugin {
     this._startSheetPreviewClock();
   }
 
+  _buildTzRowsHtml(draft) {
+    const q = (this._tzFilter || '').trim().toLowerCase();
+    if (q) {
+      const pool = allTimezones().filter((z) => {
+        const city = cityLabel(z, this._locale).toLowerCase();
+        return z.toLowerCase().includes(q) || city.includes(q);
+      });
+      const rows = pool.slice(0, 120).map((z) => {
+        const off = offsetLabel(getOffsetMinutes(z));
+        const city = cityLabel(z, this._locale);
+        return `<button type="button" class="cultiva-tz-row${z === draft.timezone ? ' is-active' : ''}" data-cultiva-act="pickTz" data-tz="${this._escapeAttr(z)}"><span class="cultiva-tz-name">${this._escapeHtml(city)}</span><span class="cultiva-tz-meta">${this._escapeHtml(off)}</span></button>`;
+      }).join('');
+      return rows || `<div class="cultiva-muted cultiva-pad">${this._escapeHtml(this._t('noMatches'))}</div>`;
+    }
+    if (!this._tzGroups) {
+      this._tzGroups = buildTimezoneGroups(this._locale);
+    }
+    return this._tzGroups.map((group) => {
+      const rows = group.zones.map((z) =>
+        `<button type="button" class="cultiva-tz-row${z.tz === draft.timezone ? ' is-active' : ''}" data-cultiva-act="pickTz" data-tz="${this._escapeAttr(z.tz)}"><span class="cultiva-tz-name">${this._escapeHtml(z.city)}</span><span class="cultiva-tz-meta">${this._escapeHtml(group.label)}</span></button>`
+      ).join('');
+      return `<div class="cultiva-tz-group"><div class="cultiva-tz-group-label">${this._escapeHtml(group.label)}</div>${rows}</div>`;
+    }).join('');
+  }
+
   _buildSheetHtml() {
     const draft = this._sheetDraft || this.settings;
-    const all = allTimezones();
-    const q = (this._tzFilter || '').trim().toLowerCase();
-    const pool = q ? all.filter((z) => z.toLowerCase().includes(q)) : COMMON_TZS;
-    const zones = pool.slice(0, 80);
-    const rows = zones
-      .map(
-        (z) =>
-          `<button type="button" class="cultiva-tz-row${z === draft.timezone ? ' is-active' : ''}" data-cultiva-act="pickTz" data-tz="${this._escapeAttr(z)}"><span class="cultiva-tz-name">${this._escapeHtml(z)}</span></button>`
-      )
-      .join('');
+    const rows = this._buildTzRowsHtml(draft);
     const preview = this._escapeHtml(this.formatTime(new Date(), draft));
-    const previewColor = this._escapeHtml(this.getColorStyle(draft) || '');
-    const tzLine = this._escapeHtml(draft.timezone || 'UTC');
+    let previewStyle = '';
+    if (draft.color !== 'default') {
+      const previewColor = this.getColorStyle(draft);
+      if (previewColor) {
+        previewStyle = ` style="color:${this._escapeHtml(previewColor)}"`;
+      }
+    }
+    const tzLine = this._escapeHtml(cityLabel(draft.timezone || 'UTC', this._locale));
     const seg = (value, label) =>
       `<button type="button" class="cultiva-seg${draft.format === value ? ' is-on' : ''}" data-cultiva-act="pickFormat" data-format="${value}">${label}</button>`;
     return `
@@ -213,28 +409,28 @@ class TimePlugin {
   <div class="cultiva-sheet-grabber"></div>
   <div class="cultiva-sheet-head">
     <div>
-      <div class="cultiva-sheet-title">Clock</div>
+      <div class="cultiva-sheet-title">${this._t('clock')}</div>
       <div class="cultiva-sheet-sub">${tzLine}</div>
     </div>
     <button type="button" class="cultiva-sheet-x" data-cultiva-act="close" aria-label="Close">×</button>
   </div>
   <div class="cultiva-sheet-body">
     <div class="time-hero">
-      <div class="time-hero-clock" style="${previewColor ? `color:${previewColor}` : ''}">${preview}</div>
-      <div class="time-hero-caption">Live preview</div>
+      <div class="time-hero-clock"${previewStyle}>${preview}</div>
+      <div class="time-hero-caption">${this._t('preview')}</div>
     </div>
-    <label class="cultiva-field-label">Time zone</label>
-    <input type="search" name="tzFilter" class="cultiva-sheet-input" data-cultiva-input-act="tzFilter" placeholder="Filter zones…" value="${this._escapeAttr(this._tzFilter)}" autocomplete="off" />
-    <div class="cultiva-tz-scroll">${rows || '<div class="cultiva-muted cultiva-pad">No matches</div>'}</div>
-    <label class="cultiva-field-label">Format</label>
+    <label class="cultiva-field-label">${this._t('timezone')}</label>
+    <input type="search" name="tzFilter" class="cultiva-sheet-input" data-cultiva-input-act="tzFilter" placeholder="${this._escapeAttr(this._t('filter'))}" value="${this._escapeAttr(this._tzFilter)}" autocomplete="off" />
+    <div class="cultiva-tz-scroll">${rows}</div>
+    <label class="cultiva-field-label">${this._t('format')}</label>
     <div class="cultiva-segmented">
       ${seg('HH:MM:SS', '24h + sec')}
       ${seg('HH:MM', '24h')}
       ${seg('hh:MM:SS A', '12h')}
     </div>
-    <label class="cultiva-field-label">Accent</label>
+    <label class="cultiva-field-label">${this._t('accent')}</label>
     <select name="color" class="cultiva-sheet-select" data-cultiva-change-act="colorDraft">
-      <option value="default" ${draft.color === 'default' ? 'selected' : ''}>System</option>
+      <option value="default" ${draft.color === 'default' ? 'selected' : ''}>${this._t('system')}</option>
       <option value="green" ${draft.color === 'green' ? 'selected' : ''}>Green</option>
       <option value="blue" ${draft.color === 'blue' ? 'selected' : ''}>Blue</option>
       <option value="purple" ${draft.color === 'purple' ? 'selected' : ''}>Purple</option>
@@ -242,7 +438,7 @@ class TimePlugin {
       <option value="graphite" ${draft.color === 'graphite' ? 'selected' : ''}>Graphite</option>
       <option value="rainbow" ${draft.color === 'rainbow' ? 'selected' : ''}>Spectrum</option>
     </select>
-    <button type="button" class="cultiva-sheet-primary" data-cultiva-act="apply" data-cultiva-collect="1">Save</button>
+    <button type="button" class="cultiva-sheet-primary" data-cultiva-act="apply" data-cultiva-collect="1">${this._t('save')}</button>
   </div>
 </div>`;
   }
@@ -302,6 +498,7 @@ class TimePlugin {
       await this.context.storage.set('settings', this.settings);
       this._sheetDraft = null;
       this._stopSheetPreviewClock();
+      await this._syncThemeAccent();
       this.startClock();
       this.context.ui.closeMainSheet();
     }

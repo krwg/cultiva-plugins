@@ -7,19 +7,27 @@ class PomodoroPlugin {
     this.remaining = 0;
     this.endTimestamp = 0;
     this.tick = null;
+    this._locale = 'en';
   }
 
   _escapeHtml(s) {
     return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
+  _formatRemaining() {
+    const m = Math.floor(this.remaining / 60);
+    const s = this.remaining % 60;
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
   _label() {
     if (this.phase === 'idle') {
-      return 'Pomodoro';
+      return this._locale === 'ru' ? 'Помодоро' : 'Pomodoro';
     }
-    const m = Math.ceil(this.remaining / 60);
-    const tag = this.phase === 'work' ? 'Focus' : 'Break';
-    return `${tag} ${m}m`;
+    const tag = this.phase === 'work'
+      ? (this._locale === 'ru' ? 'Фокус' : 'Focus')
+      : (this._locale === 'ru' ? 'Перерыв' : 'Break');
+    return `${tag} ${this._formatRemaining()}`;
   }
 
   _updateHeader() {
@@ -42,6 +50,13 @@ class PomodoroPlugin {
   }
 
   async onEnable() {
+    if (this.context.app && typeof this.context.app.getLocale === 'function') {
+      try {
+        this._locale = await this.context.app.getLocale();
+      } catch {
+        this._locale = 'en';
+      }
+    }
     const saved = await this.context.storage.get('settings');
     if (saved) {
       this.settings = { ...this.settings, ...saved };
@@ -74,29 +89,36 @@ class PomodoroPlugin {
   openModal() {
     const work = this.settings.workMinutes;
     const brk = this.settings.breakMinutes;
+    const ru = this._locale === 'ru';
     const status = this.phase === 'idle'
-      ? 'Ready to focus'
-      : `${this.phase === 'work' ? 'Focus' : 'Break'} — ${Math.ceil(this.remaining / 60)} min left`;
+      ? (ru ? 'Готовы к фокусу' : 'Ready to focus')
+      : `${this.phase === 'work' ? (ru ? 'Фокус' : 'Focus') : (ru ? 'Перерыв' : 'Break')} — ${this._formatRemaining()}`;
+    const title = ru ? 'Помодоро' : 'Pomodoro';
+    const sub = ru ? `${work} мин фокус · ${brk} мин перерыв` : `${work}m focus · ${brk}m break`;
+    const btnWork = ru ? `Старт ${work} мин` : `Start ${work}m focus`;
+    const btnBreak = ru ? `Перерыв ${brk} мин` : `Start ${brk}m break`;
+    const btnStop = ru ? 'Стоп' : 'Stop';
     this.context.ui.openMainSheet(`
       <div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
       <div class="cultiva-sheet-card cultiva-sheet-card--pomodoro">
         <div class="cultiva-sheet-grabber"></div>
         <div class="cultiva-sheet-head">
           <div>
-            <div class="cultiva-sheet-title">Pomodoro</div>
-            <div class="cultiva-sheet-sub">${work}m focus · ${brk}m break</div>
+            <div class="cultiva-sheet-title">${title}</div>
+            <div class="cultiva-sheet-sub">${sub}</div>
           </div>
           <button type="button" class="cultiva-sheet-x" data-cultiva-act="close" aria-label="Close">×</button>
         </div>
         <div class="cultiva-sheet-body">
           <div class="pomodoro-hero">
             <div class="pomodoro-hero-emoji">🍅</div>
+            <div class="pomodoro-hero-timer">${this.phase === 'idle' ? `${String(work).padStart(2, '0')}:00` : this._formatRemaining()}</div>
             <div class="pomodoro-hero-status">${this._escapeHtml(status)}</div>
           </div>
           <div class="pomodoro-actions">
-            <button type="button" class="cultiva-sheet-primary pomodoro-btn--focus" data-cultiva-act="startWork">Start ${work}m focus</button>
-            <button type="button" class="cultiva-sheet-secondary pomodoro-btn--break" data-cultiva-act="startBreak">Start ${brk}m break</button>
-            <button type="button" class="cultiva-sheet-secondary pomodoro-btn--ghost" data-cultiva-act="stop">Stop</button>
+            <button type="button" class="cultiva-sheet-primary pomodoro-btn--focus" data-cultiva-act="startWork">${btnWork}</button>
+            <button type="button" class="cultiva-sheet-secondary pomodoro-btn--break" data-cultiva-act="startBreak">${btnBreak}</button>
+            <button type="button" class="cultiva-sheet-secondary pomodoro-btn--ghost" data-cultiva-act="stop">${btnStop}</button>
           </div>
         </div>
       </div>`);
