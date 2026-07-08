@@ -34,3 +34,13 @@
   border-radius: 12px;
   background: transparent;
 }
+
+.quote-icon {
+  color: var(--accent-pink);
+}
+
+.quote-icon-svg {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
