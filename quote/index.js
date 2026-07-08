@@ -44,6 +44,9 @@ class QuotePlugin {
           <div class="card-subtitle">— ${this._escapeHtml(q.author)}</div>
         </div>
       </div>
+      <div class="card-actions quote-card-actions" aria-hidden="true">
+        <span class="quote-card-spacer"></span>
+      </div>
     </article>`;
   }
 

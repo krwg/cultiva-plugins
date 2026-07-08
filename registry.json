@@ -100,9 +100,9 @@
         "quote"
       ],
       "sha256": {
-        "manifest.json": "da42df21fb7a98a93c9be4eab5828749457104e5e9ada612deb78cbe7d2d1924",
-        "index.js": "267a50720c4e7dfcd7b5ace4a2c5b5b867de46572897decde1e1f0e5176a7c19",
-        "styles.css": "ef8eaac48e6eb69ee55c7d06c3fc2066c570644b38aa6448100ba8d699c9ebe7"
+        "manifest.json": "75c99b954bae4ab7f687a6382253f089fa10510b1d265638dcbf215338bb3271",
+        "index.js": "2a1f7b44de3ec4c8595738838f7b91ec9be5bac4707e3e04c0c8571baffdb3e5",
+        "styles.css": "37b0e5373b0cac878bf3c505b063d34bcd7ae79b5946e5534adc9f1b0ab8c453"
       }
     },
     {
