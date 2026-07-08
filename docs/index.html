@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Official Cultiva plugin registry — Weather, Time, and Radio widgets.">
+  <meta name="description" content="Official Cultiva plugin registry — Weather, Time, Radio, Pomodoro, Quote, Streak.">
   <title>Cultiva Plugins</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
       background: linear-gradient(165deg, #f5fbf7 0%, #eef6f0 45%, #e8f2ec 100%);
       color: #1a2e1f;
       min-height: 100vh;
@@ -25,7 +25,12 @@
       margin-bottom: 14px;
       box-shadow: 0 8px 24px rgba(30, 60, 40, 0.06);
     }
-    .card h2 { font-size: 1.1rem; margin-bottom: 6px; }
+    .card h2 { font-size: 1.1rem; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+    .card h2 span.badge {
+      display: inline-flex; width: 28px; height: 28px; border-radius: 8px;
+      background: #e8f2ec; color: #2d6a4f; font-size: 0.75rem; font-weight: 700;
+      align-items: center; justify-content: center;
+    }
     .card p { color: #4a5c50; font-size: 0.95rem; }
     .meta { font-size: 0.8rem; color: #6b7f72; margin-top: 10px; }
     .cta {
@@ -43,22 +48,37 @@
 <body>
   <div class="wrap">
     <h1>Cultiva Plugins</h1>
-    <p class="tag">Registry 2.0.0 · Weather · Time · Radio</p>
+    <p class="tag">Registry 3.0.0 · Cultiva 1.7.0+ · sha256 integrity</p>
 
     <div class="card">
-      <h2>🌤️ Weather Widget</h2>
-      <p>Hybrid city search (1100+ Russian locations + worldwide) with Open-Meteo. No API key.</p>
-      <p class="meta">v2.0.0 · widget, weather, russia</p>
+      <h2><span class="badge">W</span> Weather Widget</h2>
+      <p>Open-Meteo forecast; 1100+ Russian cities bundled offline as cities-ru.json.</p>
+      <p class="meta">v2.1.0 · widget, weather, russia</p>
     </div>
     <div class="card">
-      <h2>🕐 Time Widget</h2>
-      <p>Live clock, time zones, Apple-style sheet UI.</p>
+      <h2><span class="badge">T</span> Time Widget</h2>
+      <p>Live clock, time zones, sheet UI.</p>
       <p class="meta">v2.0.0 · widget, clock, timezone</p>
     </div>
     <div class="card">
-      <h2>📻 Radio Widget</h2>
-      <p>Ambient streams, sleep timer, volume, glass UI.</p>
-      <p class="meta">v2.0.0 · widget, radio, music, ambient</p>
+      <h2><span class="badge">R</span> Radio Widget</h2>
+      <p>SomaFM ambient streams, sleep timer, volume.</p>
+      <p class="meta">v2.0.0 · widget, radio, music</p>
+    </div>
+    <div class="card">
+      <h2><span class="badge">P</span> Pomodoro Timer</h2>
+      <p>Focus and break cycles in the header.</p>
+      <p class="meta">v1.0.0 · timer, focus</p>
+    </div>
+    <div class="card">
+      <h2><span class="badge">Q</span> Quote of the Day</h2>
+      <p>Daily inspiration in the garden.</p>
+      <p class="meta">v1.0.0 · garden, quote</p>
+    </div>
+    <div class="card">
+      <h2><span class="badge">S</span> Streak Celebrator</h2>
+      <p>Notifications when habits complete.</p>
+      <p class="meta">v1.0.0 · habits, streak</p>
     </div>
 
     <a class="cta" href="https://github.com/krwg/cultiva/releases">Get Cultiva</a>
