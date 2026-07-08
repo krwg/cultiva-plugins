@@ -6,7 +6,7 @@
   "description": "Live clock in the header, world time zones, and Apple-style sheet. Cultiva 0.4.0+.",
   "icon": "",
   "entry": "index.js",
-  "styles": ["styles.css"],
+  "styles": ["cultiva-sheet-base.css", "styles.css"],
   "permissions": ["storage", "ui"],
   "minAppVersion": "1.7.0",
   "settings": [

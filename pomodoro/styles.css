@@ -1,89 +1,6 @@
 
-.cultiva-plugin-sheet-root {
-  position: fixed;
-  inset: 0;
-  z-index: 10050;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 0 12px 12px;
-  pointer-events: none;
-}
-.cultiva-plugin-sheet-root > * {
-  pointer-events: auto;
-}
-.cultiva-sheet-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(12, 12, 18, 0.42);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-.cultiva-sheet-card {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-  max-height: min(86vh, 680px);
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
-  border-radius: 22px 22px 28px 28px;
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
 .cultiva-sheet-card--pomodoro {
   border-color: color-mix(in srgb, #ff6b6b 24%, var(--border-light));
-}
-.cultiva-sheet-grabber {
-  width: 40px;
-  height: 5px;
-  border-radius: 3px;
-  background: var(--border-light);
-  margin: 10px auto 6px;
-  opacity: 0.85;
-}
-.cultiva-sheet-head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 4px 18px 12px;
-  border-bottom: 1px solid var(--border-light);
-}
-.cultiva-sheet-title {
-  font-size: 20px;
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
-}
-.cultiva-sheet-sub {
-  font-size: 13px;
-  color: var(--text-secondary);
-  margin-top: 2px;
-}
-.cultiva-sheet-x {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-  flex-shrink: 0;
-}
-.cultiva-sheet-x:hover {
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
-}
-.cultiva-sheet-body {
-  padding: 14px 18px 20px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 .pomodoro-hero {
   text-align: center;
@@ -125,23 +42,6 @@
 .cultiva-sheet-primary,
 .cultiva-sheet-secondary {
   width: 100%;
-  padding: 14px;
-  border-radius: 14px;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.cultiva-sheet-primary {
-  border: none;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--accent-blue, #0a84ff) 72%, white) 0%, var(--accent-blue, #0a84ff) 100%);
-  color: #fff;
-}
-.cultiva-sheet-secondary {
-  border: 1px solid var(--border-light);
-  background: var(--bg-secondary);
-}
-.cultiva-sheet-secondary:hover {
-  background: var(--bg-tertiary);
 }
 .pomodoro-btn--ghost {
   margin-top: 2px;

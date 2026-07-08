@@ -6,7 +6,7 @@
   "description": "SomaFM streams, sleep timer, and glass sheet UI. Cultiva 0.4.0+.",
   "icon": "",
   "entry": "index.js",
-  "styles": ["styles.css"],
+  "styles": ["cultiva-sheet-base.css", "styles.css"],
   "permissions": ["network", "storage", "ui"],
   "minAppVersion": "1.7.0"
 }

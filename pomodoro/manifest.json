@@ -6,7 +6,7 @@
   "description": "Focus timer in the header — 25/5 pomodoro cycles.",
   "icon": "",
   "entry": "index.js",
-  "styles": ["styles.css"],
+  "styles": ["cultiva-sheet-base.css", "styles.css"],
   "permissions": ["storage", "ui"],
   "minAppVersion": "1.7.0",
   "settings": [
