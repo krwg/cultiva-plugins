@@ -1,3 +1,11 @@
+.cultiva-plugin-sheet-root {
+  z-index: 11000;
+}
+
+.cultiva-sheet-overlay {
+  background: rgba(0, 0, 0, 0.45);
+}
+
 .cultiva-sheet-card.pomodoro-sheet {
   max-width: 360px;
   margin: 0 auto;

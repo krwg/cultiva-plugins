@@ -122,6 +122,7 @@ class TimePlugin {
     if (this.settings.color === 'rainbow') {
       this.colorInterval = setInterval(() => {
         this.hue = (this.hue + 1) % 360;
+        this.updateHeaderDisplay();
       }, 80);
     }
   }

@@ -27,6 +27,7 @@ class QuotePlugin {
   constructor(context, hooks) {
     this.context = context;
     this.hooks = hooks;
+    this.midnightTimer = null;
   }
 
   _escapeHtml(s) {
@@ -45,9 +46,29 @@ class QuotePlugin {
         el.innerHTML = this._html();
       }
     });
+    this._scheduleMidnightRefresh();
   }
 
-  onDisable() {}
+  _scheduleMidnightRefresh() {
+    if (this.midnightTimer) {
+      clearTimeout(this.midnightTimer);
+      this.midnightTimer = null;
+    }
+    const now = new Date();
+    const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 3);
+    const delay = Math.max(1000, next.getTime() - now.getTime());
+    this.midnightTimer = setTimeout(() => {
+      this.context.ui.updateGardenHtml(this._html());
+      this._scheduleMidnightRefresh();
+    }, delay);
+  }
+
+  onDisable() {
+    if (this.midnightTimer) {
+      clearTimeout(this.midnightTimer);
+      this.midnightTimer = null;
+    }
+  }
 }
 
 return new QuotePlugin(context, hooks);

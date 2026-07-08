@@ -5,6 +5,7 @@ class PomodoroPlugin {
     this.settings = { workMinutes: 25, breakMinutes: 5 };
     this.phase = 'idle';
     this.remaining = 0;
+    this.endTimestamp = 0;
     this.tick = null;
   }
 
@@ -32,8 +33,12 @@ class PomodoroPlugin {
     }
   }
 
-  _persist() {
-    return this.context.storage.set('settings', this.settings);
+  async _persistState() {
+    await this.context.storage.set('settings', this.settings);
+    await this.context.storage.set('timerState', {
+      phase: this.phase,
+      endTimestamp: this.endTimestamp
+    });
   }
 
   async onEnable() {
@@ -42,6 +47,17 @@ class PomodoroPlugin {
       this.settings = { ...this.settings, ...saved };
       this.settings.workMinutes = parseInt(this.settings.workMinutes, 10) || 25;
       this.settings.breakMinutes = parseInt(this.settings.breakMinutes, 10) || 5;
+    }
+    const savedTimer = await this.context.storage.get('timerState');
+    if (savedTimer && savedTimer.phase && savedTimer.endTimestamp) {
+      const now = Date.now();
+      const left = Math.max(0, Math.floor((Number(savedTimer.endTimestamp) - now) / 1000));
+      if (left > 0) {
+        this.phase = savedTimer.phase;
+        this.endTimestamp = Number(savedTimer.endTimestamp);
+        this.remaining = left;
+        this._startTick();
+      }
     }
     this.context.ui.registerHeaderItem({
       label: this._label(),
@@ -52,6 +68,7 @@ class PomodoroPlugin {
 
   onDisable() {
     this._clearTick();
+    void this._persistState();
   }
 
   openModal() {
@@ -61,6 +78,7 @@ class PomodoroPlugin {
       ? 'Ready to focus'
       : `${this.phase === 'work' ? 'Focus' : 'Break'} — ${Math.ceil(this.remaining / 60)} min left`;
     this.context.ui.openMainSheet(`
+      <div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
       <div class="cultiva-sheet-card pomodoro-sheet">
         <div class="cultiva-sheet-header">
           <span>🍅 Pomodoro</span>
@@ -79,17 +97,26 @@ class PomodoroPlugin {
     this._clearTick();
     this.phase = phase;
     this.remaining = minutes * 60;
+    this.endTimestamp = Date.now() + this.remaining * 1000;
     this._updateHeader();
+    this._startTick();
+    void this._persistState();
+  }
+
+  _startTick() {
+    this._clearTick();
     this.tick = setInterval(() => {
-      this.remaining -= 1;
+      this.remaining = Math.max(0, Math.floor((this.endTimestamp - Date.now()) / 1000));
       this._updateHeader();
       if (this.remaining <= 0) {
+        const finishedPhase = this.phase;
         this._clearTick();
         this.phase = 'idle';
+        this.endTimestamp = 0;
         this._updateHeader();
-        const msg = phase === 'work' ? 'Focus session complete — take a break!' : 'Break over — back to the garden!';
-        this.context.ui.showNotification('🍅', msg);
-        this.openModal();
+        const msg = finishedPhase === 'work' ? 'Focus session complete — take a break!' : 'Break over — back to the garden!';
+        this.context.ui.showNotification('', msg);
+        void this._persistState();
       }
     }, 1000);
   }
@@ -109,7 +136,9 @@ class PomodoroPlugin {
       this._clearTick();
       this.phase = 'idle';
       this.remaining = 0;
+      this.endTimestamp = 0;
       this._updateHeader();
+      await this._persistState();
       this.context.ui.closeMainSheet();
     }
   }

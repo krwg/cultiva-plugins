@@ -71,6 +71,7 @@ class WeatherPlugin {
     if (saved) {
       this.settings = { ...this.settings, ...saved };
     }
+    await this._syncCoordsFromCity();
 
     this.context.ui.registerHeaderItem({
       label: '—',
@@ -84,6 +85,8 @@ class WeatherPlugin {
         position: 'top',
         onTapMethod: 'openWeatherModal'
       });
+    } else {
+      this.context.ui.updateGardenHtml('<div style="display:none"></div>');
     }
 
     await this._loadRussianCities();
@@ -136,6 +139,41 @@ class WeatherPlugin {
       console.error('[Weather] Search failed:', e);
       return [];
     }
+  }
+
+  async geocodeCity(name) {
+    const q = String(name || '').trim();
+    if (!q) {
+      return null;
+    }
+    await this._loadRussianCities();
+    const local = this.russianCities.find((c) => String(c.name || '').toLowerCase() === q.toLowerCase());
+    if (local) {
+      return { city: local.name, lat: local.lat, lon: local.lon };
+    }
+    try {
+      const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=1&language=en&format=json`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const hit = Array.isArray(data.results) ? data.results[0] : null;
+      if (!hit) {
+        return null;
+      }
+      return { city: hit.name || q, lat: hit.latitude, lon: hit.longitude };
+    } catch {
+      return null;
+    }
+  }
+
+  async _syncCoordsFromCity() {
+    const mapped = await this.geocodeCity(this.settings.city);
+    if (!mapped) {
+      return;
+    }
+    this.settings.city = mapped.city;
+    this.settings.lat = mapped.lat;
+    this.settings.lon = mapped.lon;
+    await this.context.storage.set('settings', this.settings);
   }
 
   async fetchWeather() {

@@ -7,6 +7,6 @@
   "icon": "",
   "entry": "index.js",
   "styles": ["styles.css"],
-  "permissions": ["storage", "ui"],
+  "permissions": ["network", "storage", "ui"],
   "minAppVersion": "1.7.0"
 }
