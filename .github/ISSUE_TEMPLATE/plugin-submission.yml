@@ -1,0 +1,62 @@
+name: Plugin Submission
+description: Propose a new plugin for the official registry
+title: "[plugin] "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read [Publishing a Plugin](https://github.com/krwg/cultiva-plugins/wiki/Publishing-a-Plugin) and the [Author guide](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md) first.
+        Prefer opening a **PR** if you already have working code.
+
+  - type: input
+    id: plugin_id
+    attributes:
+      label: Proposed plugin id
+      description: Lowercase, letters/digits/hyphens — matches folder name
+      placeholder: my-widget
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: What does the plugin do?
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: surfaces
+    attributes:
+      label: UI surfaces used
+      options:
+        - label: Header chip (`updateMainHeader`)
+        - label: Garden widget (`registerGardenWidget`)
+        - label: Modal sheet (`openMainSheet`)
+        - label: Hooks only (`onHabitComplete`, etc.)
+        - label: Notifications only
+
+  - type: checkboxes
+    id: permissions
+    attributes:
+      label: Permissions needed
+      options:
+        - label: ui
+        - label: storage
+        - label: network
+        - label: manifest.data (bundled files)
+
+  - type: input
+    id: min_version
+    attributes:
+      label: minAppVersion tested
+      placeholder: "1.7.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: pr_link
+    attributes:
+      label: PR link (if ready)
+      placeholder: https://github.com/krwg/cultiva-plugins/pull/...

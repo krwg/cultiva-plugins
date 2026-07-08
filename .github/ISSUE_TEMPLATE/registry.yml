@@ -1,0 +1,45 @@
+name: Registry / sha256
+description: registry.json, baseUrl, hash mismatch, or catalog metadata
+title: "[registry] "
+labels:
+  - registry
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For plugin **behavior** bugs, use **Bug Report** instead.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - sha256 hash mismatch on install
+        - baseUrl / download failure
+        - registry version / schema
+        - catalog metadata (description, tags, icons)
+        - compute-registry-sha256 script
+        - GitHub Pages / docs site
+    validations:
+      required: true
+
+  - type: input
+    id: registry_version
+    attributes:
+      label: Registry version
+      placeholder: "3.0.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error message or DevTools log
+      render: shell

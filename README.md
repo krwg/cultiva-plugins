@@ -204,6 +204,8 @@ cultiva-plugins/
 
 Cultiva application is **[GPL-3.0](https://github.com/krwg/cultiva/blob/main/LICENSE)**; plugins in this registry are MIT so authors can reuse code freely.
 
+**Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md) · **Security:** [SECURITY.md](SECURITY.md) · **Code of Conduct:** [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) · **Changelog:** [CHANGELOG.md](CHANGELOG.md)
+
 ---
 
 <div align="center">

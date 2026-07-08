@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Cultiva app (core runtime)
+    url: https://github.com/krwg/cultiva/issues/new/choose
+    about: Sandbox, install pipeline, or Cultiva desktop bugs — report in the main repo
+  - name: Wiki — Publishing a Plugin
+    url: https://github.com/krwg/cultiva-plugins/wiki/Publishing-a-Plugin
+    about: Step-by-step author guide before opening a submission
+  - name: Security (private)
+    url: https://github.com/krwg/cultiva/blob/main/SECURITY.md
+    about: Do not post vulnerabilities publicly — email shevotsukov@icloud.com
