@@ -2,76 +2,199 @@
 
 # Cultiva Plugins
 
-**Official widget registry for [Cultiva](https://github.com/krwg/cultiva) — weather, clock, and ambient radio on your habit garden.**
+**Official sandboxed extension registry for [Cultiva](https://github.com/krwg/cultiva) — widgets, timers, and garden tools that stay on your device.**
 
-[![Registry](https://img.shields.io/badge/registry-2.0.0-34c759?style=flat-square)](registry.json)
+[![Registry](https://img.shields.io/badge/registry-3.0.0-34c759?style=flat-square)](registry.json)
 [![License](https://img.shields.io/badge/license-MIT-af52de?style=flat-square)](LICENSE)
-[![Cultiva](https://img.shields.io/badge/for-Cultiva%201.1.0+-0071e3?style=flat-square)](https://github.com/krwg/cultiva)
-[![Plugins](https://img.shields.io/badge/plugins-3-ffcc00?style=flat-square)](#included-plugins)
+[![Cultiva](https://img.shields.io/badge/Cultiva-1.7.0%2B-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
+[![Plugins](https://img.shields.io/badge/plugins-6-ffcc00?style=flat-square)](#catalog)
+[![Integrity](https://img.shields.io/badge/sha256-enforced-5856d6?style=flat-square)](#security)
+[![Pages](https://img.shields.io/badge/docs-GitHub%20Pages-0071e3?style=flat-square)](https://krwg.github.io/cultiva-plugins/)
+[![Maintained](https://img.shields.io/badge/maintained-yes-34c759?style=flat-square)](#)
+
+[Browse catalog (Pages)](https://krwg.github.io/cultiva-plugins/) · [Cultiva app](https://github.com/krwg/cultiva/releases) · [Author guide](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md) · [Report issue](https://github.com/krwg/cultiva-plugins/issues)
 
 </div>
 
 ---
 
-This repository is the **public plugin catalog** for Cultiva. The desktop app fetches `registry.json` and installs sandboxed widgets from here — no separate store account, no npm for end users.
+This repository is the **single source of truth** for Cultiva desktop plugins. The app downloads `registry.json`, verifies **sha256 integrity** for every file, installs into a local sandbox, and runs extensions without Node.js or npm on the user side.
 
-**[→ Registry overview (Pages)](https://krwg.github.io/cultiva-plugins/)** · **[Cultiva app](https://github.com/krwg/cultiva/releases)**
+**No store account. No telemetry. No habit data leaves your machine.**
 
 ---
 
-## Included plugins
+## Table of contents
 
-| Plugin | What it does |
-|--------|----------------|
-| **Weather** | Current conditions — hybrid search across 1100+ Russian cities and worldwide locations via Open-Meteo (no API key). |
-| **Time** | Live clock with time zones and a sheet-style picker. |
-| **Radio** | Curated ambient streams (e.g. SomaFM), sleep timer, volume, glass UI. |
+- [Catalog](#catalog)
+- [How it works](#how-it-works)
+- [For Cultiva users](#for-cultiva-users)
+- [Security](#security)
+- [For plugin authors](#for-plugin-authors)
+- [Repository layout](#repository-layout)
+- [Publishing checklist](#publishing-checklist)
+- [License](#license)
 
-Each plugin ships as `manifest.json` + `index.js` + `styles.css` in its own folder. Cultiva loads them from the `baseUrl` in the registry.
+---
+
+## Catalog
+
+| Plugin | Version | Surface | Permissions | Description |
+|--------|---------|---------|-------------|-------------|
+| [**Weather**](weather/) | 2.1.0 | Header + garden | `network`, `storage`, `ui` | Open-Meteo forecast; **1100+ Russian cities** bundled as `cities-ru.json` for offline search |
+| [**Time**](time/) | 2.0.0 | Header | `storage`, `ui` | Live clock, time zones, sheet UI |
+| [**Radio**](radio/) | 2.0.0 | Header | `network`, `storage`, `ui` | SomaFM ambient streams, sleep timer, volume |
+| [**Pomodoro**](pomodoro/) | 1.0.0 | Header | `storage`, `ui` | 25/5 focus cycles with sheet controls |
+| [**Quote**](quote/) | 1.0.0 | Garden | `ui` | Daily quote widget (deterministic by date) |
+| [**Streak**](streak/) | 1.0.0 | Hooks | `ui` | Toast when a habit completes (`onHabitComplete`) |
+
+Catalog UI uses **letter placeholders** until custom artwork is added — no emoji icons in manifests.
+
+<details>
+<summary><strong>Tags by plugin</strong></summary>
+
+| Plugin | Tags |
+|--------|------|
+| Weather | `widget`, `weather`, `russia` |
+| Time | `widget`, `clock`, `timezone` |
+| Radio | `widget`, `radio`, `music`, `ambient` |
+| Pomodoro | `widget`, `timer`, `focus`, `productivity` |
+| Quote | `widget`, `garden`, `quote` |
+| Streak | `habits`, `streak`, `notification` |
+
+</details>
+
+---
+
+## How it works
+
+```mermaid
+flowchart LR
+  A[Cultiva desktop] -->|HTTPS| B[registry.json]
+  B --> C[manifest + entry + assets]
+  C -->|sha256 verify| D[userData/cultiva-plugins]
+  D --> E[Sandbox iframe]
+  E --> F[Header / Garden UI]
+```
+
+1. Cultiva fetches [`registry.json`](registry.json) from this repo (`krwg/cultiva-plugins`).
+2. User taps **Install** in Settings → Plugins.
+3. Electron downloads each file listed in the manifest (`entry`, `styles`, `data`).
+4. **sha256** from the registry must match the downloaded bytes.
+5. Plugin code runs in an **opaque-origin iframe** with declared permissions only.
+
+Requires **Cultiva 1.7.0 · Linden** or newer (`minAppVersion` in registry).
 
 ---
 
 ## For Cultiva users
 
-1. Install **[Cultiva](https://github.com/krwg/cultiva/releases)**.
-2. Open **Settings → Plugins**.
-3. Browse the registry, install a widget, enable it on the garden home screen.
+1. Install **[Cultiva](https://github.com/krwg/cultiva/releases)** (Windows, macOS, or Linux build).
+2. Open **Settings → Plugins** and enable plugins if needed.
+3. Under **Browse Plugins**, tap **Install** on any catalog entry.
+4. Header widgets appear in the garden bar; garden widgets render in the home view.
 
-Plugins run in a **sandbox** with declared permissions (`network`, `storage`, `ui` where needed). Your habit data stays local.
+| Tip | Detail |
+|-----|--------|
+| Desktop only | Install/uninstall requires the Electron app, not the browser preview |
+| Offline habits | Habits and settings stay local; plugins may use network for their own data (e.g. weather API) |
+| Disable all | Toggle **Enable Plugins** off — sandboxes stop, header chips removed |
+
+---
+
+## Security
+
+| Mechanism | What it does |
+|-----------|----------------|
+| **sha256 registry map** | Every installable file has a hash in `registry.json`; mismatch aborts install |
+| **HTTPS only** | Downloads restricted to GitHub raw / objects hosts |
+| **Sandbox iframe** | No direct DOM or Node access from plugin code |
+| **Permissions** | `network`, `storage`, `ui` declared in manifest and enforced at RPC |
+| **Path guards** | Plugin ids and relative paths validated before write to disk |
+
+Maintainers regenerate hashes after any file change:
+
+```bash
+node scripts/compute-registry-sha256.mjs
+```
 
 ---
 
 ## For plugin authors
 
-| File | Role |
-|------|------|
-| `registry.json` | Catalog index — id, version, `baseUrl`, `minAppVersion`, tags |
-| `<plugin>/manifest.json` | Entry point, permissions, display name |
-| `<plugin>/index.js` | Widget logic (ES module API provided by Cultiva) |
-| `<plugin>/styles.css` | Scoped styles |
+Full API reference: **[PLUGIN_AUTHOR_GUIDE.md](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md)** in the main Cultiva repo.
 
-Authoring guide in the main Cultiva repo: [`docs/PLUGIN_AUTHOR_GUIDE.md`](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md).
+### Minimal plugin folder
 
-**Add or update a plugin:**
+```
+my-plugin/
+├── manifest.json    # id, version, permissions, entry, optional styles/data
+├── index.js         # return new MyPlugin(context, hooks);
+└── styles.css       # optional; injected into main window
+```
 
-1. Create a folder with `manifest.json`, `index.js`, and optional `styles.css`.
-2. Add an entry to `registry.json` with a `baseUrl` pointing at  
-   `https://raw.githubusercontent.com/krwg/cultiva-plugins/main/<id>`.
-3. Open a pull request.
+### Registry entry
+
+Each plugin needs a block in [`registry.json`](registry.json):
+
+```json
+{
+  "id": "my-plugin",
+  "name": "My Plugin",
+  "version": "1.0.0",
+  "author": "you",
+  "description": "Short summary for Settings → Plugins.",
+  "icon": "",
+  "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/my-plugin",
+  "minAppVersion": "1.7.0",
+  "tags": ["widget"],
+  "sha256": {
+    "manifest.json": "...",
+    "index.js": "..."
+  }
+}
+```
+
+### Bundled data (optional)
+
+List static files under `manifest.data` — readable at runtime via `context.data.read('file.json')`. See **Weather** for a real example (`cities-ru.json`).
+
+### Publish workflow
+
+1. Fork this repo and add your plugin folder.
+2. Run `node scripts/compute-registry-sha256.mjs` to fill `sha256` on your registry entry.
+3. Open a PR with version bump and changelog note in the PR body.
+4. After merge, Cultiva clients pick up the new catalog on next browse refresh.
 
 ---
 
-## Layout
+## Repository layout
 
 ```
 cultiva-plugins/
-├── registry.json       # app-facing catalog
-├── weather/            # Weather Widget
-├── time/               # Time Widget
-├── radio/              # Radio Widget
-├── neoui/              # NeoUI setup helper (dev)
-└── docs/index.html     # GitHub Pages landing
+├── registry.json                      # catalog + sha256 (app reads this)
+├── scripts/
+│   └── compute-registry-sha256.mjs    # maintainer hash tool
+├── weather/                           # header + garden, bundled cities JSON
+├── time/                              # header clock
+├── radio/                             # header streams
+├── pomodoro/                          # header timer
+├── quote/                             # garden widget
+├── streak/                            # habit hook notifications
+├── docs/index.html                    # GitHub Pages landing
+└── LICENSE                            # MIT
 ```
+
+---
+
+## Publishing checklist
+
+- [ ] `manifest.json` — valid id, semver, permissions, `minAppVersion` ≥ 1.7.0
+- [ ] Entry script returns plugin instance; `onEnable` / `onDisable` if needed
+- [ ] All files in `styles` / `data` listed and present on disk
+- [ ] `node scripts/compute-registry-sha256.mjs` run; `registry.json` updated
+- [ ] Tested install in Cultiva desktop (Settings → Plugins → Install)
+- [ ] PR description lists permission rationale if `network` is used
 
 ---
 
@@ -79,10 +202,14 @@ cultiva-plugins/
 
 **MIT** — see [LICENSE](LICENSE).
 
+Cultiva application is **[GPL-3.0](https://github.com/krwg/cultiva/blob/main/LICENSE)**; plugins in this registry are MIT so authors can reuse code freely.
+
 ---
 
 <div align="center">
 
 Maintained by [krwg](https://github.com/krwg) · widgets for the garden, not the cloud
+
+**[Cultiva](https://github.com/krwg/cultiva)** · **[Registry (Pages)](https://krwg.github.io/cultiva-plugins/)** · **[Issues](https://github.com/krwg/cultiva-plugins/issues)**
 
 </div>

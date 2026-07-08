@@ -3,93 +3,450 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Official Cultiva plugin registry — Weather, Time, Radio, Pomodoro, Quote, Streak.">
-  <title>Cultiva Plugins</title>
+  <meta name="description" content="Official Cultiva plugin registry — sandboxed widgets with sha256 integrity. Weather, Time, Radio, Pomodoro, Quote, Streak.">
+  <title>Cultiva Plugins · Official Registry</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #000000;
+      --bg-secondary: #0a0a0a;
+      --card-bg: rgba(255, 255, 255, 0.06);
+      --card-hover: rgba(255, 255, 255, 0.09);
+      --border: rgba(255, 255, 255, 0.12);
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-tertiary: #71717a;
+      --accent: #34c759;
+      --accent-blue: #0071e3;
+      --accent-muted: rgba(52, 199, 89, 0.15);
+      --font-main: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      --font-mono: 'SF Mono', 'Monaco', 'Consolas', monospace;
+      --ease: cubic-bezier(0.4, 0, 0.2, 1);
+      --radius: 20px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #ffffff;
+        --bg-secondary: #f5f5f7;
+        --card-bg: rgba(0, 0, 0, 0.04);
+        --card-hover: rgba(0, 0, 0, 0.06);
+        --border: rgba(0, 0, 0, 0.1);
+        --text-primary: #1d1d1f;
+        --text-secondary: #6e6e73;
+        --text-tertiary: #86868b;
+        --accent-muted: rgba(52, 199, 89, 0.12);
+      }
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
-      background: linear-gradient(165deg, #f5fbf7 0%, #eef6f0 45%, #e8f2ec 100%);
-      color: #1a2e1f;
-      min-height: 100vh;
+      font-family: var(--font-main);
+      background: var(--bg);
+      color: var(--text-primary);
       line-height: 1.5;
+      overflow-x: hidden;
     }
-    .wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 64px; }
-    h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px; }
-    .tag { color: #3d6b4f; font-size: 0.95rem; margin-bottom: 28px; }
-    .card {
-      background: rgba(255,255,255,0.85);
-      border: 1px solid rgba(52, 120, 80, 0.15);
-      border-radius: 14px;
-      padding: 20px 22px;
-      margin-bottom: 14px;
-      box-shadow: 0 8px 24px rgba(30, 60, 40, 0.06);
+
+    .header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid var(--border);
     }
-    .card h2 { font-size: 1.1rem; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
-    .card h2 span.badge {
-      display: inline-flex; width: 28px; height: 28px; border-radius: 8px;
-      background: #e8f2ec; color: #2d6a4f; font-size: 0.75rem; font-weight: 700;
-      align-items: center; justify-content: center;
+    @media (prefers-color-scheme: dark) {
+      .header { background: rgba(0, 0, 0, 0.72); }
     }
-    .card p { color: #4a5c50; font-size: 0.95rem; }
-    .meta { font-size: 0.8rem; color: #6b7f72; margin-top: 10px; }
-    .cta {
+    .header-inner {
+      max-width: 980px; margin: 0 auto; padding: 14px 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo {
+      font-weight: 700; font-size: 17px; letter-spacing: -0.03em;
+      text-decoration: none; color: var(--text-primary);
+    }
+    .logo span { color: var(--text-secondary); font-weight: 500; }
+    .nav { display: flex; gap: 20px; align-items: center; }
+    .nav-link {
+      font-size: 13px; color: var(--text-secondary); text-decoration: none;
+      transition: color 0.2s var(--ease);
+    }
+    .nav-link:hover { color: var(--text-primary); }
+
+    .hero {
+      min-height: 88vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 120px 24px 64px;
+      background:
+        radial-gradient(ellipse at 50% -10%, rgba(52, 199, 89, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, rgba(0, 113, 227, 0.08) 0%, transparent 40%);
+    }
+    .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
-      margin-top: 28px; padding: 12px 22px;
-      background: #2d6a4f; color: #fff; text-decoration: none;
-      border-radius: 10px; font-weight: 500; font-size: 0.95rem;
+      padding: 6px 14px; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 99px;
+      font-size: 12px; font-weight: 600; color: var(--text-secondary);
+      margin-bottom: 24px; letter-spacing: 0.02em;
     }
-    .cta:hover { background: #1b4332; }
-    .links { margin-top: 32px; font-size: 0.9rem; }
-    .links a { color: #2d6a4f; }
-    footer { margin-top: 48px; font-size: 0.85rem; color: #6b7f72; }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+    }
+    .hero-title {
+      font-size: clamp(36px, 7vw, 64px); font-weight: 800;
+      letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 18px;
+      max-width: 720px;
+    }
+    .hero-subtitle {
+      font-size: clamp(16px, 2.5vw, 20px); color: var(--text-secondary);
+      max-width: 560px; margin-bottom: 36px; line-height: 1.55;
+    }
+    .hero-stats {
+      display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+      margin-bottom: 40px;
+    }
+    .stat-pill {
+      padding: 8px 14px; border-radius: 99px; font-size: 12px; font-weight: 600;
+      background: var(--card-bg); border: 1px solid var(--border); color: var(--text-secondary);
+    }
+    .stat-pill strong { color: var(--text-primary); font-weight: 700; }
+
+    .code-container {
+      width: 100%; max-width: 520px;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 14px 18px; margin-bottom: 32px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      transition: border-color 0.3s var(--ease);
+    }
+    .code-container:hover { border-color: rgba(52, 199, 89, 0.35); }
+    .code-text {
+      font-family: var(--font-mono); font-size: 13px;
+      color: var(--text-primary); overflow-x: auto;
+    }
+    .copy-btn {
+      flex-shrink: 0; background: none; border: none; color: var(--text-secondary);
+      cursor: pointer; font-size: 13px; font-weight: 600;
+      padding: 6px 10px; border-radius: 8px; transition: all 0.2s var(--ease);
+    }
+    .copy-btn:hover { background: var(--border); color: var(--text-primary); }
+    .copy-btn.copied { color: var(--accent); }
+
+    .cta-group { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 24px; border-radius: 980px; font-size: 15px;
+      font-weight: 600; text-decoration: none; transition: all 0.25s var(--ease);
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(52, 199, 89, 0.25); }
+    .btn-secondary {
+      background: var(--card-bg); color: var(--text-primary); border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--card-hover); }
+
+    .section {
+      max-width: 980px; margin: 0 auto; padding: 72px 24px;
+    }
+    .section-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px); font-weight: 700;
+      letter-spacing: -0.03em; margin-bottom: 12px;
+    }
+    .section-desc {
+      font-size: 16px; color: var(--text-secondary); max-width: 640px;
+      margin-bottom: 36px; line-height: 1.55;
+    }
+
+    .catalog-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;
+    }
+    .plugin-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease);
+    }
+    .plugin-card:hover {
+      transform: translateY(-4px); border-color: rgba(52, 199, 89, 0.3);
+      background: var(--card-hover);
+    }
+    .plugin-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 12px; }
+    .plugin-letter {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      background: var(--accent-muted); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; font-weight: 700; color: var(--accent);
+    }
+    .plugin-name { font-size: 17px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 2px; }
+    .plugin-version { font-size: 12px; color: var(--text-tertiary); font-family: var(--font-mono); }
+    .plugin-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 14px; }
+    .plugin-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 99px;
+      background: var(--bg-secondary); border: 1px solid var(--border); color: var(--text-tertiary);
+    }
+    .plugin-surface {
+      margin-top: 12px; font-size: 11px; color: var(--text-tertiary);
+    }
+    .plugin-surface strong { color: var(--text-secondary); }
+
+    .steps {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;
+    }
+    .step {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+    }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 8px; margin-bottom: 14px;
+      background: var(--accent-muted); color: var(--accent);
+      font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    }
+    .step-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .step-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+    .security-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;
+    }
+    .security-item {
+      padding: 20px 22px; border-radius: 16px;
+      border: 1px solid var(--border); background: var(--card-bg);
+    }
+    .security-item h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .security-item p { font-size: 13px; color: var(--text-secondary); line-height: 1.45; }
+
+    .author-banner {
+      margin-top: 24px; padding: 32px; border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--accent-muted) 0%, var(--card-bg) 100%);
+      border: 1px solid var(--border); text-align: center;
+    }
+    .author-banner p { color: var(--text-secondary); margin-bottom: 20px; max-width: 520px; margin-left: auto; margin-right: auto; }
+
+    .footer {
+      border-top: 1px solid var(--border); padding: 40px 24px 48px;
+      text-align: center; font-size: 13px; color: var(--text-secondary);
+    }
+    .footer a { color: var(--accent-blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-bottom: 16px; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 100px 16px 48px; min-height: auto; }
+      .nav { gap: 12px; }
+      .code-container { flex-direction: column; align-items: stretch; }
+      .cta-group { flex-direction: column; width: 100%; }
+      .btn { width: 100%; justify-content: center; }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Cultiva Plugins</h1>
-    <p class="tag">Registry 3.0.0 · Cultiva 1.7.0+ · sha256 integrity</p>
+  <header class="header">
+    <div class="header-inner">
+      <a class="logo" href="#">Cultiva <span>Plugins</span></a>
+      <nav class="nav">
+        <a class="nav-link" href="#catalog">Catalog</a>
+        <a class="nav-link" href="#how">How it works</a>
+        <a class="nav-link" href="#security">Security</a>
+        <a class="nav-link" href="https://github.com/krwg/cultiva-plugins">GitHub</a>
+      </nav>
+    </div>
+  </header>
 
-    <div class="card">
-      <h2><span class="badge">W</span> Weather Widget</h2>
-      <p>Open-Meteo forecast; 1100+ Russian cities bundled offline as cities-ru.json.</p>
-      <p class="meta">v2.1.0 · widget, weather, russia</p>
-    </div>
-    <div class="card">
-      <h2><span class="badge">T</span> Time Widget</h2>
-      <p>Live clock, time zones, sheet UI.</p>
-      <p class="meta">v2.0.0 · widget, clock, timezone</p>
-    </div>
-    <div class="card">
-      <h2><span class="badge">R</span> Radio Widget</h2>
-      <p>SomaFM ambient streams, sleep timer, volume.</p>
-      <p class="meta">v2.0.0 · widget, radio, music</p>
-    </div>
-    <div class="card">
-      <h2><span class="badge">P</span> Pomodoro Timer</h2>
-      <p>Focus and break cycles in the header.</p>
-      <p class="meta">v1.0.0 · timer, focus</p>
-    </div>
-    <div class="card">
-      <h2><span class="badge">Q</span> Quote of the Day</h2>
-      <p>Daily inspiration in the garden.</p>
-      <p class="meta">v1.0.0 · garden, quote</p>
-    </div>
-    <div class="card">
-      <h2><span class="badge">S</span> Streak Celebrator</h2>
-      <p>Notifications when habits complete.</p>
-      <p class="meta">v1.0.0 · habits, streak</p>
-    </div>
+  <main>
+    <section class="hero">
+      <div class="hero-badge"><span class="hero-badge-dot"></span> Registry 3.0.0 · Cultiva 1.7.0+</div>
+      <h1 class="hero-title">Extend your garden.<br>Stay offline-first.</h1>
+      <p class="hero-subtitle">
+        Official sandboxed widgets for Cultiva — weather, focus timers, ambient radio, and more.
+        Installed from GitHub with sha256 integrity. Your habits never leave the device.
+      </p>
+      <div class="hero-stats">
+        <span class="stat-pill"><strong>6</strong> plugins</span>
+        <span class="stat-pill"><strong>sha256</strong> verified</span>
+        <span class="stat-pill"><strong>MIT</strong> license</span>
+        <span class="stat-pill">Desktop · Electron</span>
+      </div>
+      <div class="code-container">
+        <code class="code-text" id="registry-url">https://raw.githubusercontent.com/krwg/cultiva-plugins/main/registry.json</code>
+        <button class="copy-btn" type="button" onclick="copyText('registry-url', this)">Copy</button>
+      </div>
+      <div class="cta-group">
+        <a class="btn btn-primary" href="https://github.com/krwg/cultiva/releases">Get Cultiva</a>
+        <a class="btn btn-secondary" href="https://github.com/krwg/cultiva-plugins">View repository</a>
+      </div>
+    </section>
 
-    <a class="cta" href="https://github.com/krwg/cultiva/releases">Get Cultiva</a>
+    <section class="section" id="catalog">
+      <p class="section-label">Catalog</p>
+      <h2 class="section-title">Six official extensions</h2>
+      <p class="section-desc">Each plugin ships as manifest + entry script + optional styles and bundled data. Letter badges stand in until custom icons are added.</p>
+      <div class="catalog-grid">
+        <article class="plugin-card">
+          <div class="plugin-head">
+            <div class="plugin-letter">W</div>
+            <div>
+              <div class="plugin-name">Weather Widget</div>
+              <div class="plugin-version">v2.1.0</div>
+            </div>
+          </div>
+          <p class="plugin-desc">Open-Meteo forecast with hybrid city search — 1100+ Russian locations bundled offline in cities-ru.json.</p>
+          <div class="plugin-tags">
+            <span class="tag">weather</span><span class="tag">russia</span><span class="tag">widget</span>
+          </div>
+          <p class="plugin-surface"><strong>Surface:</strong> Header chip + garden widget</p>
+        </article>
+        <article class="plugin-card">
+          <div class="plugin-head">
+            <div class="plugin-letter">T</div>
+            <div>
+              <div class="plugin-name">Time Widget</div>
+              <div class="plugin-version">v2.0.0</div>
+            </div>
+          </div>
+          <p class="plugin-desc">Live clock with timezone sheet — minimal header label, full picker on tap.</p>
+          <div class="plugin-tags">
+            <span class="tag">clock</span><span class="tag">timezone</span>
+          </div>
+          <p class="plugin-surface"><strong>Surface:</strong> Header chip</p>
+        </article>
+        <article class="plugin-card">
+          <div class="plugin-head">
+            <div class="plugin-letter">R</div>
+            <div>
+              <div class="plugin-name">Radio Widget</div>
+              <div class="plugin-version">v2.0.0</div>
+            </div>
+          </div>
+          <p class="plugin-desc">Curated SomaFM streams with sleep timer, volume control, and glass sheet UI.</p>
+          <div class="plugin-tags">
+            <span class="tag">radio</span><span class="tag">ambient</span><span class="tag">music</span>
+          </div>
+          <p class="plugin-surface"><strong>Surface:</strong> Header chip</p>
+        </article>
+        <article class="plugin-card">
+          <div class="plugin-head">
+            <div class="plugin-letter">P</div>
+            <div>
+              <div class="plugin-name">Pomodoro Timer</div>
+              <div class="plugin-version">v1.0.0</div>
+            </div>
+          </div>
+          <p class="plugin-desc">Classic 25/5 focus cycles in the header — start work or break from a sheet.</p>
+          <div class="plugin-tags">
+            <span class="tag">timer</span><span class="tag">focus</span><span class="tag">productivity</span>
+          </div>
+          <p class="plugin-surface"><strong>Surface:</strong> Header chip</p>
+        </article>
+        <article class="plugin-card">
+          <div class="plugin-head">
+            <div class="plugin-letter">Q</div>
+            <div>
+              <div class="plugin-name">Quote of the Day</div>
+              <div class="plugin-version">v1.0.0</div>
+            </div>
+          </div>
+          <p class="plugin-desc">Daily inspiration in the garden — deterministic quote rotation, no network.</p>
+          <div class="plugin-tags">
+            <span class="tag">garden</span><span class="tag">quote</span>
+          </div>
+          <p class="plugin-surface"><strong>Surface:</strong> Garden widget</p>
+        </article>
+        <article class="plugin-card">
+          <div class="plugin-head">
+            <div class="plugin-letter">S</div>
+            <div>
+              <div class="plugin-name">Streak Celebrator</div>
+              <div class="plugin-version">v1.0.0</div>
+            </div>
+          </div>
+          <p class="plugin-desc">Listens to onHabitComplete and shows a toast when you finish a habit.</p>
+          <div class="plugin-tags">
+            <span class="tag">habits</span><span class="tag">streak</span>
+          </div>
+          <p class="plugin-surface"><strong>Surface:</strong> Hook + notification</p>
+        </article>
+      </div>
+    </section>
 
-    <p class="links">
-      <a href="https://github.com/krwg/cultiva-plugins">Repository</a> ·
-      <a href="https://github.com/krwg/cultiva-plugins/blob/main/registry.json">registry.json</a> ·
-      <a href="https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md">Author guide</a>
-    </p>
+    <section class="section" id="how">
+      <p class="section-label">How it works</p>
+      <h2 class="section-title">Install in three steps</h2>
+      <p class="section-desc">No npm, no store account. Cultiva desktop pulls files directly from this registry.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3 class="step-title">Get Cultiva</h3>
+          <p class="step-desc">Install the desktop app for Windows, macOS, or Linux from GitHub Releases.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3 class="step-title">Open Plugins</h3>
+          <p class="step-desc">Settings → Plugins → Browse. The app fetches registry.json and lists the catalog.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3 class="step-title">Install &amp; grow</h3>
+          <p class="step-desc">Tap Install. Files are verified, sandboxed, and wired into your header or garden.</p>
+        </div>
+      </div>
+    </section>
 
-    <footer>krwg · MIT · sandboxed widgets for <a href="https://github.com/krwg/cultiva">Cultiva</a></footer>
-  </div>
+    <section class="section" id="security">
+      <p class="section-label">Security</p>
+      <h2 class="section-title">Sandboxed by design</h2>
+      <p class="section-desc">Plugins never get raw Node or DOM access. Permissions are declared and enforced.</p>
+      <div class="security-grid">
+        <div class="security-item">
+          <h3>sha256 integrity</h3>
+          <p>Every file in registry.json has a hash. Mismatch aborts install before code runs.</p>
+        </div>
+        <div class="security-item">
+          <h3>Opaque iframe</h3>
+          <p>Plugin JavaScript runs in an isolated sandbox; UI is bridged via postMessage RPC.</p>
+        </div>
+        <div class="security-item">
+          <h3>Permission gates</h3>
+          <p>network, storage, and ui must be listed in manifest.json and are checked at runtime.</p>
+        </div>
+        <div class="security-item">
+          <h3>Local habits</h3>
+          <p>Cultiva habit data stays on disk. Plugins only see what you grant via the sandbox API.</p>
+        </div>
+      </div>
+      <div class="author-banner">
+        <p>Building a plugin? Read the author guide, add your folder, run the sha256 script, and open a PR.</p>
+        <div class="cta-group">
+          <a class="btn btn-primary" href="https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md">Author guide</a>
+          <a class="btn btn-secondary" href="https://github.com/krwg/cultiva-plugins/blob/main/scripts/compute-registry-sha256.mjs">Hash script</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/krwg/cultiva">Cultiva app</a>
+      <a href="https://github.com/krwg/cultiva-plugins">Repository</a>
+      <a href="https://github.com/krwg/cultiva-plugins/blob/main/registry.json">registry.json</a>
+      <a href="https://github.com/krwg/cultiva-plugins/issues">Issues</a>
+    </div>
+    <p>MIT · Maintained by <a href="https://github.com/krwg">krwg</a> · widgets for the garden, not the cloud</p>
+  </footer>
+
+  <script>
+    function copyText(id, btn) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>
