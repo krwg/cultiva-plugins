@@ -5,17 +5,17 @@
       "action": "close",
       "title": "chore: registry manifest version drift breaks sha256 installs",
       "labels": ["bug", "registry", "1.7"],
-      "commit": "16eee6af11f8f734ad17f4134989e537d44eab9f",
+      "commit": "c7d35b39533dce3d7bac97f94fef98f147d70175",
       "body": "## Problem\n\n`registry.json` plugin versions lagged behind `manifest.json` (weather 2.1.0 vs 2.3.0, etc.), causing install hash mismatches.\n\n## Fix\n\nAuto-sync versions in compute script + CI validate workflow.",
-      "closeBody": "Fixed in https://github.com/krwg/cultiva-plugins/commit/16eee6af11f8f734ad17f4134989e537d44eab9f\n\nRegistry bumped to **3.0.1** with synced versions and recomputed sha256."
+      "closeBody": "Fixed in https://github.com/krwg/cultiva-plugins/commit/c7d35b39533dce3d7bac97f94fef98f147d70175\n\nRegistry bumped to **3.0.1** with synced versions and recomputed sha256."
     },
     {
       "action": "close",
       "title": "refactor: deduplicate cultiva-sheet CSS across weather/time/radio/pomodoro",
       "labels": ["enhancement", "maintenance"],
-      "commit": "53278f9266d96f7b01d2c897654a75e84e4cb850",
+      "commit": "cb6128e12076b193ef586f4cd2a844040669be56",
       "body": "## Problem\n\nFour plugins each duplicated ~200 lines of sheet modal CSS.\n\n## Solution\n\n`shared/cultiva-sheet-base.css` + `scripts/sync-sheet-css.mjs` copied into plugin folders before hash compute.",
-      "closeBody": "Fixed in https://github.com/krwg/cultiva-plugins/commit/53278f9266d96f7b01d2c897654a75e84e4cb850"
+      "closeBody": "Fixed in https://github.com/krwg/cultiva-plugins/commit/cb6128e12076b193ef586f4cd2a844040669be56\n\nShared `cultiva-sheet-base.css` extracted; synced into weather/time/radio/pomodoro."
     },
     {
       "action": "open",

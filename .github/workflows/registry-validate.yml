@@ -1,0 +1,19 @@
+name: Registry validate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sync shared sheet CSS
+        run: node scripts/sync-sheet-css.mjs
+
+      - name: Validate manifest ↔ registry versions and recompute sha256
+        run: node scripts/validate-registry.mjs
