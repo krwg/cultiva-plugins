@@ -7,8 +7,18 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..');
 const registryPath = join(root, 'registry.json');
 
-function sha256File(filePath) {
-  return createHash('sha256').update(readFileSync(filePath)).digest('hex');
+function isTextAsset(name) {
+  return /\.(json|js|css|md|txt|html|yml|yaml)$/i.test(name);
+}
+
+function sha256File(filePath, name) {
+  const raw = readFileSync(filePath);
+  if (!isTextAsset(name)) {
+    return createHash('sha256').update(raw).digest('hex');
+  }
+  // GitHub raw serves repository text files with LF line endings.
+  const normalized = raw.toString('utf8').replace(/\r\n/g, '\n');
+  return createHash('sha256').update(Buffer.from(normalized, 'utf8')).digest('hex');
 }
 
 function listPluginFiles(pluginDir, manifest) {
@@ -31,7 +41,7 @@ function listPluginFiles(pluginDir, manifest) {
     if (!existsSync(filePath)) {
       throw new Error(`Missing file for hash: ${pluginDir}/${name}`);
     }
-    hashes[name] = sha256File(filePath);
+    hashes[name] = sha256File(filePath, name);
   }
   return hashes;
 }
