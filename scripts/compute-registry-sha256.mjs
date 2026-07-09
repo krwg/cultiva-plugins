@@ -19,7 +19,6 @@ function sha256File(filePath, name) {
   if (!isTextAsset(name)) {
     return createHash('sha256').update(raw).digest('hex');
   }
-  // GitHub raw serves repository text files with LF line endings.
   const normalized = raw.toString('utf8').replace(/\r\n/g, '\n');
   return createHash('sha256').update(Buffer.from(normalized, 'utf8')).digest('hex');
 }

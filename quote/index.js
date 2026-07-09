@@ -54,7 +54,7 @@ class QuotePlugin {
         }
       }
     } catch {
-      // Keep fallback bank.
+      void 0;
     }
   }
 
