@@ -4,319 +4,338 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Official Cultiva plugin registry — sandboxed widgets with sha256 integrity. Weather, Time, Radio, Pomodoro, Quote, Streak.">
-  <meta name="theme-color" content="#34c759">
+  <meta name="theme-color" content="#F5F5F7">
   <title>Cultiva Plugins · Official Registry</title>
   <style>
     :root {
-      --green: #34c759;
-      --green-dark: #248a3d;
-      --green-light: #30d158;
-      --green-soft: rgba(52, 199, 89, 0.14);
-      --green-glow: rgba(52, 199, 89, 0.28);
-      --blue: #0071e3;
-      --bg: #fbfbfd;
-      --bg-elevated: #ffffff;
-      --bg-muted: #f5f5f7;
-      --text: #1d1d1f;
-      --text-secondary: #6e6e73;
-      --text-tertiary: #86868b;
-      --separator: rgba(0, 0, 0, 0.08);
-      --glass: rgba(251, 251, 253, 0.78);
-      --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.04);
-      --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.08);
-      --radius-pill: 980px;
-      --radius-xl: 28px;
-      --radius-lg: 20px;
-      --radius-md: 14px;
-      --radius-icon: 22%;
-      --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+      --bg: #F5F5F7;
+      --text: #1D1D1F;
+      --text-secondary: #86868B;
+      --accent: #0071E3;
+      --card: rgba(255, 255, 255, 0.8);
+      --border: rgba(0, 0, 0, 0.06);
+      --btn-secondary-bg: #E5E5EA;
+      --btn-secondary-text: #1D1D1F;
+      --font: -apple-system, 'SF Pro Display', 'SF Pro Text', 'PingFang SC', sans-serif;
       --mono: 'SF Mono', ui-monospace, Menlo, monospace;
-      --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
-      --max: 980px;
-      --store-max: 720px;
+      --ease: cubic-bezier(0.25, 1, 0.5, 1);
+      --max: 1120px;
+      --gap: 28px;
+      --radius: 24px;
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #000000;
-        --bg-elevated: #1c1c1e;
-        --bg-muted: #0a0a0a;
-        --text: #f5f5f7;
-        --text-secondary: #a1a1a6;
-        --text-tertiary: #636366;
-        --separator: rgba(255, 255, 255, 0.1);
-        --glass: rgba(0, 0, 0, 0.72);
-        --green-soft: rgba(52, 199, 89, 0.18);
+        --text: #F5F5F7;
+        --card: rgba(255, 255, 255, 0.08);
+        --border: rgba(255, 255, 255, 0.08);
+        --btn-secondary-bg: #2C2C2E;
+        --btn-secondary-text: #F5F5F7;
       }
     }
-
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: var(--font);
+      font-weight: 400;
+      font-size: clamp(0.875rem, 2vw, 1.125rem);
+      line-height: 1.5;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.47059;
-      letter-spacing: -0.022em;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
-
+    .blobs {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    }
+    .blob {
+      position: absolute; border-radius: 50%; filter: blur(80px);
+      animation: drift 22s var(--ease) infinite alternate;
+    }
+    .blob-1 {
+      width: 520px; height: 520px; top: -12%; left: -8%;
+      background: radial-gradient(circle, rgba(162, 210, 255, 0.4) 0%, transparent 70%);
+    }
+    .blob-2 {
+      width: 440px; height: 440px; bottom: 5%; right: -10%;
+      background: radial-gradient(circle, rgba(200, 180, 255, 0.3) 0%, transparent 70%);
+      animation-delay: -7s;
+    }
+    .blob-3 {
+      width: 380px; height: 380px; top: 42%; left: 42%;
+      background: radial-gradient(circle, rgba(162, 210, 255, 0.28) 0%, transparent 70%);
+      animation-delay: -14s;
+    }
+    @keyframes drift {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(28px, -24px) scale(1.04); }
+    }
+    .shell { position: relative; z-index: 1; }
     [data-view] { display: none; }
     [data-view].active { display: block; }
-
     .nav {
-      position: sticky; top: 0; z-index: 100;
-      background: var(--glass);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      border-bottom: 1px solid var(--separator);
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(245, 245, 247, 0.72);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    @media (prefers-color-scheme: dark) {
+      .nav { background: rgba(0, 0, 0, 0.72); }
     }
     .nav-inner {
-      max-width: var(--max); margin: 0 auto; padding: 14px 22px;
+      max-width: var(--max); margin: 0 auto; padding: 16px 24px;
       display: flex; align-items: center; justify-content: space-between; gap: 16px;
     }
-    .nav-logo {
+    .brand {
       display: flex; align-items: center; gap: 10px;
       text-decoration: none; color: var(--text);
-      font-size: 17px; font-weight: 600; letter-spacing: -0.03em;
+      font-size: 1rem; font-weight: 600; letter-spacing: -0.025em;
     }
-    .nav-logo span { color: var(--text-secondary); font-weight: 500; }
-    .nav-mark {
-      width: 28px; height: 28px; border-radius: 7px;
-      background: linear-gradient(145deg, var(--green-light), var(--green-dark));
-      display: grid; place-items: center;
+    .brand span { color: var(--text-secondary); font-weight: 500; }
+    .brand-mark {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: var(--accent); display: grid; place-items: center;
     }
-    .icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; line-height: 0; }
-    .icon svg { display: block; fill: currentColor; stroke: none; }
-    .icon--white { color: #fff; }
-    .icon--green { color: var(--green); }
-    .icon-32 svg { width: 32px; height: 32px; }
-    .icon-52 svg { width: 52px; height: 52px; }
-    .screenshot-ui-row { display: inline-flex; align-items: center; gap: 6px; justify-content: center; flex-wrap: wrap; }
-    .nav-links { display: flex; gap: 20px; align-items: center; }
-    .nav-link {
-      font-size: 12px; color: var(--text-secondary); text-decoration: none;
-      transition: color 0.2s var(--ease);
+    .nav-links { display: flex; align-items: center; gap: 20px; }
+    .nav-links a {
+      font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+      color: var(--text-secondary); text-decoration: none;
+      transition: color 0.25s var(--ease);
     }
-    .nav-link:hover { color: var(--text); }
-    .nav-back {
-      display: none; align-items: center; gap: 6px;
-      font-size: 14px; font-weight: 500; color: var(--blue); text-decoration: none;
+    .nav-links a:hover { color: var(--text); }
+    .nav-back { display: none; color: var(--accent); font-weight: 600; }
+    body[data-page^="plugin-"] .nav-back { display: inline; }
+    body[data-page^="plugin-"] .nav-links .nav-hide-on-plugin { display: none; }
+    .icon { display: inline-flex; line-height: 0; color: var(--accent); flex-shrink: 0; }
+    .icon--on-accent { color: #fff; }
+    .icon svg { display: block; fill: currentColor; }
+    .i-16 svg { width: 16px; height: 16px; }
+    .i-24 svg { width: 24px; height: 24px; }
+    .i-32 svg { width: 32px; height: 32px; }
+    .i-40 svg { width: 40px; height: 40px; }
+    .i-48 svg { width: 48px; height: 48px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 12px 22px; border-radius: 22px; border: none;
+      font-family: var(--font); font-size: 1rem; font-weight: 600;
+      text-decoration: none; cursor: pointer;
+      transition: transform 0.25s var(--ease), filter 0.25s var(--ease);
     }
-    body[data-page^="plugin-"] .nav-back { display: inline-flex; }
-    body[data-page^="plugin-"] .nav-links .nav-link:not(.nav-back-wrap) { display: none; }
-
-    .hero {
-      text-align: center; padding: 72px 22px 56px;
-      background: radial-gradient(ellipse 70% 45% at 50% -5%, var(--green-soft), transparent 65%);
+    .btn:hover { transform: scale(1.02); }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { filter: brightness(1.06); }
+    .btn-secondary { background: var(--btn-secondary-bg); color: var(--btn-secondary-text); }
+    .btn-secondary:hover { filter: brightness(0.97); }
+    .page { max-width: var(--max); margin: 0 auto; padding: 48px 24px 80px; }
+    .bento {
+      display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap);
     }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 6px 14px; margin-bottom: 20px; border-radius: var(--radius-pill);
-      font-size: 12px; font-weight: 600; color: var(--green-dark);
-      background: var(--green-soft); border: 1px solid rgba(52, 199, 89, 0.2);
+    .card {
+      background: var(--card);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 28px;
+      opacity: 0;
+      animation: fadeUp 0.75s var(--ease) forwards;
     }
-    @media (prefers-color-scheme: dark) { .hero-badge { color: var(--green-light); } }
-    .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-    .hero-title {
-      font-size: clamp(36px, 7vw, 56px); font-weight: 700;
-      letter-spacing: -0.04em; line-height: 1.06; margin-bottom: 14px;
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.12s; }
+    .card:nth-child(3) { animation-delay: 0.19s; }
+    .card:nth-child(4) { animation-delay: 0.26s; }
+    .card:nth-child(5) { animation-delay: 0.33s; }
+    .card:nth-child(6) { animation-delay: 0.4s; }
+    .card:nth-child(7) { animation-delay: 0.47s; }
+    .card:nth-child(8) { animation-delay: 0.54s; }
+    .card:nth-child(9) { animation-delay: 0.61s; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .hero-lead {
-      font-size: clamp(17px, 2.5vw, 21px); color: var(--text-secondary);
-      max-width: 540px; margin: 0 auto 28px; line-height: 1.45;
+    .span-12 { grid-column: span 12; }
+    .span-8 { grid-column: span 8; }
+    .span-6 { grid-column: span 6; }
+    .span-4 { grid-column: span 4; }
+    .caption {
+      font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+      color: var(--text-secondary);
+      letter-spacing: -0.01em;
     }
-    .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 28px; }
+    h1 {
+      font-size: clamp(2.25rem, 5vw, 5rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      line-height: 1.05;
+      margin: 12px 0 16px;
+    }
+    h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    h3 {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .lead { color: var(--text-secondary); max-width: 36em; margin-bottom: 24px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
     .pill {
-      font-size: 12px; font-weight: 600; padding: 7px 14px; border-radius: var(--radius-pill);
-      background: var(--bg-elevated); border: 1px solid var(--separator); color: var(--text-secondary);
+      font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+      font-weight: 600; padding: 6px 14px; border-radius: 22px;
+      background: rgba(0, 113, 227, 0.08); color: var(--text-secondary);
+      border: 1px solid var(--border);
     }
-    .pill strong { color: var(--text); }
-
-    .section { max-width: var(--max); margin: 0 auto; padding: 56px 22px 72px; }
-    .section-label {
-      font-size: 22px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 20px;
+    .pill strong { color: var(--text); font-weight: 600; }
+    .catalog-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
     }
-
-    .store-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px;
-    }
-    .store-card {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 16px; border-radius: var(--radius-lg);
-      background: var(--bg-elevated); border: 1px solid var(--separator);
+    .catalog-item {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 20px; border-radius: 16px;
+      background: rgba(0, 113, 227, 0.04);
+      border: 1px solid var(--border);
       text-decoration: none; color: inherit;
-      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease), border-color 0.3s;
+      transition: transform 0.25s var(--ease), filter 0.25s var(--ease);
     }
-    .store-card:hover {
-      transform: scale(1.02); box-shadow: var(--shadow-md);
-      border-color: rgba(52, 199, 89, 0.35);
+    @media (prefers-color-scheme: dark) {
+      .catalog-item { background: rgba(0, 113, 227, 0.1); }
     }
-    .store-icon {
-      width: 64px; height: 64px; flex-shrink: 0; border-radius: var(--radius-icon);
-      display: grid; place-items: center;
-      box-shadow: var(--shadow-sm);
+    .catalog-item:hover { transform: scale(1.02); filter: brightness(1.02); }
+    .plugin-icon {
+      width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+      background: var(--accent); display: grid; place-items: center;
     }
-    .store-icon.weather { background: linear-gradient(145deg, #64d2ff, #007aff); }
-    .store-icon.time { background: linear-gradient(145deg, #bf5af2, #5856d6); }
-    .store-icon.radio { background: linear-gradient(145deg, #ff9f0a, #ff375f); }
-    .store-icon.pomodoro { background: linear-gradient(145deg, #ff6961, #ff3b30); }
-    .store-icon.quote { background: linear-gradient(145deg, #30d158, #248a3d); }
-    .store-icon.streak { background: linear-gradient(145deg, #ffd60a, #ff9f0a); }
-    .store-meta { min-width: 0; flex: 1; }
-    .store-name { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 2px; }
-    .store-tagline { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; line-height: 1.35; }
-    .store-action {
-      font-size: 13px; font-weight: 600; color: var(--blue);
-    }
-
-    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 8px; }
-    .step {
-      padding: 24px; border-radius: var(--radius-lg);
-      background: var(--bg-elevated); border: 1px solid var(--separator);
+    .plugin-meta { min-width: 0; flex: 1; }
+    .plugin-name { font-weight: 600; font-size: 1rem; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .plugin-tagline { font-size: 0.9375rem; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.4; }
+    .plugin-action { font-size: 0.875rem; font-weight: 600; color: var(--accent); }
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 8px;
     }
     .step-num {
-      width: 26px; height: 26px; border-radius: 8px; margin-bottom: 12px;
-      background: var(--green-soft); color: var(--green-dark);
-      font-size: 13px; font-weight: 800; display: grid; place-items: center;
+      width: 28px; height: 28px; border-radius: 10px; margin-bottom: 12px;
+      background: rgba(0, 113, 227, 0.1); color: var(--accent);
+      font-size: 0.875rem; font-weight: 700; display: grid; place-items: center;
     }
-    @media (prefers-color-scheme: dark) { .step-num { color: var(--green-light); } }
-    .step h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
-    .step p { font-size: 14px; color: var(--text-secondary); line-height: 1.45; }
-
+    .step p { color: var(--text-secondary); font-size: 0.9375rem; }
     .code-row {
-      display: flex; align-items: center; gap: 12px; margin-top: 24px;
-      padding: 12px 16px; border-radius: var(--radius-md);
-      background: var(--bg-muted); border: 1px solid var(--separator);
-      font-family: var(--mono); font-size: 12px; overflow-x: auto;
+      display: flex; align-items: center; gap: 12px; margin-top: 20px;
+      padding: 14px 16px; border-radius: 16px;
+      background: rgba(0, 0, 0, 0.03); border: 1px solid var(--border);
+      font-family: var(--mono); font-size: 0.8125rem; overflow-x: auto;
+    }
+    @media (prefers-color-scheme: dark) {
+      .code-row { background: rgba(255, 255, 255, 0.04); }
     }
     .copy-btn {
-      flex-shrink: 0; border: none; background: var(--green-soft);
-      color: var(--green-dark); font-size: 11px; font-weight: 700;
-      padding: 6px 10px; border-radius: 8px; cursor: pointer;
+      flex-shrink: 0; border: none; border-radius: 14px;
+      background: var(--btn-secondary-bg); color: var(--text);
+      font-family: var(--font); font-size: 0.75rem; font-weight: 600;
+      padding: 8px 14px; cursor: pointer;
+      transition: transform 0.25s var(--ease);
     }
-
-    .product {
-      max-width: var(--store-max); margin: 0 auto; padding: 32px 22px 64px;
-    }
+    .copy-btn:hover { transform: scale(1.02); }
     .product-hero {
-      display: flex; gap: 20px; align-items: flex-start;
-      padding-bottom: 28px; border-bottom: 1px solid var(--separator);
-      margin-bottom: 28px;
+      display: flex; gap: 24px; align-items: flex-start;
     }
     .product-icon {
-      width: 120px; height: 120px; flex-shrink: 0; border-radius: var(--radius-icon);
-      display: grid; place-items: center;
-      box-shadow: var(--shadow-md);
+      width: 88px; height: 88px; border-radius: 20px; flex-shrink: 0;
+      background: var(--accent); display: grid; place-items: center;
     }
-    .product-info { flex: 1; min-width: 0; padding-top: 4px; }
-    .product-name { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 4px; }
-    .product-tagline { font-size: 17px; color: var(--text-secondary); margin-bottom: 10px; }
-    .product-dev { font-size: 13px; color: var(--text-tertiary); margin-bottom: 16px; }
-    .product-dev a { color: var(--blue); text-decoration: none; }
-    .product-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-    .get-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 88px; padding: 8px 22px; border-radius: var(--radius-pill);
-      background: var(--green-soft); color: var(--green-dark);
-      font-size: 15px; font-weight: 700; text-decoration: none;
-      transition: filter 0.2s, transform 0.2s;
+    .product-info { flex: 1; min-width: 0; }
+    .product-name {
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700; letter-spacing: -0.025em; line-height: 1.1;
+      margin: 0 0 8px;
     }
-    @media (prefers-color-scheme: dark) { .get-btn { color: var(--green-light); } }
-    .get-btn:hover { filter: brightness(1.08); transform: scale(1.03); }
-    .product-rating { font-size: 12px; color: var(--text-tertiary); }
-
-    .screenshots {
-      display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px;
-      scroll-snap-type: x mandatory; margin-bottom: 32px;
-      -webkit-overflow-scrolling: touch;
+    .product-tagline { font-size: 1.0625rem; color: var(--text-secondary); margin-bottom: 8px; }
+    .product-dev { font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 16px; }
+    .product-dev a { color: var(--accent); text-decoration: none; }
+    .product-note { font-size: 0.875rem; color: var(--text-secondary); }
+    .preview-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px; margin-top: 8px;
     }
-    .screenshot {
-      flex: 0 0 min(280px, 75vw); scroll-snap-align: start;
-      aspect-ratio: 16/10; border-radius: var(--radius-lg);
-      border: 1px solid var(--separator); overflow: hidden;
-      background: var(--bg-muted); position: relative;
+    .preview-tile {
+      padding: 20px; border-radius: 16px;
+      background: rgba(0, 113, 227, 0.06);
+      border: 1px solid var(--border);
     }
-    .screenshot-inner {
-      position: absolute; inset: 0; padding: 16px;
-      display: flex; flex-direction: column; gap: 10px;
+    @media (prefers-color-scheme: dark) {
+      .preview-tile { background: rgba(0, 113, 227, 0.12); }
     }
-    .screenshot-label {
-      font-size: 11px; font-weight: 700; color: var(--text-tertiary);
-      text-transform: uppercase; letter-spacing: 0.06em;
+    .preview-label {
+      font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+      font-weight: 600; color: var(--text-secondary);
+      text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px;
     }
-    .screenshot-ui {
-      flex: 1; border-radius: 10px; background: var(--bg-elevated);
-      border: 1px solid var(--separator);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; font-weight: 600; color: var(--text-secondary);
-      text-align: center; padding: 16px;
-    }
-
-    .product-section { margin-bottom: 32px; }
-    .product-section h2 {
-      font-size: 20px; font-weight: 700; letter-spacing: -0.03em;
-      margin-bottom: 12px;
-    }
-    .product-section p {
-      font-size: 15px; color: var(--text-secondary); line-height: 1.55;
+    .preview-content {
+      font-size: 1rem; font-weight: 600; color: var(--text);
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
     }
     .feature-list { list-style: none; margin-top: 12px; }
     .feature-list li {
-      font-size: 15px; color: var(--text-secondary); padding: 8px 0;
-      border-bottom: 1px solid var(--separator);
       display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      color: var(--text-secondary); font-size: 0.9375rem;
     }
-    .feature-list li::before {
-      content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0;
-    }
-
-    .info-table {
-      border-radius: var(--radius-lg); overflow: hidden;
-      border: 1px solid var(--separator); background: var(--bg-elevated);
-    }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list .icon { margin-top: 2px; }
+    .info-table { margin-top: 8px; }
     .info-row {
       display: flex; justify-content: space-between; gap: 16px;
-      padding: 12px 16px; font-size: 14px;
-      border-bottom: 1px solid var(--separator);
+      padding: 12px 0; font-size: 0.9375rem;
+      border-bottom: 1px solid var(--border);
     }
     .info-row:last-child { border-bottom: none; }
-    .info-key { color: var(--text-tertiary); flex-shrink: 0; }
-    .info-val { text-align: right; font-weight: 500; color: var(--text); }
-
-    .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .info-key { color: var(--text-secondary); }
+    .info-val { font-weight: 500; text-align: right; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .tag {
-      font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: var(--radius-pill);
-      background: var(--bg-muted); border: 1px solid var(--separator); color: var(--text-tertiary);
+      font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+      font-weight: 600; padding: 5px 12px; border-radius: 22px;
+      background: var(--btn-secondary-bg); color: var(--text-secondary);
     }
-
     .footer {
-      border-top: 1px solid var(--separator); padding: 36px 22px 44px;
-      text-align: center; font-size: 12px; color: var(--text-tertiary);
+      max-width: var(--max); margin: 0 auto; padding: 32px 24px 48px;
+      text-align: center; border-top: 1px solid var(--border);
     }
-    .footer-links { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-bottom: 12px; }
-    .footer a { color: var(--blue); text-decoration: none; }
-
-    @media (max-width: 720px) {
-      .product-hero { flex-direction: column; align-items: center; text-align: center; }
-      .product-actions { justify-content: center; }
+    .footer-links {
+      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-bottom: 12px;
+    }
+    .footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .footer a:hover { text-decoration: underline; }
+    @media (max-width: 900px) {
+      .span-8, .span-6, .span-4 { grid-column: span 12; }
+      .catalog-grid { grid-template-columns: 1fr; }
       .steps { grid-template-columns: 1fr; }
-      .nav-links .nav-link:not(.nav-back-wrap) { display: none; }
+      .product-hero { flex-direction: column; }
+      .nav-links a.nav-hide-on-plugin { display: none; }
+    }
+    @media (max-width: 520px) {
+      .actions { flex-direction: column; align-items: stretch; }
+      .actions .btn { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .blob { animation: none; }
+      .card { animation: none; opacity: 1; }
+      .catalog-item:hover { transform: none; }
     }
   </style>
 </head>
 <body data-page="home">
+  <div class="blobs" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
-    <symbol id="i-leaf" viewBox="0 0 256 256"><path d="M223.45,40.07a8,8,0,0,0-7.52-7.52C139.8,28.08,78.82,51,52.82,94a87.09,87.09,0,0,0-12.76,49A101.72,101.72,0,0,0,46.7,175.2a4,4,0,0,0,6.61,1.43l85-86.3a8,8,0,0,1,11.32,11.32L56.74,195.94,42.55,210.13a8.2,8.2,0,0,0-.6,11.1,8,8,0,0,0,11.71.43l16.79-16.79c14.14,6.84,28.41,10.57,42.56,11.07q1.67.06,3.33.06A86.93,86.93,0,0,0,162,203.18C205,177.18,227.93,116.21,223.45,40.07Z"/></symbol>
-    <symbol id="i-tree" viewBox="0 0 256 256"><path d="M128,187.85a72.44,72.44,0,0,0,8,4.62V232a8,8,0,0,1-16,0V192.47A72.44,72.44,0,0,0,128,187.85ZM198.1,62.59a76,76,0,0,0-140.2,0A71.71,71.71,0,0,0,16,127.8C15.9,166,48,199,86.14,200A72.22,72.22,0,0,0,120,192.47V156.94L76.42,135.16a8,8,0,1,1,7.16-14.32L120,139.06V88a8,8,0,0,1,16,0v27.06l36.42-18.22a8,8,0,1,1,7.16,14.32L136,132.94v59.53A72.17,72.17,0,0,0,168,200l1.82,0C208,199,240.11,166,240,127.8A71.71,71.71,0,0,0,198.1,62.59Z"/></symbol>
-    <symbol id="i-branch" viewBox="0 0 256 256"><path d="M205.41,159.07a60.9,60.9,0,0,1-31.83,8.86,71.71,71.71,0,0,1-27.36-5.66A55.55,55.55,0,0,0,136,194.51V224a8,8,0,0,1-8.53,8,8.18,8.18,0,0,1-7.47-8.25V211.31L81.38,172.69A52.5,52.5,0,0,1,63.44,176a45.82,45.82,0,0,1-23.92-6.67C17.73,156.09,6,125.62,8.27,87.79a8,8,0,0,1,7.52-7.52c37.83-2.23,68.3,9.46,81.5,31.25A46,46,0,0,1,103.74,140a4,4,0,0,1-6.89,2.43l-19.2-20.1a8,8,0,0,0-11.31,11.31l53.88,55.25c.06-.78.13-1.56.21-2.33a68.56,68.56,0,0,1,18.64-39.46l50.59-53.46a8,8,0,0,0-11.31-11.32l-49,51.82a4,4,0,0,1-6.78-1.74c-4.74-17.48-2.65-34.88,6.4-49.82,17.86-29.48,59.42-45.26,111.18-42.22a8,8,0,0,1,7.52,7.52C250.67,99.65,234.89,141.21,205.41,159.07Z"/></symbol>
-    <symbol id="i-seed" viewBox="0 0 256 256"><path d="M174,47.75a254.19,254.19,0,0,0-41.45-38.3,8,8,0,0,0-9.18,0A254.19,254.19,0,0,0,82,47.75C54.51,79.32,40,112.6,40,144a88,88,0,0,0,176,0C216,112.6,201.49,79.32,174,47.75Zm9.85,105.59a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z"/></symbol>
-    <symbol id="i-legacy" viewBox="0 0 256 256"><path d="M239.73,208H224V96a16,16,0,0,0-16-16H164a4,4,0,0,0-4,4V208H144V32.41a16.43,16.43,0,0,0-6.16-13,16,16,0,0,0-18.72-.69L39.12,72A16,16,0,0,0,32,85.34V208H16.27A8.18,8.18,0,0,0,8,215.47,8,8,0,0,0,16,224H240a8,8,0,0,0,8-8.53A8.18,8.18,0,0,0,239.73,208ZM76,184a8,8,0,0,1-8.53,8A8.18,8.18,0,0,1,60,183.72V168.27A8.19,8.19,0,0,1,67.47,160,8,8,0,0,1,76,168Zm0-56a8,8,0,0,1-8.53,8A8.19,8.19,0,0,1,60,127.72V112.27A8.19,8.19,0,0,1,67.47,104,8,8,0,0,1,76,112Zm40,56a8,8,0,0,1-8.53,8,8.18,8.18,0,0,1-7.47-8.26V168.27a8.19,8.19,0,0,1,7.47-8.26,8,8,0,0,1,8.53,8Zm0-56a8,8,0,0,1-8.53,8,8.19,8.19,0,0,1-7.47-8.26V112.27a8.19,8.19,0,0,1,7.47-8.26,8,8,0,0,1,8.53,8Z"/></symbol>
-    <symbol id="i-offline" viewBox="0 0 256 256"><path d="M213.92,210.62a8,8,0,1,1-11.84,10.76l-33.67-37-28.1,33.88A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,188.26,188.26,0,0,1,46.6,50.35l-4.29-4.72a8.22,8.22,0,0,1,.13-11.38,8,8,0,0,1,11.48.37Zm34-129.71a15.93,15.93,0,0,0-6.17-10.81A186.67,186.67,0,0,0,128,32a191,191,0,0,0-42.49,4.75,4,4,0,0,0-2,6.59L186,156.07a4,4,0,0,0,6-.14L244.35,92.8A15.65,15.65,0,0,0,247.89,80.91Z"/></symbol>
-    <symbol id="i-flame" viewBox="0 0 256 256"><path d="M143.38,17.85a8,8,0,0,0-12.63,3.41l-22,60.41L84.59,58.26a8,8,0,0,0-11.93.89C51,87.53,40,116.08,40,144a88,88,0,0,0,176,0C216,84.55,165.21,36,143.38,17.85Zm40.51,135.49a57.6,57.6,0,0,1-46.56,46.55A7.65,7.65,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z"/></symbol>
-    <symbol id="i-calendar" viewBox="0 0 256 256"><path d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM112,184a8,8,0,0,1-16,0V132.94l-4.42,2.22a8,8,0,0,1-7.16-14.32l16-8A8,8,0,0,1,112,120Zm56-8a8,8,0,0,1,0,16H136a8,8,0,0,1-6.4-12.8l28.78-38.37A8,8,0,1,0,145.07,132a8,8,0,1,1-13.85-8A24,24,0,0,1,176,136a23.76,23.76,0,0,1-4.84,14.45L152,176ZM48,80V48H72v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80Z"/></symbol>
-    <symbol id="i-puzzle" viewBox="0 0 256 256"><path d="M165.78,224H208a16,16,0,0,0,16-16V170.35A8,8,0,0,0,212.94,163a23.37,23.37,0,0,1-8.94,1.77c-13.23,0-24-11.1-24-24.73s10.77-24.73,24-24.73a23.37,23.37,0,0,1,8.94,1.77A8,8,0,0,0,224,109.65V72a16,16,0,0,0-16-16H171.78a35.36,35.36,0,0,0,.22-4,36,36,0,0,0-72,0,35.36,35.36,0,0,0,.22,4H64A16,16,0,0,0,48,72v32.22a35.36,35.36,0,0,0-4-.22,36,36,0,0,0,0,72,35.36,35.36,0,0,0,4-.22V208a16,16,0,0,0,16,16h42.22"/></symbol>
-    <symbol id="i-backup" viewBox="0 0 256 256"><path d="M208,40H48A16,16,0,0,0,32,56v48a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V56A16,16,0,0,0,208,40ZM180,92a12,12,0,1,1,12-12A12,12,0,0,1,180,92Z"/><path d="M208,136H48a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V152A16,16,0,0,0,208,136Zm-28,52a12,12,0,1,1,12-12A12,12,0,0,1,180,188Z"/></symbol>
     <symbol id="i-grid" viewBox="0 0 256 256"><path d="M120,56v48a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V56A16,16,0,0,1,56,40h48A16,16,0,0,1,120,56Zm80-16H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm-96,96H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm96,0H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Z"/></symbol>
     <symbol id="i-weather" viewBox="0 0 256 256"><path d="M164,72a76.2,76.2,0,0,0-20.26,2.73,55.63,55.63,0,0,0-9.41-11.54l9.51-13.57a8,8,0,1,0-13.11-9.18L121.22,54A55.9,55.9,0,0,0,96,48c-.59,0-1.16,0-1.74,0L91.37,31.71a8,8,0,1,0-15.75,2.77L78.5,50.82A56.1,56.1,0,0,0,55.23,65.67L41.61,56.14a8,8,0,1,0-9.17,13.11L46,78.77A55.55,55.55,0,0,0,40,104c0,.57,0,1.15,0,1.72L23.71,108.6a8,8,0,0,0,1.38,15.88,8.24,8.24,0,0,0,1.39-.12l16.32-2.88a55.74,55.74,0,0,0,5.86,12.42A52,52,0,0,0,84,224h80a76,76,0,0,0,0-152ZM92.92,120.76a52.14,52.14,0,0,0-31,4.17,40,40,0,0,1,66.62-44.17A76.26,76.26,0,0,0,92.92,120.76Z"/></symbol>
     <symbol id="i-sun" viewBox="0 0 256 256"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm8,24a64,64,0,1,0,64,64A64.07,64.07,0,0,0,128,64ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"/></symbol>
@@ -324,373 +343,455 @@
     <symbol id="i-radio" viewBox="0 0 256 256"><path d="M216,64H86.51L194.3,31.67a8,8,0,0,0-4.6-15.33l-160,48h0A8,8,0,0,0,24,72V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V80A16,16,0,0,0,216,64ZM104,176H64a8,8,0,0,1,0-16h40a8,8,0,0,1,0,16Zm0-32H64a8,8,0,0,1,0-16h40a8,8,0,0,1,0,16Zm0-32H64a8,8,0,0,1,0-16h40a8,8,0,0,1,0,16Zm64,56a32,32,0,1,1,32-32A32,32,0,0,1,168,168Z"/></symbol>
     <symbol id="i-timer" viewBox="0 0 256 256"><path d="M128,40a96,96,0,1,0,96,96A96.11,96.11,0,0,0,128,40Zm45.66,61.66-40,40a8,8,0,0,1-11.32-11.32l40-40a8,8,0,0,1,11.32,11.32ZM96,16a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,16Z"/></symbol>
     <symbol id="i-quote" viewBox="0 0 256 256"><path d="M116,72v88a48.05,48.05,0,0,1-48,48,8,8,0,0,1,0-16,32,32,0,0,0,32-32v-8H40a16,16,0,0,1-16-16V72A16,16,0,0,1,40,56h60A16,16,0,0,1,116,72ZM216,56H156a16,16,0,0,0-16,16v64a16,16,0,0,0,16,16h60v8a32,32,0,0,1-32,32,8,8,0,0,0,0,16,48.05,48.05,0,0,0,48-48V72A16,16,0,0,0,216,56Z"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 256 256"><path d="M143.38,17.85a8,8,0,0,0-12.63,3.41l-22,60.41L84.59,58.26a8,8,0,0,0-11.93.89C51,87.53,40,116.08,40,144a88,88,0,0,0,176,0C216,84.55,165.21,36,143.38,17.85Zm40.51,135.49a57.6,57.6,0,0,1-46.56,46.55A7.65,7.65,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 256 256"><path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"/></symbol>
   </svg>
-  <nav class="nav">
-    <div class="nav-inner">
-      <a class="nav-logo" href="#">
-        <span class="nav-mark icon icon--white icon-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-grid"/></svg></span>
-        Cultiva <span>Plugins</span>
-      </a>
-      <div class="nav-links">
-        <span class="nav-back-wrap">
-          <a class="nav-back" href="#catalog">‹ Catalog</a>
-        </span>
-        <a class="nav-link" href="#catalog">Catalog</a>
-        <a class="nav-link" href="#how">Install</a>
-        <a class="nav-link" href="https://github.com/krwg/cultiva-plugins">GitHub</a>
+
+  <div class="shell">
+    <nav class="nav">
+      <div class="nav-inner">
+        <a class="brand" href="#">
+          <span class="brand-mark icon icon--on-accent i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-grid"/></svg></span>
+          Cultiva <span>Plugins</span>
+        </a>
+        <div class="nav-links">
+          <a class="nav-back" href="#catalog">&#8249; Catalog</a>
+          <a class="nav-hide-on-plugin" href="#catalog">Catalog</a>
+          <a class="nav-hide-on-plugin" href="#how">Install</a>
+          <a class="nav-hide-on-plugin" href="https://github.com/krwg/cultiva-plugins">GitHub</a>
+        </div>
       </div>
+    </nav>
+
+    <div data-view="home" class="active">
+      <main class="page">
+        <div class="bento">
+          <section class="card span-8">
+            <p class="caption">Registry 3.0.2 · Cultiva 1.7.0+</p>
+            <h1>Extend your garden.<br>Stay offline-first.</h1>
+            <p class="lead">Official sandboxed widgets for Cultiva — installed from GitHub with sha256 integrity. Browse the catalog and install inside the app.</p>
+            <div class="pill-row">
+              <span class="pill"><strong>6</strong> plugins</span>
+              <span class="pill"><strong>sha256</strong> verified</span>
+              <span class="pill">MIT license</span>
+              <span class="pill">Desktop</span>
+            </div>
+            <div class="actions">
+              <a class="btn btn-primary" href="https://github.com/krwg/cultiva/releases">Get Cultiva</a>
+              <a class="btn btn-secondary" href="https://github.com/krwg/cultiva-plugins">Repository</a>
+            </div>
+          </section>
+
+          <aside class="card span-4">
+            <p class="caption">Security model</p>
+            <h3>Sandboxed by design</h3>
+            <p style="color:var(--text-secondary);font-size:0.9375rem;margin-top:8px">Every file is hashed in registry.json. Cultiva verifies sha256 before install and runs plugins in an isolated context.</p>
+          </aside>
+
+          <section class="card span-12" id="catalog">
+            <p class="caption">Catalog</p>
+            <h2>Available plugins</h2>
+            <div class="catalog-grid" style="margin-top:20px">
+              <a class="catalog-item" href="#weather">
+                <div class="plugin-icon icon icon--on-accent i-24" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-weather"/></svg></div>
+                <div class="plugin-meta">
+                  <div class="plugin-name">Weather Widget</div>
+                  <div class="plugin-tagline">Forecast with hybrid city search</div>
+                  <div class="plugin-action">View details</div>
+                </div>
+              </a>
+              <a class="catalog-item" href="#time">
+                <div class="plugin-icon icon icon--on-accent i-24" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-clock"/></svg></div>
+                <div class="plugin-meta">
+                  <div class="plugin-name">Time Widget</div>
+                  <div class="plugin-tagline">Live clock and world time zones</div>
+                  <div class="plugin-action">View details</div>
+                </div>
+              </a>
+              <a class="catalog-item" href="#radio">
+                <div class="plugin-icon icon icon--on-accent i-24" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-radio"/></svg></div>
+                <div class="plugin-meta">
+                  <div class="plugin-name">Radio Widget</div>
+                  <div class="plugin-tagline">SomaFM streams and sleep timer</div>
+                  <div class="plugin-action">View details</div>
+                </div>
+              </a>
+              <a class="catalog-item" href="#pomodoro">
+                <div class="plugin-icon icon icon--on-accent i-24" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-timer"/></svg></div>
+                <div class="plugin-meta">
+                  <div class="plugin-name">Pomodoro Timer</div>
+                  <div class="plugin-tagline">25/5 focus cycles in the header</div>
+                  <div class="plugin-action">View details</div>
+                </div>
+              </a>
+              <a class="catalog-item" href="#quote">
+                <div class="plugin-icon icon icon--on-accent i-24" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-quote"/></svg></div>
+                <div class="plugin-meta">
+                  <div class="plugin-name">Quote of the Day</div>
+                  <div class="plugin-tagline">500 EN/RU quotes in your garden</div>
+                  <div class="plugin-action">View details</div>
+                </div>
+              </a>
+              <a class="catalog-item" href="#streak">
+                <div class="plugin-icon icon icon--on-accent i-24" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-flame"/></svg></div>
+                <div class="plugin-meta">
+                  <div class="plugin-name">Streak Celebrator</div>
+                  <div class="plugin-tagline">Toast when you complete a habit</div>
+                  <div class="plugin-action">View details</div>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <section class="card span-12" id="how">
+            <p class="caption">Setup</p>
+            <h2>How to install</h2>
+            <div class="steps">
+              <div>
+                <div class="step-num">1</div>
+                <h3>Get Cultiva</h3>
+                <p>Install the desktop app from GitHub Releases — Windows, macOS, or Linux.</p>
+              </div>
+              <div>
+                <div class="step-num">2</div>
+                <h3>Open Plugins</h3>
+                <p>Settings → Plugins → Browse. Cultiva fetches registry.json automatically.</p>
+              </div>
+              <div>
+                <div class="step-num">3</div>
+                <h3>Install</h3>
+                <p>Tap Install. Files are sha256-verified, sandboxed, and wired into your UI.</p>
+              </div>
+            </div>
+            <div class="code-row">
+              <code id="registry-url" style="flex:1">https://raw.githubusercontent.com/krwg/cultiva-plugins/main/registry.json</code>
+              <button class="copy-btn" type="button" onclick="copyText('registry-url', this)">Copy</button>
+            </div>
+          </section>
+        </div>
+      </main>
     </div>
-  </nav>
 
-  <div data-view="home" class="active">
-    <header class="hero">
-      <div class="hero-badge"><span class="hero-dot"></span> Registry 3.0.1 · Cultiva 1.7.0+</div>
-      <h1 class="hero-title">Extend your garden.<br>Stay offline-first.</h1>
-      <p class="hero-lead">Official sandboxed widgets for Cultiva — installed from GitHub with sha256 integrity. Tap any plugin to preview it like the App Store.</p>
-      <div class="hero-pills">
-        <span class="pill"><strong>6</strong> plugins</span>
-        <span class="pill"><strong>sha256</strong> verified</span>
-        <span class="pill">MIT license</span>
-        <span class="pill">Desktop · Electron</span>
-      </div>
-      <a class="get-btn" href="https://github.com/krwg/cultiva/releases" style="font-size:17px;padding:12px 28px">Get Cultiva</a>
-    </header>
-
-    <section class="section" id="catalog">
-      <h2 class="section-label">Today</h2>
-      <div class="store-grid">
-        <a class="store-card" href="#weather">
-          <div class="store-icon weather icon icon--white icon-32" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-weather"/></svg></div>
-          <div class="store-meta">
-            <div class="store-name">Weather Widget</div>
-            <div class="store-tagline">Forecast with hybrid city search</div>
-            <div class="store-action">View ›</div>
-          </div>
-        </a>
-        <a class="store-card" href="#time">
-          <div class="store-icon time icon icon--white icon-32" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-clock"/></svg></div>
-          <div class="store-meta">
-            <div class="store-name">Time Widget</div>
-            <div class="store-tagline">Live clock &amp; world time zones</div>
-            <div class="store-action">View ›</div>
-          </div>
-        </a>
-        <a class="store-card" href="#radio">
-          <div class="store-icon radio icon icon--white icon-32" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-radio"/></svg></div>
-          <div class="store-meta">
-            <div class="store-name">Radio Widget</div>
-            <div class="store-tagline">SomaFM streams &amp; sleep timer</div>
-            <div class="store-action">View ›</div>
-          </div>
-        </a>
-        <a class="store-card" href="#pomodoro">
-          <div class="store-icon pomodoro icon icon--white icon-32" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-timer"/></svg></div>
-          <div class="store-meta">
-            <div class="store-name">Pomodoro Timer</div>
-            <div class="store-tagline">25/5 focus cycles in the header</div>
-            <div class="store-action">View ›</div>
-          </div>
-        </a>
-        <a class="store-card" href="#quote">
-          <div class="store-icon quote icon icon--white icon-32" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-quote"/></svg></div>
-          <div class="store-meta">
-            <div class="store-name">Quote of the Day</div>
-            <div class="store-tagline">500 EN/RU quotes in your garden</div>
-            <div class="store-action">View ›</div>
-          </div>
-        </a>
-        <a class="store-card" href="#streak">
-          <div class="store-icon streak icon icon--white icon-32" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-flame"/></svg></div>
-          <div class="store-meta">
-            <div class="store-name">Streak Celebrator</div>
-            <div class="store-tagline">Toast when you complete a habit</div>
-            <div class="store-action">View ›</div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <section class="section" id="how" style="padding-top:0">
-      <h2 class="section-label">How to install</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <h3>Get Cultiva</h3>
-          <p>Install the desktop app from GitHub Releases — Windows, macOS, or Linux.</p>
+    <div data-view="weather">
+      <main class="page">
+        <div class="bento">
+          <header class="card span-12 product-hero">
+            <div class="product-icon icon icon--on-accent i-48" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-weather"/></svg></div>
+            <div class="product-info">
+              <h1 class="product-name">Weather Widget</h1>
+              <p class="product-tagline">Forecast with hybrid city search</p>
+              <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/weather">Source</a></p>
+              <div class="actions">
+                <a class="btn btn-primary" href="https://github.com/krwg/cultiva/releases">Install in Cultiva</a>
+                <span class="product-note">Cultiva 1.7.0+</span>
+              </div>
+            </div>
+          </header>
+          <section class="card span-12">
+            <p class="caption">Surfaces</p>
+            <div class="preview-grid">
+              <div class="preview-tile">
+                <div class="preview-label">Header</div>
+                <div class="preview-content"><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-sun"/></svg></span>22° Moscow</div>
+              </div>
+              <div class="preview-tile">
+                <div class="preview-label">Sheet</div>
+                <div class="preview-content">7-day forecast · city picker · °C/°F</div>
+              </div>
+              <div class="preview-tile">
+                <div class="preview-label">Garden</div>
+                <div class="preview-content">Optional weather chip</div>
+              </div>
+            </div>
+          </section>
+          <section class="card span-8">
+            <h2>About this plugin</h2>
+            <p class="lead" style="margin-bottom:0">Open-Meteo forecast with hybrid city search — 1100+ Russian locations bundled offline in cities-ru.json, plus worldwide geocoding when online.</p>
+            <ul class="feature-list">
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Header chip + optional garden widget</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Offline city list for Russia</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Sheet UI in the main window</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Celsius / Fahrenheit settings</li>
+            </ul>
+            <div class="tag-row"><span class="tag">weather</span><span class="tag">widget</span><span class="tag">russia</span></div>
+          </section>
+          <section class="card span-4">
+            <h2>Information</h2>
+            <div class="info-table">
+              <div class="info-row"><span class="info-key">Version</span><span class="info-val">2.3.0</span></div>
+              <div class="info-row"><span class="info-key">Category</span><span class="info-val">Weather</span></div>
+              <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
+              <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">network, storage, ui</span></div>
+              <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Header + Garden</span></div>
+            </div>
+          </section>
         </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <h3>Open Plugins</h3>
-          <p>Settings → Plugins → Browse. Cultiva fetches registry.json automatically.</p>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <h3>Install</h3>
-          <p>Tap Install. Files are sha256-verified, sandboxed, and wired into your UI.</p>
-        </div>
-      </div>
-      <div class="code-row">
-        <code id="registry-url" style="flex:1">https://raw.githubusercontent.com/krwg/cultiva-plugins/main/registry.json</code>
-        <button class="copy-btn" type="button" onclick="copyText('registry-url', this)">Copy</button>
-      </div>
-    </section>
-  </div>
-
-  <div data-view="weather">
-    <article class="product">
-      <header class="product-hero">
-        <div class="product-icon store-icon weather icon icon--white icon-52" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-weather"/></svg></div>
-        <div class="product-info">
-          <h1 class="product-name">Weather Widget</h1>
-          <p class="product-tagline">Forecast with hybrid city search</p>
-          <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/weather">Source</a></p>
-          <div class="product-actions">
-            <a class="get-btn" href="https://github.com/krwg/cultiva/releases">GET</a>
-            <span class="product-rating">In-App Install · Cultiva 1.7.0+</span>
-          </div>
-        </div>
-      </header>
-      <div class="screenshots">
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Header</span><div class="screenshot-ui screenshot-ui-row"><span class="icon icon--green icon-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-sun"/></svg></span>22° Moscow</div></div></div>
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Sheet</span><div class="screenshot-ui">7-day forecast · city picker · °C/°F</div></div></div>
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Garden</span><div class="screenshot-ui">Optional weather chip in the garden</div></div></div>
-      </div>
-      <section class="product-section">
-        <h2>About this plugin</h2>
-        <p>Open-Meteo forecast with hybrid city search — 1100+ Russian locations bundled offline in cities-ru.json, plus worldwide geocoding when online.</p>
-        <ul class="feature-list">
-          <li>Header chip + optional garden widget</li>
-          <li>Offline city list for Russia</li>
-          <li>Apple-style sheet UI in the main window</li>
-          <li>Celsius / Fahrenheit settings</li>
-        </ul>
-        <div class="tag-row"><span class="tag">weather</span><span class="tag">widget</span><span class="tag">russia</span></div>
-      </section>
-      <section class="product-section">
-        <h2>Information</h2>
-        <div class="info-table">
-          <div class="info-row"><span class="info-key">Version</span><span class="info-val">2.3.0</span></div>
-          <div class="info-row"><span class="info-key">Category</span><span class="info-val">Weather</span></div>
-          <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
-          <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">network, storage, ui</span></div>
-          <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Header + Garden</span></div>
-        </div>
-      </section>
-    </article>
-  </div>
-
-  <div data-view="time">
-    <article class="product">
-      <header class="product-hero">
-        <div class="product-icon store-icon time icon icon--white icon-52" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-clock"/></svg></div>
-        <div class="product-info">
-          <h1 class="product-name">Time Widget</h1>
-          <p class="product-tagline">Live clock &amp; world time zones</p>
-          <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/time">Source</a></p>
-          <div class="product-actions">
-            <a class="get-btn" href="https://github.com/krwg/cultiva/releases">GET</a>
-            <span class="product-rating">In-App Install · Cultiva 1.7.0+</span>
-          </div>
-        </div>
-      </header>
-      <div class="screenshots">
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Header</span><div class="screenshot-ui">14:32:08</div></div></div>
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Sheet</span><div class="screenshot-ui">World clocks · format picker · accent colors</div></div></div>
-      </div>
-      <section class="product-section">
-        <h2>About this plugin</h2>
-        <p>Minimal live clock in the header with a full timezone sheet on tap. Choose 12h/24h formats and accent colors — no network required.</p>
-        <ul class="feature-list">
-          <li>Real-time header label</li>
-          <li>Multiple timezone rows in sheet</li>
-          <li>Color themes including rainbow mode</li>
-        </ul>
-        <div class="tag-row"><span class="tag">clock</span><span class="tag">timezone</span><span class="tag">widget</span></div>
-      </section>
-      <section class="product-section">
-        <h2>Information</h2>
-        <div class="info-table">
-          <div class="info-row"><span class="info-key">Version</span><span class="info-val">2.2.0</span></div>
-          <div class="info-row"><span class="info-key">Category</span><span class="info-val">Utilities</span></div>
-          <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
-          <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">storage, ui</span></div>
-          <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Header</span></div>
-        </div>
-      </section>
-    </article>
-  </div>
-
-  <div data-view="radio">
-    <article class="product">
-      <header class="product-hero">
-        <div class="product-icon store-icon radio icon icon--white icon-52" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-radio"/></svg></div>
-        <div class="product-info">
-          <h1 class="product-name">Radio Widget</h1>
-          <p class="product-tagline">SomaFM streams &amp; sleep timer</p>
-          <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/radio">Source</a></p>
-          <div class="product-actions">
-            <a class="get-btn" href="https://github.com/krwg/cultiva/releases">GET</a>
-            <span class="product-rating">In-App Install · Cultiva 1.7.0+</span>
-          </div>
-        </div>
-      </header>
-      <div class="screenshots">
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Header</span><div class="screenshot-ui">▶ Groove Salad</div></div></div>
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Sheet</span><div class="screenshot-ui">Station list · volume · sleep timer</div></div></div>
-      </div>
-      <section class="product-section">
-        <h2>About this plugin</h2>
-        <p>Curated SomaFM ambient streams with glass sheet UI. Set a sleep timer, adjust volume, and focus without leaving your garden.</p>
-        <ul class="feature-list">
-          <li>Multiple SomaFM stations</li>
-          <li>Sleep timer with auto-stop</li>
-          <li>Shared Cultiva sheet design language</li>
-        </ul>
-        <div class="tag-row"><span class="tag">radio</span><span class="tag">ambient</span><span class="tag">music</span></div>
-      </section>
-      <section class="product-section">
-        <h2>Information</h2>
-        <div class="info-table">
-          <div class="info-row"><span class="info-key">Version</span><span class="info-val">2.1.0</span></div>
-          <div class="info-row"><span class="info-key">Category</span><span class="info-val">Music</span></div>
-          <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
-          <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">network, storage, ui</span></div>
-          <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Header</span></div>
-        </div>
-      </section>
-    </article>
-  </div>
-
-  <div data-view="pomodoro">
-    <article class="product">
-      <header class="product-hero">
-        <div class="product-icon store-icon pomodoro icon icon--white icon-52" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-timer"/></svg></div>
-        <div class="product-info">
-          <h1 class="product-name">Pomodoro Timer</h1>
-          <p class="product-tagline">25/5 focus cycles in the header</p>
-          <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/pomodoro">Source</a></p>
-          <div class="product-actions">
-            <a class="get-btn" href="https://github.com/krwg/cultiva/releases">GET</a>
-            <span class="product-rating">In-App Install · Cultiva 1.7.0+</span>
-          </div>
-        </div>
-      </header>
-      <div class="screenshots">
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Work</span><div class="screenshot-ui">25:00 · Focus session</div></div></div>
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Break</span><div class="screenshot-ui">05:00 · Short break</div></div></div>
-      </div>
-      <section class="product-section">
-        <h2>About this plugin</h2>
-        <p>Classic pomodoro technique built into the header chip. Start work or break sessions from a sheet — configurable intervals, zero distraction.</p>
-        <ul class="feature-list">
-          <li>Work / break cycle with notifications</li>
-          <li>Configurable 25/30/45 min work blocks</li>
-          <li>5 or 10 minute breaks</li>
-        </ul>
-        <div class="tag-row"><span class="tag">timer</span><span class="tag">focus</span><span class="tag">productivity</span></div>
-      </section>
-      <section class="product-section">
-        <h2>Information</h2>
-        <div class="info-table">
-          <div class="info-row"><span class="info-key">Version</span><span class="info-val">1.2.0</span></div>
-          <div class="info-row"><span class="info-key">Category</span><span class="info-val">Productivity</span></div>
-          <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
-          <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">storage, ui</span></div>
-          <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Header</span></div>
-        </div>
-      </section>
-    </article>
-  </div>
-
-  <div data-view="quote">
-    <article class="product">
-      <header class="product-hero">
-        <div class="product-icon store-icon quote icon icon--white icon-52" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-quote"/></svg></div>
-        <div class="product-info">
-          <h1 class="product-name">Quote of the Day</h1>
-          <p class="product-tagline">500 EN/RU quotes in your garden</p>
-          <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/quote">Source</a></p>
-          <div class="product-actions">
-            <a class="get-btn" href="https://github.com/krwg/cultiva/releases">GET</a>
-            <span class="product-rating">In-App Install · Cultiva 1.7.0+</span>
-          </div>
-        </div>
-      </header>
-      <div class="screenshots">
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Garden</span><div class="screenshot-ui">"The secret of getting ahead is getting started."</div></div></div>
-      </div>
-      <section class="product-section">
-        <h2>About this plugin</h2>
-        <p>Daily inspiration widget planted in your garden. Deterministic quote rotation from 500 bundled EN/RU quotes — fully offline, no API calls.</p>
-        <ul class="feature-list">
-          <li>Garden surface widget</li>
-          <li>500 quotes in quotes-data.json</li>
-          <li>Same quote all day, new one tomorrow</li>
-        </ul>
-        <div class="tag-row"><span class="tag">garden</span><span class="tag">quote</span><span class="tag">offline</span></div>
-      </section>
-      <section class="product-section">
-        <h2>Information</h2>
-        <div class="info-table">
-          <div class="info-row"><span class="info-key">Version</span><span class="info-val">1.2.0</span></div>
-          <div class="info-row"><span class="info-key">Category</span><span class="info-val">Lifestyle</span></div>
-          <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
-          <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">storage, ui</span></div>
-          <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Garden</span></div>
-        </div>
-      </section>
-    </article>
-  </div>
-
-  <div data-view="streak">
-    <article class="product">
-      <header class="product-hero">
-        <div class="product-icon store-icon streak icon icon--white icon-52" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-flame"/></svg></div>
-        <div class="product-info">
-          <h1 class="product-name">Streak Celebrator</h1>
-          <p class="product-tagline">Celebrate every habit completion</p>
-          <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/streak">Source</a></p>
-          <div class="product-actions">
-            <a class="get-btn" href="https://github.com/krwg/cultiva/releases">GET</a>
-            <span class="product-rating">In-App Install · Cultiva 1.7.0+</span>
-          </div>
-        </div>
-      </header>
-      <div class="screenshots">
-        <div class="screenshot"><div class="screenshot-inner"><span class="screenshot-label">Toast</span><div class="screenshot-ui screenshot-ui-row"><span class="icon icon--green icon-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-flame"/></svg></span>Streak kept! Read daily — 12 days</div></div></div>
-      </div>
-      <section class="product-section">
-        <h2>About this plugin</h2>
-        <p>Listens to the onHabitComplete hook and shows a lightweight celebration toast when you finish a habit. Small delight, no extra UI chrome.</p>
-        <ul class="feature-list">
-          <li>Hooks into habit completion events</li>
-          <li>Non-blocking toast notification</li>
-          <li>Zero configuration required</li>
-        </ul>
-        <div class="tag-row"><span class="tag">habits</span><span class="tag">streak</span><span class="tag">notification</span></div>
-      </section>
-      <section class="product-section">
-        <h2>Information</h2>
-        <div class="info-table">
-          <div class="info-row"><span class="info-key">Version</span><span class="info-val">1.0.0</span></div>
-          <div class="info-row"><span class="info-key">Category</span><span class="info-val">Habits</span></div>
-          <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
-          <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">ui</span></div>
-          <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Hook + Toast</span></div>
-        </div>
-      </section>
-    </article>
-  </div>
-
-  <footer class="footer">
-    <div class="footer-links">
-      <a href="https://github.com/krwg/cultiva">Cultiva app</a>
-      <a href="https://github.com/krwg/cultiva-plugins">Repository</a>
-      <a href="#catalog">Catalog</a>
-      <a href="https://github.com/krwg/cultiva-plugins/blob/main/registry.json">registry.json</a>
+      </main>
     </div>
-    <p>MIT · Maintained by <a href="https://github.com/krwg">krwg</a></p>
-  </footer>
+
+    <div data-view="time">
+      <main class="page">
+        <div class="bento">
+          <header class="card span-12 product-hero">
+            <div class="product-icon icon icon--on-accent i-48" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-clock"/></svg></div>
+            <div class="product-info">
+              <h1 class="product-name">Time Widget</h1>
+              <p class="product-tagline">Live clock and world time zones</p>
+              <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/time">Source</a></p>
+              <div class="actions">
+                <a class="btn btn-primary" href="https://github.com/krwg/cultiva/releases">Install in Cultiva</a>
+                <span class="product-note">Cultiva 1.7.0+</span>
+              </div>
+            </div>
+          </header>
+          <section class="card span-12">
+            <p class="caption">Surfaces</p>
+            <div class="preview-grid">
+              <div class="preview-tile">
+                <div class="preview-label">Header</div>
+                <div class="preview-content">14:32:08</div>
+              </div>
+              <div class="preview-tile">
+                <div class="preview-label">Sheet</div>
+                <div class="preview-content">World clocks · format picker · accent colors</div>
+              </div>
+            </div>
+          </section>
+          <section class="card span-8">
+            <h2>About this plugin</h2>
+            <p class="lead" style="margin-bottom:0">Minimal live clock in the header with a full timezone sheet on tap. Choose 12h/24h formats and accent colors — no network required.</p>
+            <ul class="feature-list">
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Real-time header label</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Multiple timezone rows in sheet</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Color themes including rainbow mode</li>
+            </ul>
+            <div class="tag-row"><span class="tag">clock</span><span class="tag">timezone</span><span class="tag">widget</span></div>
+          </section>
+          <section class="card span-4">
+            <h2>Information</h2>
+            <div class="info-table">
+              <div class="info-row"><span class="info-key">Version</span><span class="info-val">2.2.0</span></div>
+              <div class="info-row"><span class="info-key">Category</span><span class="info-val">Utilities</span></div>
+              <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
+              <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">storage, ui</span></div>
+              <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Header</span></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div data-view="radio">
+      <main class="page">
+        <div class="bento">
+          <header class="card span-12 product-hero">
+            <div class="product-icon icon icon--on-accent i-48" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-radio"/></svg></div>
+            <div class="product-info">
+              <h1 class="product-name">Radio Widget</h1>
+              <p class="product-tagline">SomaFM streams and sleep timer</p>
+              <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/radio">Source</a></p>
+              <div class="actions">
+                <a class="btn btn-primary" href="https://github.com/krwg/cultiva/releases">Install in Cultiva</a>
+                <span class="product-note">Cultiva 1.7.0+</span>
+              </div>
+            </div>
+          </header>
+          <section class="card span-12">
+            <p class="caption">Surfaces</p>
+            <div class="preview-grid">
+              <div class="preview-tile">
+                <div class="preview-label">Header</div>
+                <div class="preview-content"><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-play"/></svg></span>Groove Salad</div>
+              </div>
+              <div class="preview-tile">
+                <div class="preview-label">Sheet</div>
+                <div class="preview-content">Station list · volume · sleep timer</div>
+              </div>
+            </div>
+          </section>
+          <section class="card span-8">
+            <h2>About this plugin</h2>
+            <p class="lead" style="margin-bottom:0">Curated SomaFM ambient streams with glass sheet UI. Set a sleep timer, adjust volume, and focus without leaving your garden.</p>
+            <ul class="feature-list">
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Multiple SomaFM stations</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Sleep timer with auto-stop</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Shared Cultiva sheet design language</li>
+            </ul>
+            <div class="tag-row"><span class="tag">radio</span><span class="tag">ambient</span><span class="tag">music</span></div>
+          </section>
+          <section class="card span-4">
+            <h2>Information</h2>
+            <div class="info-table">
+              <div class="info-row"><span class="info-key">Version</span><span class="info-val">2.1.0</span></div>
+              <div class="info-row"><span class="info-key">Category</span><span class="info-val">Music</span></div>
+              <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
+              <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">network, storage, ui</span></div>
+              <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Header</span></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div data-view="pomodoro">
+      <main class="page">
+        <div class="bento">
+          <header class="card span-12 product-hero">
+            <div class="product-icon icon icon--on-accent i-48" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-timer"/></svg></div>
+            <div class="product-info">
+              <h1 class="product-name">Pomodoro Timer</h1>
+              <p class="product-tagline">25/5 focus cycles in the header</p>
+              <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/pomodoro">Source</a></p>
+              <div class="actions">
+                <a class="btn btn-primary" href="https://github.com/krwg/cultiva/releases">Install in Cultiva</a>
+                <span class="product-note">Cultiva 1.7.0+</span>
+              </div>
+            </div>
+          </header>
+          <section class="card span-12">
+            <p class="caption">Sessions</p>
+            <div class="preview-grid">
+              <div class="preview-tile">
+                <div class="preview-label">Work</div>
+                <div class="preview-content">25:00 · Focus session</div>
+              </div>
+              <div class="preview-tile">
+                <div class="preview-label">Break</div>
+                <div class="preview-content">05:00 · Short break</div>
+              </div>
+            </div>
+          </section>
+          <section class="card span-8">
+            <h2>About this plugin</h2>
+            <p class="lead" style="margin-bottom:0">Classic pomodoro technique built into the header chip. Start work or break sessions from a sheet — configurable intervals, zero distraction.</p>
+            <ul class="feature-list">
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Work / break cycle with notifications</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Configurable 25/30/45 min work blocks</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>5 or 10 minute breaks</li>
+            </ul>
+            <div class="tag-row"><span class="tag">timer</span><span class="tag">focus</span><span class="tag">productivity</span></div>
+          </section>
+          <section class="card span-4">
+            <h2>Information</h2>
+            <div class="info-table">
+              <div class="info-row"><span class="info-key">Version</span><span class="info-val">1.2.0</span></div>
+              <div class="info-row"><span class="info-key">Category</span><span class="info-val">Productivity</span></div>
+              <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
+              <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">storage, ui</span></div>
+              <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Header</span></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div data-view="quote">
+      <main class="page">
+        <div class="bento">
+          <header class="card span-12 product-hero">
+            <div class="product-icon icon icon--on-accent i-48" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-quote"/></svg></div>
+            <div class="product-info">
+              <h1 class="product-name">Quote of the Day</h1>
+              <p class="product-tagline">500 EN/RU quotes in your garden</p>
+              <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/quote">Source</a></p>
+              <div class="actions">
+                <a class="btn btn-primary" href="https://github.com/krwg/cultiva/releases">Install in Cultiva</a>
+                <span class="product-note">Cultiva 1.7.0+</span>
+              </div>
+            </div>
+          </header>
+          <section class="card span-12">
+            <p class="caption">Garden widget</p>
+            <div class="preview-grid">
+              <div class="preview-tile" style="grid-column:1/-1">
+                <div class="preview-label">Today</div>
+                <div class="preview-content" style="font-weight:500;font-style:italic">"The secret of getting ahead is getting started."</div>
+              </div>
+            </div>
+          </section>
+          <section class="card span-8">
+            <h2>About this plugin</h2>
+            <p class="lead" style="margin-bottom:0">Daily inspiration widget planted in your garden. Deterministic quote rotation from 500 bundled EN/RU quotes — fully offline, no API calls.</p>
+            <ul class="feature-list">
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Garden surface widget</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>500 quotes in quotes-data.json</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Same quote all day, new one tomorrow</li>
+            </ul>
+            <div class="tag-row"><span class="tag">garden</span><span class="tag">quote</span><span class="tag">offline</span></div>
+          </section>
+          <section class="card span-4">
+            <h2>Information</h2>
+            <div class="info-table">
+              <div class="info-row"><span class="info-key">Version</span><span class="info-val">1.2.0</span></div>
+              <div class="info-row"><span class="info-key">Category</span><span class="info-val">Lifestyle</span></div>
+              <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
+              <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">storage, ui</span></div>
+              <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Garden</span></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div data-view="streak">
+      <main class="page">
+        <div class="bento">
+          <header class="card span-12 product-hero">
+            <div class="product-icon icon icon--on-accent i-48" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-flame"/></svg></div>
+            <div class="product-info">
+              <h1 class="product-name">Streak Celebrator</h1>
+              <p class="product-tagline">Celebrate every habit completion</p>
+              <p class="product-dev">krwg · <a href="https://github.com/krwg/cultiva-plugins/tree/main/streak">Source</a></p>
+              <div class="actions">
+                <a class="btn btn-primary" href="https://github.com/krwg/cultiva/releases">Install in Cultiva</a>
+                <span class="product-note">Cultiva 1.7.0+</span>
+              </div>
+            </div>
+          </header>
+          <section class="card span-12">
+            <p class="caption">Notification</p>
+            <div class="preview-grid">
+              <div class="preview-tile" style="grid-column:1/-1">
+                <div class="preview-label">Toast</div>
+                <div class="preview-content"><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-flame"/></svg></span>Streak kept! Read daily — 12 days</div>
+              </div>
+            </div>
+          </section>
+          <section class="card span-8">
+            <h2>About this plugin</h2>
+            <p class="lead" style="margin-bottom:0">Listens to the onHabitComplete hook and shows a lightweight celebration toast when you finish a habit. Small delight, no extra UI chrome.</p>
+            <ul class="feature-list">
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Hooks into habit completion events</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Non-blocking toast notification</li>
+              <li><span class="icon i-16" aria-hidden="true"><svg viewBox="0 0 256 256"><use href="#i-check"/></svg></span>Zero configuration required</li>
+            </ul>
+            <div class="tag-row"><span class="tag">habits</span><span class="tag">streak</span><span class="tag">notification</span></div>
+          </section>
+          <section class="card span-4">
+            <h2>Information</h2>
+            <div class="info-table">
+              <div class="info-row"><span class="info-key">Version</span><span class="info-val">1.0.0</span></div>
+              <div class="info-row"><span class="info-key">Category</span><span class="info-val">Habits</span></div>
+              <div class="info-row"><span class="info-key">Compatibility</span><span class="info-val">Cultiva 1.7.0+</span></div>
+              <div class="info-row"><span class="info-key">Permissions</span><span class="info-val">ui</span></div>
+              <div class="info-row"><span class="info-key">Surface</span><span class="info-val">Hook + Toast</span></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="https://github.com/krwg/cultiva">Cultiva app</a>
+        <a href="https://github.com/krwg/cultiva-plugins">Repository</a>
+        <a href="#catalog">Catalog</a>
+        <a href="https://github.com/krwg/cultiva-plugins/blob/main/registry.json">registry.json</a>
+      </div>
+      <p class="caption">MIT · Maintained by <a href="https://github.com/krwg">krwg</a></p>
+    </footer>
+  </div>
 
   <script>
     const VIEWS = ['home', 'weather', 'time', 'radio', 'pomodoro', 'quote', 'streak'];
@@ -723,7 +824,7 @@
     window.addEventListener('hashchange', route);
     route();
 
-    document.querySelector('.nav-logo').addEventListener('click', (e) => {
+    document.querySelector('.brand').addEventListener('click', (e) => {
       if (location.hash && location.hash !== '#catalog' && location.hash !== '#how') {
         e.preventDefault();
         location.hash = '';
