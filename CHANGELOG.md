@@ -6,11 +6,35 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
+## [3.0.2] — 2026-07-09
+
+### Changed
+- README catalog table synced with manifest versions
+- GitHub Pages landing redesigned (Apple green style, hash routing preserved)
+
+### Fixed
+- Registry manifest version drift vs `manifest.json` (weather 2.3.0, time 2.2.0, etc.) — hashes recomputed via `compute-registry-sha256.mjs`
+
+---
+
+## [3.0.1] — 2026-07-08
+
+### Changed
+- Plugin version bumps across catalog (weather 2.3.0, time 2.2.0, radio 2.1.0, pomodoro 1.2.0, quote 1.2.0)
+- Letter placeholders in Cultiva catalog UI (no emoji in manifests)
+- `cultiva-sheet-base.css` sha256 alignment for shared sheet styles
+
+### Fixed
+- Weather `onEnable` no longer blocks install on network timeout
+- Registry `baseUrl` canonical path `krwg/cultiva-plugins`
+
+---
+
 ## [3.0.0] — 2026-07-08
 
 ### Added
 - **Pomodoro Timer** plugin (header focus timer)
-- **Quote of the Day** plugin (garden widget)
+- **Quote of the Day** plugin (garden widget, 500 EN/RU quotes)
 - **Streak Celebrator** plugin (`onHabitComplete` notifications)
 - sha256 integrity map for every installable file per plugin
 - `scripts/compute-registry-sha256.mjs` for maintainers
@@ -24,12 +48,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 - Weather 2.1.0 — hybrid RU offline search + Open-Meteo worldwide
 - Time 2.0.0 — timezone sheet, accent colors
 - Radio 2.0.0 — SomaFM streams, sleep timer
-- Registry URL canonical path: `krwg/cultiva-plugins`
-- Removed emoji from plugin UI; letter placeholders in Cultiva catalog
-
-### Fixed
-- Weather `onEnable` no longer blocks on network (install timeout)
-- Registry `baseUrl` points to correct repository
 
 ---
 
@@ -42,7 +60,6 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ### Changed
 - **Weather Widget** major update — sheet UI, garden widget, settings
-- Expanded README and install documentation
 
 ---
 
@@ -55,6 +72,8 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
-[3.0.0]: https://github.com/krwg/cultiva-plugins/compare/registry-2.0.0...main
+[3.0.2]: https://github.com/krwg/cultiva-plugins/compare/3.0.1...main
+[3.0.1]: https://github.com/krwg/cultiva-plugins/compare/3.0.0...3.0.1
+[3.0.0]: https://github.com/krwg/cultiva-plugins/compare/registry-2.0.0...3.0.0
 [2.0.0]: https://github.com/krwg/cultiva-plugins/releases
 [1.0.0]: https://github.com/krwg/cultiva-plugins/releases

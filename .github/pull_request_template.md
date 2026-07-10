@@ -28,4 +28,4 @@
 
 <!-- If bumping registry `version` in registry.json, note old → new -->
 
-**Before:** `3.0.0` → **After:** `<!-- e.g. 3.0.1 -->`
+**Before:** `3.0.1` → **After:** `<!-- e.g. 3.0.2 -->`

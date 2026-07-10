@@ -4,7 +4,8 @@
 
 | Registry / Cultiva | Supported |
 |--------------------|-----------|
-| Registry **3.0.0** + Cultiva **1.7.x** | Yes |
+| Registry **3.0.2** + Cultiva **1.7.x** | Yes |
+| Registry 3.0.x + Cultiva 1.7.x | Yes |
 | Registry 2.x + Cultiva 1.1.x | Best effort |
 | Older | No |
 

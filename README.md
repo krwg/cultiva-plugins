@@ -45,7 +45,7 @@ This repository is the **single source of truth** for Cultiva desktop plugins. T
 | [**Time**](time/) | 2.2.0 | Header | `storage`, `ui` | Live clock, time zones, sheet UI |
 | [**Radio**](radio/) | 2.1.0 | Header | `network`, `storage`, `ui` | SomaFM ambient streams, sleep timer, volume |
 | [**Pomodoro**](pomodoro/) | 1.2.0 | Header | `storage`, `ui` | 25/5 focus cycles with sheet controls |
-| [**Quote**](quote/) | 1.2.0 | Garden | `ui` | Daily quote widget — **500 EN/RU quotes**, deterministic by date |
+| [**Quote**](quote/) | 1.2.0 | Garden | `storage`, `ui` | Daily quote widget — **500 EN/RU quotes**, deterministic by date |
 | [**Streak**](streak/) | 1.0.0 | Hooks | `ui` | Toast when a habit completes (`onHabitComplete`) |
 
 Catalog UI uses **letter placeholders** until custom artwork is added — no emoji icons in manifests.
