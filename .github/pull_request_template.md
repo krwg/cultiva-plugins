@@ -16,7 +16,7 @@
 
 ## Checklist
 
-- [ ] Tested install on Cultiva **≥ 1.7.0** (fork registry URL or local build)
+- [ ] Tested install on Cultiva **≥ 2.0.0 · Rowan** (fork registry URL or local build)
 - [ ] `manifest.json` version matches registry entry
 - [ ] Ran `node scripts/compute-registry-sha256.mjs` and committed `registry.json`
 - [ ] All files in `sha256` map exist and are listed in manifest (`entry`, `styles`, `data`)

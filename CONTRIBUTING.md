@@ -32,7 +32,7 @@ Core Cultiva runtime bugs belong in [krwg/cultiva](https://github.com/krwg/culti
 
 1. **Fork** and branch from `main`
 2. Make focused changes — one plugin or one registry update per PR when possible
-3. **Test** install on Cultiva **≥ 1.7.0** (point registry URL to your fork's raw `registry.json`)
+3. **Test** install on Cultiva **≥ 2.0.0 · Rowan** (point registry URL to your fork's raw `registry.json`)
 4. **Recompute hashes:**
 
 ```bash
