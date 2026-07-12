@@ -30,19 +30,6 @@
   margin-top: 8px;
 }
 
-.quote-card-actions {
-  margin-top: 10px;
-  min-height: auto;
-  padding-top: 4px;
-  justify-content: flex-start;
-}
-
-.quote-card-hint {
-  font-size: 11px;
-  color: var(--text-tertiary);
-  line-height: 1.35;
-}
-
 .quote-favorite-btn {
   flex-shrink: 0;
   width: 36px;

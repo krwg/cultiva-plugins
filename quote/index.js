@@ -34,13 +34,11 @@ class QuotePlugin {
   _t(key) {
     const en = {
       favorited: 'Added to favorites',
-      unfavorited: 'Removed from favorites',
-      favoritesHint: 'Open plugin settings to browse favorites'
+      unfavorited: 'Removed from favorites'
     };
     const ru = {
       favorited: 'Добавлено в избранное',
-      unfavorited: 'Удалено из избранного',
-      favoritesHint: 'Откройте настройки плагина, чтобы просмотреть избранное'
+      unfavorited: 'Удалено из избранного'
     };
     const dict = this._locale === 'ru' ? ru : en;
     return dict[key] || en[key] || key;
@@ -153,9 +151,6 @@ class QuotePlugin {
           <div class="card-subtitle quote-card-author">— ${this._escapeHtml(q.author)}</div>
         </div>
         <button type="button" class="quote-favorite-btn${fav ? ' quote-favorite-btn--active' : ''}" data-quote-act="toggleFavorite" aria-label="${this._escapeHtml(heartLabel)}" title="${this._escapeHtml(heartLabel)}">${this._heartSvg(fav)}</button>
-      </div>
-      <div class="card-actions quote-card-actions">
-        <span class="quote-card-hint">${this._escapeHtml(this._t('favoritesHint'))}</span>
       </div>
     </article>`;
   }

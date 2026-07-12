@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
+## [3.0.6] — 2026-07-12
+
+### Changed
+- Quote 1.3.1: leaner garden card (heart only, no hint row); removed legacy quote generator script
+
+---
+
 ## [3.0.5] — 2026-07-12
 
 ### Changed

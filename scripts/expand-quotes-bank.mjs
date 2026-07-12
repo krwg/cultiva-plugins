@@ -1,8 +1,3 @@
-/**
- * Offline rebuild of quote/quotes-data.json — 1000 EN + 1000 RU.
- * EN: JamesFT/Database-Quotes-JSON (GitHub).
- * RU: clean seeds + embedded corpus + generated RU-only habit lines.
- */
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -46,7 +41,6 @@ function dedupePush(bank, seen, q, validate) {
   return true;
 }
 
-/** Public-domain / classic Russian lines (habits, character, work). */
 const RU_CLASSIC = [
   { text: 'Делу время, потехе час.', author: 'Пословица' },
   { text: 'Терпение и труд всё перетрут.', author: 'Пословица' },
