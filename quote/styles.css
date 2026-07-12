@@ -1,46 +1,123 @@
-.quote-widget {
-  margin: 0 0 12px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  text-align: center;
-  color: var(--text-primary);
+
+.garden-plugin-card--quote {
+  min-height: auto !important;
+  height: auto !important;
 }
 
-.quote-text {
-  font-size: 14px;
-  line-height: 1.45;
-  font-style: italic;
+.quote-card-header {
+  align-items: flex-start;
+  gap: 12px;
 }
 
-.quote-author {
+.quote-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.quote-card-text {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  display: block;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.quote-card-author {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
   margin-top: 8px;
-  font-size: 12px;
-  color: var(--text-tertiary);
 }
 
 .quote-card-actions {
-  margin-top: auto;
-  min-height: 38px;
-  display: flex;
-  align-items: center;
+  margin-top: 10px;
+  min-height: auto;
+  padding-top: 4px;
+  justify-content: flex-start;
 }
 
-.quote-card-spacer {
+.quote-card-hint {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  line-height: 1.35;
+}
+
+.quote-favorite-btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s var(--ease-apple), background 0.2s var(--ease-apple), transform 0.15s var(--ease-apple);
+}
+
+.quote-favorite-btn:hover {
+  background: color-mix(in srgb, var(--accent-pink) 16%, var(--bg-tertiary));
+  color: var(--accent-pink);
+  transform: scale(1.05);
+}
+
+.quote-favorite-btn--active {
+  color: var(--accent-pink);
+  background: color-mix(in srgb, var(--accent-pink) 14%, var(--bg-tertiary));
+}
+
+.quote-heart-svg {
+  width: 18px;
+  height: 18px;
   display: block;
-  width: 100%;
-  height: 38px;
-  border-radius: 12px;
-  background: transparent;
 }
 
 .quote-icon {
   color: var(--accent-pink);
+  flex-shrink: 0;
 }
 
 .quote-icon-svg {
   width: 26px;
   height: 26px;
   display: block;
+}
+
+.plugin-favorites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+  margin-top: 4px;
+}
+
+.plugin-favorites-item {
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+}
+
+.plugin-favorites-text {
+  font-size: 14px;
+  line-height: 1.45;
+  font-style: italic;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.plugin-favorites-author {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.plugin-favorites-empty {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  padding: 8px 0;
 }

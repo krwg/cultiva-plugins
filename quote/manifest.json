@@ -1,13 +1,20 @@
 {
   "id": "quote",
   "name": "Quote of the Day",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "author": "krwg",
-  "description": "Daily inspiration widget in your garden — 500 EN/RU quotes.",
+  "description": "Daily inspiration in your garden — 1000 EN/RU quotes, favorites, locale-pure banks.",
   "icon": "",
   "entry": "index.js",
   "styles": ["styles.css"],
-  "permissions": ["ui"],
+  "permissions": ["storage", "ui"],
   "minAppVersion": "1.7.0",
-  "data": ["quotes-data.json"]
+  "data": ["quotes-data.json"],
+  "settings": [
+    {
+      "key": "favorites",
+      "type": "favorites",
+      "label": "Favorite quotes"
+    }
+  ]
 }

@@ -6,6 +6,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
+## [3.0.5] — 2026-07-12
+
+### Changed
+- Quote 1.3.0: 1000 EN + 1000 RU quotes from open sources; locale-pure banks (no mixed EN/RU)
+- Quote: heart button to save favorites; browse favorites in plugin settings
+- Quote: full quote text visible in garden widget (no ellipsis clipping)
+
+---
+
 ## [3.0.4] — 2026-07-12
 
 ### Changed

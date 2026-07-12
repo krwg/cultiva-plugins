@@ -1,6 +1,6 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "plugins": [
     {
       "id": "weather",
@@ -92,9 +92,9 @@
     {
       "id": "quote",
       "name": "Quote of the Day",
-      "version": "1.2.1",
+      "version": "1.3.0",
       "author": "krwg",
-      "description": "Daily inspiration widget in your garden — 500 EN/RU quotes.",
+      "description": "Daily inspiration widget in your garden — 1000 EN/RU quotes, favorites, locale-pure banks.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/quote",
       "minAppVersion": "1.7.0",
@@ -104,10 +104,10 @@
         "quote"
       ],
       "sha256": {
-        "manifest.json": "555751c36070e1febca925d06c2c87dce334b7c67bfae9bd0e1f046e6f4bd2ce",
-        "index.js": "90ddb0a8df419218888f6b371f64b64677387ebbac3334b7526308280452e820",
-        "styles.css": "42d39173179cbd519c851685ea52731540d5c6c04a1a2f8bf381a6877a8dfec0",
-        "quotes-data.json": "cb392467a6833d7d95f802207d5b40bda29bc2b18ccfa41ff3f77e1060b8fd5b"
+        "manifest.json": "3c2ed2b8173aa77ccdf9cae5f27c4d0849979f9d2f3a8ab7b8f9684abd9e823b",
+        "index.js": "66e2e72f07fa4db0e0972526048e3283f7d5545fe2d27bfbde5cc30bebe68a89",
+        "styles.css": "de98cd65abdda067adffcd6ed0841e1cbf2d6c049dabf9b330d7382db5ec32c0",
+        "quotes-data.json": "a96eeee30269fc8d95e7ddf80ff9fa76e2d9b4e407ec7fe9ef5f685c375d7e89"
       }
     },
     {
