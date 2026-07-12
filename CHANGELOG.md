@@ -6,6 +6,27 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
+## [3.4.0] — 2026-07-12
+
+### Removed
+- **Streak Celebrator** — redundant with built-in streak grace (Settings → Garden)
+- **Focus Session** — redundant with Pomodoro header widget
+
+### Changed
+- Registry **3.4.0** — 9 plugins; catalog store flow is driven by local install history in Cultiva, not plugin type
+
+---
+
+## [3.3.0] — 2026-07-12
+
+### Changed
+- Registry **3.3.0**: product descriptions (EN/RU), per-plugin **`minAppVersion`** audit (`1.1.0` / `1.7.0` / `2.0.0`)
+- **`storeFlow`**: legacy six plugins `direct`; Cultiva 2.0 plugins use App Store **Get → Install**
+- Landing page (`docs/index.html`) mirrors in-app plugin store layout
+- All manifest descriptions refreshed; habit-reflection minimum app **1.7.0**
+
+---
+
 ## [3.2.0] — 2026-07-12
 
 ### Added

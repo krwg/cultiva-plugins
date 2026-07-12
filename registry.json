@@ -1,13 +1,13 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.2.0",
+  "version": "3.4.0",
   "plugins": [
     {
       "id": "weather",
       "name": "Weather Widget",
       "version": "2.3.2",
       "author": "krwg",
-      "description": "Shows current weather. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide.",
+      "description": "Live weather in the header and garden. Hybrid city search across 1100+ Russian cities and worldwide Open-Meteo — know conditions before you step outside.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
       "minAppVersion": "1.7.0",
@@ -29,30 +29,31 @@
       "i18n": {
         "en": {
           "name": "Weather Widget",
-          "description": "Shows current weather. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide."
+          "description": "Live weather in the header and garden. Hybrid city search across 1100+ Russian cities and worldwide Open-Meteo — know conditions before you step outside."
         },
         "ru": {
           "name": "Погода",
-          "description": "Текущая погода. Гибридный поиск: 1100+ городов РФ и Open-Meteo по всему миру."
+          "description": "Погода в шапке и в саду. Гибридный поиск: 1100+ городов РФ и Open-Meteo по миру — узнайте условия перед выходом."
         }
       },
       "sha256": {
-        "manifest.json": "71cb5bcc24bd64d72ac3c08ea2ca1a074434afc800ae73050a62543369d209eb",
+        "manifest.json": "60bf3c3e9d5437b71badb852d55d28ddbdb80e9c74d0581178775eb777f23412",
         "index.js": "d93d4548968e7cb928b9ffa284e2b02fce0703df7e0269e6da70a6188b5db459",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "8cdf2251d77f54ff14b675dd4beb55ab19f9e2ca26eae8cd6ec4691707d5e153",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
-      }
+      },
+      "storeFlow": "direct"
     },
     {
       "id": "time",
       "name": "Time Widget",
       "version": "2.2.2",
       "author": "krwg",
-      "description": "Live clock, time zones, Apple-style sheet.",
+      "description": "A calm always-on clock in the header with world time zones and a polished sheet — perfect for remote work without leaving your garden.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/time",
-      "minAppVersion": "1.7.0",
+      "minAppVersion": "1.1.0",
       "permissions": [
         "storage",
         "ui"
@@ -69,29 +70,30 @@
       "i18n": {
         "en": {
           "name": "Time Widget",
-          "description": "Live clock, time zones, Apple-style sheet."
+          "description": "A calm always-on clock in the header with world time zones and a polished sheet — perfect for remote work without leaving your garden."
         },
         "ru": {
           "name": "Часы",
-          "description": "Живые часы, часовые пояса, sheet в стиле Apple."
+          "description": "Живые часы в шапке с часовыми поясами и аккуратным sheet — удобно для удалёнки, не отрываясь от сада."
         }
       },
       "sha256": {
-        "manifest.json": "a4e9038a3ad08877a824eda8be109a1282aec34b75f5b82dd3859e545aa466a3",
+        "manifest.json": "5d75f4d17a945d10c67aaf70a31774b33c956b2626d4b77422eba91cf8f1a2b5",
         "index.js": "dbebdd9cc9076e7d48a4655dd8634abfa219a76367c04f40588c57d341b85e5a",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "632c4f0ba4bf61cd4fd650ceae59d1f7b14009bd14e515479cba0415bba25d39"
-      }
+      },
+      "storeFlow": "direct"
     },
     {
       "id": "radio",
       "name": "Radio Widget",
       "version": "2.2.0",
       "author": "krwg",
-      "description": "SomaFM streams, sleep timer, volume, glass UI.",
+      "description": "Curated SomaFM streams in the header with volume, sleep timer, and glass UI — focus music while habits stay one click away.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/radio",
-      "minAppVersion": "1.7.0",
+      "minAppVersion": "1.1.0",
       "permissions": [
         "network",
         "storage",
@@ -110,29 +112,30 @@
       "i18n": {
         "en": {
           "name": "Radio Widget",
-          "description": "SomaFM streams, sleep timer, volume, glass UI."
+          "description": "Curated SomaFM streams in the header with volume, sleep timer, and glass UI — focus music while habits stay one click away."
         },
         "ru": {
           "name": "Радио",
-          "description": "Потоки SomaFM, таймер сна, громкость, стеклянный UI."
+          "description": "Потоки SomaFM в шапке: громкость, таймер сна, стеклянный UI — музыка для фокуса рядом с привычками."
         }
       },
       "sha256": {
-        "manifest.json": "fdefcf679ae1295cfe7b5552b49f2e20d68b94a16af5ec79e6e4137e045e9680",
+        "manifest.json": "8b4489749301b9052677e7650a6b1541b3111d685553f1173a20f7ca53a7d806",
         "index.js": "3c4ad2ed148795254c01ec082fcac340677ebbd36758c0093777a02a31d54088",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "d16592955a85029e39724166449db36153d5f10e9caa3fd343beed56ceb66968"
-      }
+      },
+      "storeFlow": "direct"
     },
     {
       "id": "pomodoro",
       "name": "Pomodoro Timer",
       "version": "1.2.1",
       "author": "krwg",
-      "description": "Focus timer in the header — 25/5 pomodoro cycles.",
+      "description": "Classic 25/5 pomodoro in the header with configurable work and break lengths — lightweight focus sprints between check-ins.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/pomodoro",
-      "minAppVersion": "1.7.0",
+      "minAppVersion": "1.1.0",
       "permissions": [
         "storage",
         "ui"
@@ -150,26 +153,27 @@
       "i18n": {
         "en": {
           "name": "Pomodoro Timer",
-          "description": "Focus timer in the header — 25/5 pomodoro cycles."
+          "description": "Classic 25/5 pomodoro in the header with configurable work and break lengths — lightweight focus sprints between check-ins."
         },
         "ru": {
           "name": "Помодоро",
-          "description": "Таймер фокуса в шапке — циклы 25/5."
+          "description": "Классический помодоро 25/5 в шапке с настройкой интервалов — короткие спринты фокуса между привычками."
         }
       },
       "sha256": {
-        "manifest.json": "f6992ab2f6d60800a3f287471384c42d998e3f8b681630856a26fda749ff5fae",
+        "manifest.json": "51c32d68493bb2be0e38edbff800525274d1effff6b8c4a2ecdd02c718a2e21d",
         "index.js": "51cd8865a63fc5fb149b3d211250b0f853a2082f6b66d7df32be1598976290c7",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "e8cbb7d76210b9104aafd124b0689a3e1b4a9d245cb77c40d30effdedd611a51"
-      }
+      },
+      "storeFlow": "direct"
     },
     {
       "id": "quote",
       "name": "Quote of the Day",
       "version": "1.3.2",
       "author": "krwg",
-      "description": "Daily inspiration widget in your garden — 1000 EN/RU quotes, favorites, locale-pure banks.",
+      "description": "Daily inspiration card in your garden — 1000 curated quotes in EN and RU, favorites, and locale-pure banks.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/quote",
       "minAppVersion": "1.7.0",
@@ -189,64 +193,27 @@
       "i18n": {
         "en": {
           "name": "Quote of the Day",
-          "description": "Daily inspiration widget in your garden — 1000 EN/RU quotes, favorites, locale-pure banks."
+          "description": "Daily inspiration card in your garden — 1000 curated quotes in EN and RU, favorites, and locale-pure banks."
         },
         "ru": {
           "name": "Цитата дня",
-          "description": "Виджет вдохновения в саду — 1000 цитат EN/RU, избранное, чистые банки по языку."
+          "description": "Карточка вдохновения в саду — 1000 цитат EN/RU, избранное и чистые языковые банки."
         }
       },
       "sha256": {
-        "manifest.json": "18f146479697d918556af919d687251b95ce72882744ba7ae12c1001b8b2728c",
+        "manifest.json": "ab50bcb1442a9a05c0b9f1ed9e9dbcf45f27d24e9db870d16c84bdb684007ba4",
         "index.js": "36b113ecb596211649dd3335b039fa068a5c33a277980de1198cae6034db5d18",
         "styles.css": "e006b19f17fdb7075df45cee3204f62f7d26d9cfeb896060cac46141d287d96e",
         "quotes-data.json": "a96eeee30269fc8d95e7ddf80ff9fa76e2d9b4e407ec7fe9ef5f685c375d7e89"
-      }
-    },
-    {
-      "id": "streak",
-      "name": "Streak Celebrator",
-      "version": "1.1.0",
-      "author": "krwg",
-      "description": "Celebrates habit completions and shows streak grace status in the garden.",
-      "icon": "",
-      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/streak",
-      "minAppVersion": "1.7.0",
-      "permissions": [
-        "ui"
-      ],
-      "surfaces": [
-        "garden",
-        "hooks"
-      ],
-      "settings": false,
-      "tags": [
-        "habits",
-        "streak",
-        "notification"
-      ],
-      "i18n": {
-        "en": {
-          "name": "Streak Celebrator",
-          "description": "Celebrates habit completions and shows streak grace status in the garden."
-        },
-        "ru": {
-          "name": "Серии",
-          "description": "Празднует выполнения и показывает статус пропуска в серии в саду."
-        }
       },
-      "sha256": {
-        "manifest.json": "3bdac9f8bff87f168d769006dd875cc576609f8eb29e9f43a9973e7969c33c54",
-        "index.js": "f0c5f7b3d721789821b903fafb13308ddcefaa6898a4d6523806049c8c93230a",
-        "styles.css": "5c252563030dfdeddadafda0f5b9d107aa2ce2d31d26b8023684e7016cb4a116"
-      }
+      "storeFlow": "direct"
     },
     {
       "id": "weekly-stats",
       "name": "Weekly Stats",
       "version": "1.0.0",
       "author": "krwg",
-      "description": "Garden widget with a 7-day completion chart and weekly rate from Cultiva analytics.",
+      "description": "Garden analytics with a 7-day bar chart and weekly completion rate powered by Cultiva 2.0 — see momentum at a glance.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weekly-stats",
       "minAppVersion": "2.0.0",
@@ -269,28 +236,29 @@
       "i18n": {
         "en": {
           "name": "Weekly Stats",
-          "description": "Garden widget with a 7-day completion chart and weekly rate from Cultiva analytics."
+          "description": "Garden analytics with a 7-day bar chart and weekly completion rate powered by Cultiva 2.0 — see momentum at a glance."
         },
         "ru": {
           "name": "Недельная статистика",
-          "description": "Виджет в саду: график за 7 дней и процент выполнения за неделю."
+          "description": "Аналитика в саду: график за 7 дней и процент недели на данных Cultiva 2.0 — импульс на одном экране."
         }
       },
       "sha256": {
-        "manifest.json": "7966b470b95f53d1905d925b085c694f96321e34aea3c9b223853284952b669a",
+        "manifest.json": "e435e6b50bdadac17457a9e023a08823ff19f9994939732c58c93308327c3a93",
         "index.js": "d57247bd12bf29d12ed3714d1cf3a4667f5206fa4208f453965300edd57ac35f",
         "styles.css": "65c6a7cabd9eaa01a933293f9dd41f8c0c54d4172e4dd685b7b1e20a515e27fa"
-      }
+      },
+      "storeFlow": "get"
     },
     {
       "id": "habit-reflection",
       "name": "Habit Reflection",
       "version": "1.0.0",
       "author": "krwg",
-      "description": "Opens a micro-journal sheet after each habit completion to capture a one-line reflection.",
+      "description": "Opens a one-line micro-journal sheet right after you complete a habit — capture why it mattered in under five seconds.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/habit-reflection",
-      "minAppVersion": "2.0.0",
+      "minAppVersion": "1.7.0",
       "permissions": [
         "storage",
         "ui"
@@ -307,26 +275,27 @@
       "i18n": {
         "en": {
           "name": "Habit Reflection",
-          "description": "Opens a micro-journal sheet after each habit completion to capture a one-line reflection."
+          "description": "Opens a one-line micro-journal sheet right after you complete a habit — capture why it mattered in under five seconds."
         },
         "ru": {
           "name": "Рефлексия привычки",
-          "description": "После выполнения открывает sheet с однострочной записью в журнал."
+          "description": "Однострочный журнал сразу после выполнения — зафиксируйте смысл привычки за несколько секунд."
         }
       },
       "sha256": {
-        "manifest.json": "1b300bef8be5e664e129f80f93fdbb6310b5db577cf22817d00780ea162a74c0",
+        "manifest.json": "865d4ec53f4f78eab4d53cb0159c81757c6b35e9db4415f8f11da9be441cb3e5",
         "index.js": "ab5316f9f9170c3dc9802065f9bee167a98a42a27293c69cf806377bf6ea261e",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "68e535446c6f32cb7d5185d8630fed1a996c3438aab6149eac1d7262a8ce4aa9"
-      }
+      },
+      "storeFlow": "get"
     },
     {
       "id": "routine",
       "name": "Morning & Evening Routine",
       "version": "1.0.0",
       "author": "krwg",
-      "description": "Garden checklist for morning and evening habits matched by name from plugin settings.",
+      "description": "Morning and evening ritual checklists in the garden, matched to habits by name — start and end the day with intention.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/routine",
       "minAppVersion": "2.0.0",
@@ -349,25 +318,26 @@
       "i18n": {
         "en": {
           "name": "Morning & Evening Routine",
-          "description": "Garden checklist for morning and evening habits matched by name from plugin settings."
+          "description": "Morning and evening ritual checklists in the garden, matched to habits by name — start and end the day with intention."
         },
         "ru": {
           "name": "Утренний и вечерний ритуал",
-          "description": "Чеклист в саду: утренние и вечерние привычки по имени из настроек."
+          "description": "Утренний и вечерний чеклист в саду по именам привычек — начало и завершение дня с намерением."
         }
       },
       "sha256": {
-        "manifest.json": "f0956c1d1308ce322f93479c92074626c58d547ce41465cd4bf3625c38de603d",
+        "manifest.json": "ca51f2ad4f61fb970688329690de7c8d95b8ff65a06c197886776c5b41a02b84",
         "index.js": "7f5c396cc69fb3d6a12f64aa9143a436f018a17e2e5fc32cee07da064a88e916",
         "styles.css": "03c7c44d5fd7f3c7c2f23d4459b68389ea360b76369b4f6ccc493636c998d4c1"
-      }
+      },
+      "storeFlow": "get"
     },
     {
       "id": "gentle-nudge",
       "name": "Gentle Nudge",
       "version": "1.0.0",
       "author": "krwg",
-      "description": "Friendly in-app reminder for incomplete habits after a configurable hour each day.",
+      "description": "A friendly in-app nudge after your chosen hour if habits remain open — supportive, not nagging, with configurable timing.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/gentle-nudge",
       "minAppVersion": "2.0.0",
@@ -389,60 +359,18 @@
       "i18n": {
         "en": {
           "name": "Gentle Nudge",
-          "description": "Friendly in-app reminder for incomplete habits after a configurable hour each day."
+          "description": "A friendly in-app nudge after your chosen hour if habits remain open — supportive, not nagging, with configurable timing."
         },
         "ru": {
           "name": "Мягкое напоминание",
-          "description": "Дружелюбное напоминание о незавершённых привычках после заданного часа."
+          "description": "Мягкое напоминание после заданного часа, если привычки открыты — поддержка без навязчивости."
         }
       },
       "sha256": {
-        "manifest.json": "de002b29f9b7b257ff3e5569af4b9e9fa232eb409decfeba6f06791ac4a9b680",
+        "manifest.json": "51449c9f2b7feb2a860eef735efe9045dc071afdf19ecaa347247dd13349d44c",
         "index.js": "6575fd199fe403ff32bbeeabf7e3797cf9ee75b491ae4a66869b1cf2b1c2204d"
-      }
-    },
-    {
-      "id": "focus-session",
-      "name": "Focus Session",
-      "version": "1.0.0",
-      "author": "krwg",
-      "description": "Header pomodoro timer that completes a linked habit when a work session ends.",
-      "icon": "",
-      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/focus-session",
-      "minAppVersion": "2.0.0",
-      "permissions": [
-        "habits.read",
-        "habits.write",
-        "storage",
-        "ui"
-      ],
-      "surfaces": [
-        "header",
-        "hooks"
-      ],
-      "settings": true,
-      "tags": [
-        "widget",
-        "timer",
-        "focus",
-        "habits"
-      ],
-      "i18n": {
-        "en": {
-          "name": "Focus Session",
-          "description": "Header pomodoro timer that completes a linked habit when a work session ends."
-        },
-        "ru": {
-          "name": "Сессия фокуса",
-          "description": "Таймер в шапке: по окончании работы отмечает связанную привычку."
-        }
       },
-      "sha256": {
-        "manifest.json": "fcf52cbaab6cd8c50d4ccc9d4bd052e4a7a282fa75f09cdd2f44465a17bcc6af",
-        "index.js": "4a1b06a3c40496c1e46db55ff512749856fd59d35962f12f115bdd3536bd8194",
-        "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "e9ae5b9b23711e5a7c17f7c658c83a0de377ebb287c36cd83350147ac26a268d"
-      }
+      "storeFlow": "get"
     }
   ]
 }

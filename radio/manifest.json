@@ -3,13 +3,13 @@
   "name": "Radio Widget",
   "version": "2.2.0",
   "author": "krwg",
-  "description": "SomaFM streams, sleep timer, and glass sheet UI. Cultiva 0.4.0+.",
+  "description": "Stream SomaFM stations from the header with a sleep timer and glass-style sheet controls.",
   "icon": "",
   "entry": "index.js",
   "styles": ["cultiva-sheet-base.css", "styles.css"],
   "permissions": ["network", "storage", "ui"],
   "surfaces": ["header"],
-  "minAppVersion": "1.7.0",
+  "minAppVersion": "1.1.0",
   "settings": [
     {
       "key": "station",

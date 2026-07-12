@@ -3,7 +3,7 @@
   "name": "Morning & Evening Routine",
   "version": "1.0.0",
   "author": "krwg",
-  "description": "Garden checklist for morning and evening habits matched by name from plugin settings.",
+  "description": "Morning and evening checklists in the garden, matched to your habits by name from plugin settings.",
   "icon": "",
   "entry": "index.js",
   "styles": ["styles.css"],

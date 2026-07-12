@@ -4,10 +4,10 @@
 
 **Official sandboxed extension registry for [Cultiva](https://github.com/krwg/cultiva) — widgets, timers, and garden tools that stay on your device.**
 
-[![Registry](https://img.shields.io/badge/registry-3.0.2-34c759?style=flat-square)](registry.json)
+[![Registry](https://img.shields.io/badge/registry-3.3.0-34c759?style=flat-square)](registry.json)
 [![License](https://img.shields.io/badge/license-MIT-af52de?style=flat-square)](LICENSE)
-[![Cultiva](https://img.shields.io/badge/Cultiva-1.7.0%2B%20(2.0%20Rowan)-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
-[![Plugins](https://img.shields.io/badge/plugins-6-ffcc00?style=flat-square)](#catalog)
+[![Cultiva](https://img.shields.io/badge/Cultiva-1.1.0%2B%20(2.0%20Rowan)-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
+[![Plugins](https://img.shields.io/badge/plugins-9-ffcc00?style=flat-square)](#catalog)
 [![Integrity](https://img.shields.io/badge/sha256-enforced-5856d6?style=flat-square)](#security)
 [![Pages](https://img.shields.io/badge/docs-GitHub%20Pages-0071e3?style=flat-square)](https://krwg.github.io/cultiva-plugins/)
 [![Maintained](https://img.shields.io/badge/maintained-yes-34c759?style=flat-square)](#)
@@ -39,16 +39,19 @@ This repository is the **single source of truth** for Cultiva desktop plugins. T
 
 ## Catalog
 
-| Plugin | Version | Surface | Permissions | Description |
-|--------|---------|---------|-------------|-------------|
-| [**Weather**](weather/) | 2.3.0 | Header + garden | `network`, `storage`, `ui` | Open-Meteo forecast; **1100+ Russian cities** bundled as `cities-ru.json` for offline search |
-| [**Time**](time/) | 2.2.0 | Header | `storage`, `ui` | Live clock, time zones, sheet UI |
-| [**Radio**](radio/) | 2.1.0 | Header | `network`, `storage`, `ui` | SomaFM ambient streams, sleep timer, volume |
-| [**Pomodoro**](pomodoro/) | 1.2.0 | Header | `storage`, `ui` | 25/5 focus cycles with sheet controls |
-| [**Quote**](quote/) | 1.2.0 | Garden | `storage`, `ui` | Daily quote widget — **500 EN/RU quotes**, deterministic by date |
-| [**Streak**](streak/) | 1.0.0 | Hooks | `ui` | Toast when a habit completes (`onHabitComplete`) |
+| Plugin | Min Cultiva | Surface | Description |
+|--------|-------------|---------|-------------|
+| [**Time**](time/) | 1.1.0 | Header | Live clock and time zones in a polished sheet |
+| [**Radio**](radio/) | 1.1.0 | Header | SomaFM streams, sleep timer, glass UI |
+| [**Pomodoro**](pomodoro/) | 1.1.0 | Header | Classic 25/5 focus timer in the header |
+| [**Weather**](weather/) | 1.7.0 | Header + garden | Open-Meteo + 1100+ Russian cities offline search |
+| [**Quote**](quote/) | 1.7.0 | Garden | 1000 EN/RU quotes, favorites, locale-pure banks |
+| [**Habit Reflection**](habit-reflection/) | 1.7.0 | Hooks | One-line micro-journal after each completion |
+| [**Weekly Stats**](weekly-stats/) | 2.0.0 | Garden + hooks | 7-day chart and weekly rate (Cultiva 2.0 analytics) |
+| [**Routine**](routine/) | 2.0.0 | Garden + hooks | Morning/evening checklist matched by habit name |
+| [**Gentle Nudge**](gentle-nudge/) | 2.0.0 | Hooks | Friendly in-app reminder after your chosen hour |
 
-Catalog UI uses **letter placeholders** until custom artwork is added — no emoji icons in manifests.
+In the Cultiva app: **Получить** for plugins you have never installed before; **Установить** if you installed them previously on this device (tracked locally).
 
 <details>
 <summary><strong>Tags by plugin</strong></summary>
@@ -78,12 +81,13 @@ flowchart LR
 ```
 
 1. Cultiva fetches [`registry.json`](registry.json) from this repo (`krwg/cultiva-plugins`).
-2. User taps **Install** in Settings → Plugins.
+2. User taps **Get** (first time on this device) or **Install** (if the plugin was installed before — tracked locally).
 3. Electron downloads each file listed in the manifest (`entry`, `styles`, `data`).
 4. **sha256** from the registry must match the downloaded bytes.
-5. Plugin code runs in an **opaque-origin iframe** with declared permissions only.
+5. For first-time plugins, user taps **Install** after **Get** to activate the sandbox.
+6. Plugin code runs in an **opaque-origin iframe** with declared permissions only.
 
-Requires **Cultiva 1.7.0 · Linden** or newer (`minAppVersion` in registry).
+Requires **Cultiva 1.1.0+** for header widgets; **1.7.0+** for garden/hooks; **2.0.0 Rowan** for habit analytics plugins (`minAppVersion` in registry).
 
 ---
 

@@ -3,13 +3,13 @@
   "name": "Pomodoro Timer",
   "version": "1.2.1",
   "author": "krwg",
-  "description": "Focus timer in the header — 25/5 pomodoro cycles.",
+  "description": "Classic 25/5 pomodoro cycles in the header — start a focus session without leaving your garden.",
   "icon": "",
   "entry": "index.js",
   "styles": ["cultiva-sheet-base.css", "styles.css"],
   "permissions": ["storage", "ui"],
   "surfaces": ["header"],
-  "minAppVersion": "1.7.0",
+  "minAppVersion": "1.1.0",
   "settings": [
     {
       "key": "workMinutes",

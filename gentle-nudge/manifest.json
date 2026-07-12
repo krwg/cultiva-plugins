@@ -3,7 +3,7 @@
   "name": "Gentle Nudge",
   "version": "1.0.0",
   "author": "krwg",
-  "description": "Friendly in-app reminder for incomplete habits after a configurable hour each day.",
+  "description": "A gentle in-app reminder for incomplete habits, triggered once each day after your chosen hour.",
   "icon": "",
   "entry": "index.js",
   "permissions": ["habits.read", "storage", "ui", "settings.read"],

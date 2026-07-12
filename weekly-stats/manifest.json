@@ -3,7 +3,7 @@
   "name": "Weekly Stats",
   "version": "1.0.0",
   "author": "krwg",
-  "description": "Garden widget with a 7-day completion chart and weekly rate from Cultiva analytics.",
+  "description": "A garden widget with a 7-day completion chart and weekly rate, powered by Cultiva 2.0 analytics.",
   "icon": "",
   "entry": "index.js",
   "styles": ["styles.css"],
