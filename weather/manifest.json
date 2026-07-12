@@ -25,7 +25,10 @@
       "key": "city",
       "label": "City",
       "type": "text",
-      "default": "Moscow"
+      "default": "Moscow",
+      "i18n": {
+        "ru": { "label": "Город" }
+      }
     },
     {
       "key": "units",
@@ -41,13 +44,25 @@
           "label": "Fahrenheit (°F)"
         }
       ],
-      "default": "celsius"
+      "default": "celsius",
+      "i18n": {
+        "ru": {
+          "label": "Единицы",
+          "options": {
+            "celsius": "Цельсий (°C)",
+            "fahrenheit": "Фаренгейт (°F)"
+          }
+        }
+      }
     },
     {
       "key": "showInGarden",
       "label": "Show in garden",
       "type": "boolean",
-      "default": true
+      "default": true,
+      "i18n": {
+        "ru": { "label": "Показывать в саду" }
+      }
     }
   ]
 }

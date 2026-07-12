@@ -20,7 +20,10 @@
         { "value": "HH:MM", "label": "23:59" },
         { "value": "hh:MM:SS A", "label": "11:59:59 PM" }
       ],
-      "default": "HH:MM:SS"
+      "default": "HH:MM:SS",
+      "i18n": {
+        "ru": { "label": "Формат времени" }
+      }
     },
     {
       "key": "color",
@@ -35,7 +38,21 @@
         { "value": "graphite", "label": "Graphite" },
         { "value": "rainbow", "label": "Rainbow" }
       ],
-      "default": "default"
+      "default": "default",
+      "i18n": {
+        "ru": {
+          "label": "Цвет",
+          "options": {
+            "default": "По умолчанию",
+            "green": "Зелёный",
+            "blue": "Синий",
+            "purple": "Фиолетовый",
+            "orange": "Оранжевый",
+            "graphite": "Графит",
+            "rainbow": "Радуга"
+          }
+        }
+      }
     }
   ]
 }

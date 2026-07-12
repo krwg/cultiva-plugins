@@ -150,7 +150,7 @@ class QuotePlugin {
           <div class="card-title quote-card-text">"${this._escapeHtml(q.text)}"</div>
           <div class="card-subtitle quote-card-author">— ${this._escapeHtml(q.author)}</div>
         </div>
-        <button type="button" class="quote-favorite-btn${fav ? ' quote-favorite-btn--active' : ''}" data-quote-act="toggleFavorite" aria-label="${this._escapeHtml(heartLabel)}" title="${this._escapeHtml(heartLabel)}">${this._heartSvg(fav)}</button>
+        <button type="button" class="quote-favorite-btn${fav ? ' quote-favorite-btn--active' : ''}" data-plugin-act="toggleFavorite" aria-label="${this._escapeHtml(heartLabel)}" title="${this._escapeHtml(heartLabel)}">${this._heartSvg(fav)}</button>
       </div>
     </article>`;
   }

@@ -4,6 +4,23 @@
   height: auto !important;
 }
 
+.habit-card.garden-plugin-card--quote .card-title,
+.garden-plugin-card--quote .quote-card-text {
+  font-size: 14px;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.45;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+.habit-card.garden-plugin-card--quote .card-subtitle,
+.garden-plugin-card--quote .quote-card-author {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
 .quote-card-header {
   align-items: flex-start;
   gap: 12px;

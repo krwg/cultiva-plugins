@@ -27,7 +27,10 @@
         { "value": "chillhop", "label": "Chillhop Radio" },
         { "value": "defcon", "label": "DEF CON Radio" }
       ],
-      "default": "groovesalad"
+      "default": "groovesalad",
+      "i18n": {
+        "ru": { "label": "Станция по умолчанию" }
+      }
     },
     {
       "key": "volume",
@@ -41,7 +44,20 @@
         { "value": "0.65", "label": "65%" },
         { "value": "0.75", "label": "75%" }
       ],
-      "default": "0.45"
+      "default": "0.45",
+      "i18n": {
+        "ru": {
+          "label": "Громкость",
+          "options": {
+            "0.25": "25%",
+            "0.35": "35%",
+            "0.45": "45%",
+            "0.55": "55%",
+            "0.65": "65%",
+            "0.75": "75%"
+          }
+        }
+      }
     },
     {
       "key": "sleepMinutes",
@@ -53,7 +69,18 @@
         { "value": "30", "label": "30 min" },
         { "value": "60", "label": "60 min" }
       ],
-      "default": "0"
+      "default": "0",
+      "i18n": {
+        "ru": {
+          "label": "Таймер сна",
+          "options": {
+            "0": "Выкл",
+            "15": "15 мин",
+            "30": "30 мин",
+            "60": "60 мин"
+          }
+        }
+      }
     }
   ]
 }
