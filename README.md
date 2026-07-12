@@ -6,7 +6,7 @@
 
 [![Registry](https://img.shields.io/badge/registry-3.0.2-34c759?style=flat-square)](registry.json)
 [![License](https://img.shields.io/badge/license-MIT-af52de?style=flat-square)](LICENSE)
-[![Cultiva](https://img.shields.io/badge/Cultiva-1.7.0%2B-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
+[![Cultiva](https://img.shields.io/badge/Cultiva-1.7.0%2B%20(2.0%20Rowan)-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
 [![Plugins](https://img.shields.io/badge/plugins-6-ffcc00?style=flat-square)](#catalog)
 [![Integrity](https://img.shields.io/badge/sha256-enforced-5856d6?style=flat-square)](#security)
 [![Pages](https://img.shields.io/badge/docs-GitHub%20Pages-0071e3?style=flat-square)](https://krwg.github.io/cultiva-plugins/)
