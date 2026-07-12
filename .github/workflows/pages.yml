@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Sync registry for Pages
+        run: cp registry.json docs/registry.json
       - uses: actions/configure-pages@v5
         with:
           enablement: true

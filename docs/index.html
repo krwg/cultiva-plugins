@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Official Cultiva plugin store — 11 sandboxed extensions with sha256 integrity.">
+  <meta name="description" content="Official Cultiva plugin store — 9 sandboxed extensions with sha256 integrity.">
   <meta name="theme-color" content="#000000">
   <title>Cultiva Plugins · Store</title>
   <style>
@@ -92,7 +92,7 @@
     .plugin-description { font-size: 13px; color: var(--text-tertiary); line-height: 1.5; }
     .plugin-card-footer {
       display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 12px; padding-top: 4px;
+      flex-wrap: wrap; gap: 12px; padding-top: 10px;
       border-top: 1px solid var(--border-light);
     }
     .plugin-meta {
@@ -112,15 +112,12 @@
       font-size: 12px; font-weight: 700; cursor: default;
     }
     .plugin-btn-install { background: var(--text-primary); color: var(--bg-primary); }
-    .plugin-btn-get { background: var(--accent-blue); color: #fff; }
-    .plugin-btn-legacy { background: var(--bg-tertiary); color: var(--text-secondary); }
 
     .plugins-loading, .plugins-empty { padding: 24px; text-align: center; color: var(--text-tertiary); font-size: 14px; }
     .footnote {
       max-width: var(--max); margin: 0 auto; padding: 0 20px 48px;
       font-size: 13px; color: var(--text-tertiary);
     }
-    .footnote code { font-family: var(--mono); font-size: 12px; }
   </style>
 </head>
 <body>
@@ -143,7 +140,7 @@
   <section class="store">
     <div class="store-head">
       <h2 id="browse-title">Available plugins</h2>
-      <span id="browse-hint">From registry</span>
+      <span id="browse-hint">From catalog</span>
     </div>
     <div class="plugins-list" id="plugins-list">
       <div class="plugins-loading" id="loading">Loading catalog…</div>
@@ -152,15 +149,18 @@
 
   <p class="footnote" id="footnote">
     Install and enable plugins inside the <strong>Cultiva desktop app</strong> (Settings → Plugins).
-    Registry: <code>registry.json</code> v<span id="registry-version">—</span>.
   </p>
 
   <script>
-    const REGISTRY_URL = '../registry.json';
+    const REGISTRY_URLS = [
+      'registry.json',
+      'https://raw.githubusercontent.com/krwg/cultiva-plugins/main/registry.json'
+    ];
+
     const COPY = {
       en: {
         heroTitle: 'Plugin Store',
-        heroDesc: 'The same catalog you see in Cultiva → Settings → Plugins. Get for first install on a device; Install if you had the plugin before.',
+        heroDesc: 'The same catalog you see in Cultiva → Settings → Plugins. Sandboxed extensions with sha256 integrity checks.',
         browseTitle: 'Available plugins',
         browseHint: 'From catalog',
         loading: 'Loading catalog…',
@@ -168,11 +168,11 @@
         error: 'Could not load registry.',
         minLabel: 'Requires Cultiva',
         install: 'Install',
-        footnote: 'Install and enable plugins inside the Cultiva desktop app (Settings → Plugins). Registry: registry.json v'
+        footnote: 'Install and enable plugins inside the Cultiva desktop app (Settings → Plugins).'
       },
       ru: {
         heroTitle: 'Магазин плагинов',
-        heroDesc: 'Тот же каталог, что в Cultiva → Настройки → Плагины. «Получить» при первой установке; «Установить», если плагин уже был на устройстве.',
+        heroDesc: 'Тот же каталог, что в Cultiva → Настройки → Плагины. Песочница и проверка sha256.',
         browseTitle: 'Доступные плагины',
         browseHint: 'Из каталога',
         loading: 'Загрузка каталога…',
@@ -180,7 +180,7 @@
         error: 'Не удалось загрузить каталог.',
         minLabel: 'Требуется Cultiva',
         install: 'Установить',
-        footnote: 'Устанавливайте плагины в десктопном приложении Cultiva (Настройки → Плагины). Каталог: registry.json v'
+        footnote: 'Устанавливайте плагины в десктопном приложении Cultiva (Настройки → Плагины).'
       }
     };
 
@@ -188,6 +188,7 @@
     let registry = null;
 
     function t(key) { return (COPY[lang] && COPY[lang][key]) || COPY.en[key] || key; }
+
     function meta(p) {
       const row = p.i18n && p.i18n[lang] ? p.i18n[lang] : { name: p.name, description: p.description };
       return { name: row.name || p.name, description: row.description || p.description || '' };
@@ -198,7 +199,7 @@
       document.getElementById('hero-desc').textContent = t('heroDesc');
       document.getElementById('browse-title').textContent = t('browseTitle');
       document.getElementById('browse-hint').textContent = t('browseHint');
-      document.getElementById('footnote').innerHTML = t('footnote') + '<span id="registry-version">' + (registry?.version || '—') + '</span>.';
+      document.getElementById('footnote').innerHTML = t('footnote');
       document.querySelectorAll('[data-lang]').forEach((btn) => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
       });
@@ -219,8 +220,6 @@
         const m = meta(p);
         const card = document.createElement('article');
         card.className = 'plugin-card';
-        const btnLabel = t('install');
-        const btnClass = 'plugin-btn-install';
         card.innerHTML = `
           <div class="plugin-card-main">
             <div class="plugin-card-top">
@@ -237,7 +236,7 @@
                 <span class="plugin-author"></span>
               </div>
               <div class="plugin-actions">
-                <span class="plugin-btn ${btnClass}"></span>
+                <span class="plugin-btn plugin-btn-install"></span>
               </div>
             </div>
           </div>`;
@@ -246,21 +245,38 @@
         card.querySelector('.plugin-version').textContent = p.version ? `v${p.version}` : '';
         card.querySelector('.plugin-min-badge').textContent = p.minAppVersion ? `${t('minLabel')} ${p.minAppVersion}+` : '';
         card.querySelector('.plugin-author').textContent = p.author ? String(p.author) : '';
-        card.querySelector('.plugin-btn').textContent = btnLabel;
+        card.querySelector('.plugin-btn').textContent = t('install');
         list.appendChild(card);
       }
+    }
+
+    async function fetchRegistry() {
+      let lastError = null;
+      for (const url of REGISTRY_URLS) {
+        try {
+          const res = await fetch(url, { cache: 'no-store' });
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
+          const data = await res.json();
+          if (!Array.isArray(data?.plugins) || !data.plugins.length) {
+            throw new Error('Empty plugins list');
+          }
+          return data;
+        } catch (e) {
+          lastError = e;
+        }
+      }
+      throw lastError || new Error('Registry unavailable');
     }
 
     async function loadRegistry() {
       const list = document.getElementById('plugins-list');
       try {
-        const res = await fetch(REGISTRY_URL, { cache: 'no-store' });
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        registry = await res.json();
-        document.getElementById('registry-version').textContent = registry.version || '—';
+        registry = await fetchRegistry();
         applyChrome();
         renderList();
-      } catch (e) {
+      } catch {
         list.replaceChildren();
         const err = document.createElement('div');
         err.className = 'plugins-empty';
@@ -277,6 +293,7 @@
       });
     });
 
+    applyChrome();
     loadRegistry();
   </script>
 </body>

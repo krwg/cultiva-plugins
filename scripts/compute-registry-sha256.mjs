@@ -75,3 +75,7 @@ if (versionMismatch) {
 
 writeFileSync(registryPath, `${JSON.stringify(registry, null, 2)}\n`);
 console.log('[sha256] Updated', registryPath);
+
+const pagesRegistryPath = join(root, 'docs', 'registry.json');
+writeFileSync(pagesRegistryPath, `${JSON.stringify(registry, null, 2)}\n`);
+console.log('[sha256] Copied to', pagesRegistryPath);
