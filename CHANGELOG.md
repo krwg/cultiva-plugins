@@ -6,6 +6,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
+## [3.0.4] — 2026-07-12
+
+### Changed
+- Weather manifest settings labels default to English (City, Units, Show in garden)
+
+### Fixed
+- Weather: removed ~180 lines of unused `.weather-modal-*` and legacy `.weather-widget` CSS
+
+---
+
 ## [3.0.3] — 2026-07-12
 
 ### Changed

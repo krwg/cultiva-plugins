@@ -1,11 +1,11 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "plugins": [
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "2.3.1",
+      "version": "2.3.2",
       "author": "krwg",
       "description": "Shows current weather. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide.",
       "icon": "",
@@ -17,10 +17,10 @@
         "russia"
       ],
       "sha256": {
-        "manifest.json": "ccd8ce0f760179458931223e6cc22e3492b332962ddb2076906f21268c0b766a",
+        "manifest.json": "d7f18a269c2d993760031a2a0e86b202d5b6370cc89d2a628babc1b44545637b",
         "index.js": "d93d4548968e7cb928b9ffa284e2b02fce0703df7e0269e6da70a6188b5db459",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "17fea71a4b1b23b2f1c87fb65d384791c48ea107c98bd39da6ca5fe94c02dbd9",
+        "styles.css": "8cdf2251d77f54ff14b675dd4beb55ab19f9e2ca26eae8cd6ec4691707d5e153",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       }
     },
