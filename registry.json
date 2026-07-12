@@ -1,6 +1,6 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "plugins": [
     {
       "id": "weather",
@@ -239,6 +239,209 @@
         "manifest.json": "3bdac9f8bff87f168d769006dd875cc576609f8eb29e9f43a9973e7969c33c54",
         "index.js": "f0c5f7b3d721789821b903fafb13308ddcefaa6898a4d6523806049c8c93230a",
         "styles.css": "5c252563030dfdeddadafda0f5b9d107aa2ce2d31d26b8023684e7016cb4a116"
+      }
+    },
+    {
+      "id": "weekly-stats",
+      "name": "Weekly Stats",
+      "version": "1.0.0",
+      "author": "krwg",
+      "description": "Garden widget with a 7-day completion chart and weekly rate from Cultiva analytics.",
+      "icon": "",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weekly-stats",
+      "minAppVersion": "2.0.0",
+      "permissions": [
+        "habits.read",
+        "storage",
+        "ui"
+      ],
+      "surfaces": [
+        "garden",
+        "hooks"
+      ],
+      "settings": false,
+      "tags": [
+        "widget",
+        "garden",
+        "analytics",
+        "habits"
+      ],
+      "i18n": {
+        "en": {
+          "name": "Weekly Stats",
+          "description": "Garden widget with a 7-day completion chart and weekly rate from Cultiva analytics."
+        },
+        "ru": {
+          "name": "Недельная статистика",
+          "description": "Виджет в саду: график за 7 дней и процент выполнения за неделю."
+        }
+      },
+      "sha256": {
+        "manifest.json": "7966b470b95f53d1905d925b085c694f96321e34aea3c9b223853284952b669a",
+        "index.js": "d57247bd12bf29d12ed3714d1cf3a4667f5206fa4208f453965300edd57ac35f",
+        "styles.css": "65c6a7cabd9eaa01a933293f9dd41f8c0c54d4172e4dd685b7b1e20a515e27fa"
+      }
+    },
+    {
+      "id": "habit-reflection",
+      "name": "Habit Reflection",
+      "version": "1.0.0",
+      "author": "krwg",
+      "description": "Opens a micro-journal sheet after each habit completion to capture a one-line reflection.",
+      "icon": "",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/habit-reflection",
+      "minAppVersion": "2.0.0",
+      "permissions": [
+        "storage",
+        "ui"
+      ],
+      "surfaces": [
+        "hooks"
+      ],
+      "settings": false,
+      "tags": [
+        "habits",
+        "journal",
+        "mindfulness"
+      ],
+      "i18n": {
+        "en": {
+          "name": "Habit Reflection",
+          "description": "Opens a micro-journal sheet after each habit completion to capture a one-line reflection."
+        },
+        "ru": {
+          "name": "Рефлексия привычки",
+          "description": "После выполнения открывает sheet с однострочной записью в журнал."
+        }
+      },
+      "sha256": {
+        "manifest.json": "1b300bef8be5e664e129f80f93fdbb6310b5db577cf22817d00780ea162a74c0",
+        "index.js": "ab5316f9f9170c3dc9802065f9bee167a98a42a27293c69cf806377bf6ea261e",
+        "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
+        "styles.css": "68e535446c6f32cb7d5185d8630fed1a996c3438aab6149eac1d7262a8ce4aa9"
+      }
+    },
+    {
+      "id": "routine",
+      "name": "Morning & Evening Routine",
+      "version": "1.0.0",
+      "author": "krwg",
+      "description": "Garden checklist for morning and evening habits matched by name from plugin settings.",
+      "icon": "",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/routine",
+      "minAppVersion": "2.0.0",
+      "permissions": [
+        "habits.read",
+        "storage",
+        "ui"
+      ],
+      "surfaces": [
+        "garden",
+        "hooks"
+      ],
+      "settings": true,
+      "tags": [
+        "widget",
+        "garden",
+        "habits",
+        "routine"
+      ],
+      "i18n": {
+        "en": {
+          "name": "Morning & Evening Routine",
+          "description": "Garden checklist for morning and evening habits matched by name from plugin settings."
+        },
+        "ru": {
+          "name": "Утренний и вечерний ритуал",
+          "description": "Чеклист в саду: утренние и вечерние привычки по имени из настроек."
+        }
+      },
+      "sha256": {
+        "manifest.json": "f0956c1d1308ce322f93479c92074626c58d547ce41465cd4bf3625c38de603d",
+        "index.js": "7f5c396cc69fb3d6a12f64aa9143a436f018a17e2e5fc32cee07da064a88e916",
+        "styles.css": "03c7c44d5fd7f3c7c2f23d4459b68389ea360b76369b4f6ccc493636c998d4c1"
+      }
+    },
+    {
+      "id": "gentle-nudge",
+      "name": "Gentle Nudge",
+      "version": "1.0.0",
+      "author": "krwg",
+      "description": "Friendly in-app reminder for incomplete habits after a configurable hour each day.",
+      "icon": "",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/gentle-nudge",
+      "minAppVersion": "2.0.0",
+      "permissions": [
+        "habits.read",
+        "storage",
+        "ui",
+        "settings.read"
+      ],
+      "surfaces": [
+        "hooks"
+      ],
+      "settings": true,
+      "tags": [
+        "habits",
+        "notification",
+        "reminder"
+      ],
+      "i18n": {
+        "en": {
+          "name": "Gentle Nudge",
+          "description": "Friendly in-app reminder for incomplete habits after a configurable hour each day."
+        },
+        "ru": {
+          "name": "Мягкое напоминание",
+          "description": "Дружелюбное напоминание о незавершённых привычках после заданного часа."
+        }
+      },
+      "sha256": {
+        "manifest.json": "de002b29f9b7b257ff3e5569af4b9e9fa232eb409decfeba6f06791ac4a9b680",
+        "index.js": "6575fd199fe403ff32bbeeabf7e3797cf9ee75b491ae4a66869b1cf2b1c2204d"
+      }
+    },
+    {
+      "id": "focus-session",
+      "name": "Focus Session",
+      "version": "1.0.0",
+      "author": "krwg",
+      "description": "Header pomodoro timer that completes a linked habit when a work session ends.",
+      "icon": "",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/focus-session",
+      "minAppVersion": "2.0.0",
+      "permissions": [
+        "habits.read",
+        "habits.write",
+        "storage",
+        "ui"
+      ],
+      "surfaces": [
+        "header",
+        "hooks"
+      ],
+      "settings": true,
+      "tags": [
+        "widget",
+        "timer",
+        "focus",
+        "habits"
+      ],
+      "i18n": {
+        "en": {
+          "name": "Focus Session",
+          "description": "Header pomodoro timer that completes a linked habit when a work session ends."
+        },
+        "ru": {
+          "name": "Сессия фокуса",
+          "description": "Таймер в шапке: по окончании работы отмечает связанную привычку."
+        }
+      },
+      "sha256": {
+        "manifest.json": "fcf52cbaab6cd8c50d4ccc9d4bd052e4a7a282fa75f09cdd2f44465a17bcc6af",
+        "index.js": "4a1b06a3c40496c1e46db55ff512749856fd59d35962f12f115bdd3536bd8194",
+        "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
+        "styles.css": "e9ae5b9b23711e5a7c17f7c658c83a0de377ebb287c36cd83350147ac26a268d"
       }
     }
   ]

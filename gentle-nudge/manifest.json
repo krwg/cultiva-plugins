@@ -1,0 +1,38 @@
+{
+  "id": "gentle-nudge",
+  "name": "Gentle Nudge",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Friendly in-app reminder for incomplete habits after a configurable hour each day.",
+  "icon": "",
+  "entry": "index.js",
+  "permissions": ["habits.read", "storage", "ui", "settings.read"],
+  "surfaces": ["hooks"],
+  "minAppVersion": "2.0.0",
+  "settings": [
+    {
+      "key": "nudgeHour",
+      "label": "Nudge after hour (0–23)",
+      "type": "select",
+      "default": "18",
+      "options": [
+        { "value": "9", "label": "9" },
+        { "value": "12", "label": "12" },
+        { "value": "15", "label": "15" },
+        { "value": "18", "label": "18" },
+        { "value": "20", "label": "20" },
+        { "value": "21", "label": "21" }
+      ],
+      "i18n": {
+        "en": {
+          "label": "Nudge after hour (0–23)",
+          "options": { "9": "9:00", "12": "12:00", "15": "15:00", "18": "18:00", "20": "20:00", "21": "21:00" }
+        },
+        "ru": {
+          "label": "Напоминание после часа (0–23)",
+          "options": { "9": "9:00", "12": "12:00", "15": "15:00", "18": "18:00", "20": "20:00", "21": "21:00" }
+        }
+      }
+    }
+  ]
+}

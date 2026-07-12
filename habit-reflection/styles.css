@@ -1,0 +1,38 @@
+.cultiva-sheet-card--reflection {
+  border-color: color-mix(in srgb, var(--accent-pink, #ff6b9d) 22%, var(--border-light));
+}
+
+.reflection-textarea {
+  width: 100%;
+  min-height: 88px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 15px;
+  line-height: 1.45;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.reflection-textarea:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--accent-pink, #ff6b9d) 45%, var(--border-light));
+}
+
+.reflection-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.reflection-skip {
+  background: transparent;
+}
+
+.cultiva-sheet-primary,
+.cultiva-sheet-secondary {
+  width: 100%;
+}

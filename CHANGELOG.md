@@ -6,6 +6,17 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
+## [3.2.0] — 2026-07-12
+
+### Added
+- **Weekly Stats** — garden 7-bar chart + `app.getWeeklySummary()` rate (Cultiva 2.0)
+- **Habit Reflection** — micro-journal sheet on `onHabitComplete`
+- **Morning & Evening Routine** — garden checklist by habit name
+- **Gentle Nudge** — daily reminder for open habits after configurable hour
+- **Focus Session** — header pomodoro with `app.completeHabit()` on work end
+
+---
+
 ## [3.0.7] — 2026-07-12
 
 ### Changed

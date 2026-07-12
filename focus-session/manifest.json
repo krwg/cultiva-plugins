@@ -1,0 +1,46 @@
+{
+  "id": "focus-session",
+  "name": "Focus Session",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Header pomodoro timer that completes a linked habit when a work session ends.",
+  "icon": "",
+  "entry": "index.js",
+  "styles": ["cultiva-sheet-base.css", "styles.css"],
+  "permissions": ["habits.read", "habits.write", "storage", "ui"],
+  "surfaces": ["header", "hooks"],
+  "minAppVersion": "2.0.0",
+  "settings": [
+    {
+      "key": "workMinutes",
+      "label": "Work (min)",
+      "type": "select",
+      "options": [
+        { "value": "25", "label": "25" },
+        { "value": "30", "label": "30" },
+        { "value": "45", "label": "45" }
+      ],
+      "default": "25"
+    },
+    {
+      "key": "breakMinutes",
+      "label": "Break (min)",
+      "type": "select",
+      "options": [
+        { "value": "5", "label": "5" },
+        { "value": "10", "label": "10" }
+      ],
+      "default": "5"
+    },
+    {
+      "key": "linkedHabitName",
+      "label": "Linked habit name",
+      "type": "text",
+      "default": "",
+      "i18n": {
+        "en": { "label": "Linked habit name" },
+        "ru": { "label": "Имя связанной привычки" }
+      }
+    }
+  ]
+}

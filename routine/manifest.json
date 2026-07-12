@@ -1,0 +1,35 @@
+{
+  "id": "routine",
+  "name": "Morning & Evening Routine",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Garden checklist for morning and evening habits matched by name from plugin settings.",
+  "icon": "",
+  "entry": "index.js",
+  "styles": ["styles.css"],
+  "permissions": ["habits.read", "storage", "ui"],
+  "surfaces": ["garden", "hooks"],
+  "minAppVersion": "2.0.0",
+  "settings": [
+    {
+      "key": "morningHabits",
+      "label": "Morning habits (comma-separated)",
+      "type": "text",
+      "default": "",
+      "i18n": {
+        "en": { "label": "Morning habits (comma-separated)" },
+        "ru": { "label": "Утренние привычки (через запятую)" }
+      }
+    },
+    {
+      "key": "eveningHabits",
+      "label": "Evening habits (comma-separated)",
+      "type": "text",
+      "default": "",
+      "i18n": {
+        "en": { "label": "Evening habits (comma-separated)" },
+        "ru": { "label": "Вечерние привычки (через запятую)" }
+      }
+    }
+  ]
+}

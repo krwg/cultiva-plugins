@@ -1,0 +1,13 @@
+{
+  "id": "weekly-stats",
+  "name": "Weekly Stats",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Garden widget with a 7-day completion chart and weekly rate from Cultiva analytics.",
+  "icon": "",
+  "entry": "index.js",
+  "styles": ["styles.css"],
+  "permissions": ["habits.read", "storage", "ui"],
+  "surfaces": ["garden", "hooks"],
+  "minAppVersion": "2.0.0"
+}

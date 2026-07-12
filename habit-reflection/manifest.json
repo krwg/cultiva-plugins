@@ -1,0 +1,13 @@
+{
+  "id": "habit-reflection",
+  "name": "Habit Reflection",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Opens a micro-journal sheet after each habit completion to capture a one-line reflection.",
+  "icon": "",
+  "entry": "index.js",
+  "styles": ["cultiva-sheet-base.css", "styles.css"],
+  "permissions": ["storage", "ui"],
+  "surfaces": ["hooks"],
+  "minAppVersion": "2.0.0"
+}
