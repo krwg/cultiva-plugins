@@ -8,6 +8,7 @@
   "entry": "index.js",
   "styles": ["styles.css"],
   "permissions": ["storage", "ui"],
+  "surfaces": ["garden"],
   "minAppVersion": "1.7.0",
   "data": ["quotes-data.json"],
   "settings": [

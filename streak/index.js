@@ -9,12 +9,16 @@ class StreakPlugin {
     const en = {
       completed: '{name} completed today!',
       streak: '{name} — {n} day streak!',
-      milestone: '{name} hit {n} days. Milestone reached!'
+      milestone: '{name} hit {n} days. Milestone reached!',
+      graceOn: 'Streak grace: 1 missed day per month keeps your streak',
+      graceOff: 'Streak grace is off in Settings → Garden'
     };
     const ru = {
       completed: '{name} — отмечено сегодня!',
       streak: '{name} — серия {n} дн.!',
-      milestone: '{name} — {n} дн.! Веха достигнута!'
+      milestone: '{name} — {n} дн.! Веха достигнута!',
+      graceOn: 'Пропуск в серии: 1 пропуск в месяц сохраняет серию',
+      graceOff: 'Пропуск в серии выключен в Настройки → Сад'
     };
     const dict = this._locale === 'ru' ? ru : en;
     let text = dict[key] || en[key] || key;
@@ -37,8 +41,26 @@ class StreakPlugin {
     }
   }
 
+  _renderGraceWidget(enabled) {
+    const label = enabled ? this._t('graceOn') : this._t('graceOff');
+    const cls = enabled ? 'streak-grace-widget' : 'streak-grace-widget is-off';
+    this.context.ui.registerGardenWidget({
+      position: 'top',
+      render(relay) {
+        relay.innerHTML = `<div class="${cls}" role="status">${label}</div>`;
+      }
+    });
+  }
+
+  _applyGraceSettings(appSettings) {
+    const enabled = !appSettings || appSettings.streakGraceEnabled !== false;
+    this._renderGraceWidget(enabled);
+  }
+
   async onEnable() {
     await this._loadLocale();
+    this._applyGraceSettings({ streakGraceEnabled: true });
+
     this.hooks.on('onHabitComplete', (habit) => {
       const name = habit && (habit.treeName || habit.name) ? (habit.treeName || habit.name) : 'Habit';
       const streak = habit && habit.currentStreak ? habit.currentStreak : 1;
@@ -51,8 +73,9 @@ class StreakPlugin {
       }
       this.context.ui.showNotification('', text);
     });
-    this.hooks.on('onSettingsChange', () => {
-      void this._loadLocale();
+
+    this.hooks.on('onSettingsChange', (appSettings) => {
+      void this._loadLocale().then(() => this._applyGraceSettings(appSettings));
     });
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.0.7",
+  "version": "3.1.0",
   "plugins": [
     {
       "id": "weather",
@@ -11,13 +11,33 @@
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
       "minAppVersion": "1.7.0",
+      "permissions": [
+        "network",
+        "storage",
+        "ui"
+      ],
+      "surfaces": [
+        "header",
+        "garden"
+      ],
+      "settings": true,
       "tags": [
         "widget",
         "weather",
         "russia"
       ],
+      "i18n": {
+        "en": {
+          "name": "Weather Widget",
+          "description": "Shows current weather. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide."
+        },
+        "ru": {
+          "name": "Погода",
+          "description": "Текущая погода. Гибридный поиск: 1100+ городов РФ и Open-Meteo по всему миру."
+        }
+      },
       "sha256": {
-        "manifest.json": "d7f18a269c2d993760031a2a0e86b202d5b6370cc89d2a628babc1b44545637b",
+        "manifest.json": "b89a021813636e0f89f8b514e465fbd0f840cb23ed9fe152f934a213b9fe95a5",
         "index.js": "d93d4548968e7cb928b9ffa284e2b02fce0703df7e0269e6da70a6188b5db459",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "8cdf2251d77f54ff14b675dd4beb55ab19f9e2ca26eae8cd6ec4691707d5e153",
@@ -33,13 +53,31 @@
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/time",
       "minAppVersion": "1.7.0",
+      "permissions": [
+        "storage",
+        "ui"
+      ],
+      "surfaces": [
+        "header"
+      ],
+      "settings": true,
       "tags": [
         "widget",
         "clock",
         "timezone"
       ],
+      "i18n": {
+        "en": {
+          "name": "Time Widget",
+          "description": "Live clock, time zones, Apple-style sheet."
+        },
+        "ru": {
+          "name": "Часы",
+          "description": "Живые часы, часовые пояса, sheet в стиле Apple."
+        }
+      },
       "sha256": {
-        "manifest.json": "a0b870f64401d41c2aae65284b210d59160a001391e3e808f95b333321cfcf80",
+        "manifest.json": "c6809e1325ce75e40c401305196a6c3cc72e1c3ddd27ab41e4a5f484096564ac",
         "index.js": "dbebdd9cc9076e7d48a4655dd8634abfa219a76367c04f40588c57d341b85e5a",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "632c4f0ba4bf61cd4fd650ceae59d1f7b14009bd14e515479cba0415bba25d39"
@@ -54,14 +92,33 @@
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/radio",
       "minAppVersion": "1.7.0",
+      "permissions": [
+        "network",
+        "storage",
+        "ui"
+      ],
+      "surfaces": [
+        "header"
+      ],
+      "settings": true,
       "tags": [
         "widget",
         "radio",
         "music",
         "ambient"
       ],
+      "i18n": {
+        "en": {
+          "name": "Radio Widget",
+          "description": "SomaFM streams, sleep timer, volume, glass UI."
+        },
+        "ru": {
+          "name": "Радио",
+          "description": "Потоки SomaFM, таймер сна, громкость, стеклянный UI."
+        }
+      },
       "sha256": {
-        "manifest.json": "c2a51899a44cd391810904b7b3a945397a36c230f6a00578dc85f3a12c65f0af",
+        "manifest.json": "8e87455d7ac25e31f26d987a0983b4ab9af6cb4c842dfe07cac8836843b1af50",
         "index.js": "3c4ad2ed148795254c01ec082fcac340677ebbd36758c0093777a02a31d54088",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "d16592955a85029e39724166449db36153d5f10e9caa3fd343beed56ceb66968"
@@ -76,14 +133,32 @@
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/pomodoro",
       "minAppVersion": "1.7.0",
+      "permissions": [
+        "storage",
+        "ui"
+      ],
+      "surfaces": [
+        "header"
+      ],
+      "settings": true,
       "tags": [
         "widget",
         "timer",
         "focus",
         "productivity"
       ],
+      "i18n": {
+        "en": {
+          "name": "Pomodoro Timer",
+          "description": "Focus timer in the header — 25/5 pomodoro cycles."
+        },
+        "ru": {
+          "name": "Помодоро",
+          "description": "Таймер фокуса в шапке — циклы 25/5."
+        }
+      },
       "sha256": {
-        "manifest.json": "262fa34ba249406748f43b049498db7c313c6569714713c620d2b9908cd23629",
+        "manifest.json": "f6992ab2f6d60800a3f287471384c42d998e3f8b681630856a26fda749ff5fae",
         "index.js": "51cd8865a63fc5fb149b3d211250b0f853a2082f6b66d7df32be1598976290c7",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "e8cbb7d76210b9104aafd124b0689a3e1b4a9d245cb77c40d30effdedd611a51"
@@ -98,13 +173,31 @@
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/quote",
       "minAppVersion": "1.7.0",
+      "permissions": [
+        "storage",
+        "ui"
+      ],
+      "surfaces": [
+        "garden"
+      ],
+      "settings": true,
       "tags": [
         "widget",
         "garden",
         "quote"
       ],
+      "i18n": {
+        "en": {
+          "name": "Quote of the Day",
+          "description": "Daily inspiration widget in your garden — 1000 EN/RU quotes, favorites, locale-pure banks."
+        },
+        "ru": {
+          "name": "Цитата дня",
+          "description": "Виджет вдохновения в саду — 1000 цитат EN/RU, избранное, чистые банки по языку."
+        }
+      },
       "sha256": {
-        "manifest.json": "ce545b613a27086d8a4854dafe833d7ee8479ee3781052989379cfef2298a3a1",
+        "manifest.json": "1c332c1ef37f7c591ea6f5bc833a3fce37c17bf5caf3a0f6caa3204049156186",
         "index.js": "82ca70b284fdb39c8ebbdce977937dd3e89f0c6bcced1afc1f9a715f6720a9a3",
         "styles.css": "1bb071fb568de4d1f856532d10f1b32b1c2b33a2a5d5d242de5e418c78beafbe",
         "quotes-data.json": "a96eeee30269fc8d95e7ddf80ff9fa76e2d9b4e407ec7fe9ef5f685c375d7e89"
@@ -113,20 +206,39 @@
     {
       "id": "streak",
       "name": "Streak Celebrator",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "author": "krwg",
-      "description": "Celebrates habit completions with notifications.",
+      "description": "Celebrates habit completions and shows streak grace status in the garden.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/streak",
       "minAppVersion": "1.7.0",
+      "permissions": [
+        "ui"
+      ],
+      "surfaces": [
+        "garden",
+        "hooks"
+      ],
+      "settings": false,
       "tags": [
         "habits",
         "streak",
         "notification"
       ],
+      "i18n": {
+        "en": {
+          "name": "Streak Celebrator",
+          "description": "Celebrates habit completions and shows streak grace status in the garden."
+        },
+        "ru": {
+          "name": "Серии",
+          "description": "Празднует выполнения и показывает статус пропуска в серии в саду."
+        }
+      },
       "sha256": {
-        "manifest.json": "a1f1916ee97b3c899c3053f591360cc2ec31663ff0a9e410965eb6abf96f620f",
-        "index.js": "deeb103de238247a5eaa03c8b0692a2eb5f4f17d241779506c876cb813f37010"
+        "manifest.json": "3bdac9f8bff87f168d769006dd875cc576609f8eb29e9f43a9973e7969c33c54",
+        "index.js": "f0c5f7b3d721789821b903fafb13308ddcefaa6898a4d6523806049c8c93230a",
+        "styles.css": "5c252563030dfdeddadafda0f5b9d107aa2ce2d31d26b8023684e7016cb4a116"
       }
     }
   ]

@@ -15,6 +15,7 @@
     "storage",
     "ui"
   ],
+  "surfaces": ["header", "garden"],
   "minAppVersion": "1.7.0",
   "data": [
     "cities-ru.json"

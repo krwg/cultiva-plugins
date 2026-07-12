@@ -34,6 +34,25 @@ for (const plugin of registry.plugins) {
       failed = true;
     }
   }
+  if (!Array.isArray(manifest.permissions) || manifest.permissions.length === 0) {
+    console.error(`[validate] ${plugin.id} manifest.permissions must be a non-empty array`);
+    failed = true;
+  }
+  if (manifest.surfaces !== undefined) {
+    if (!Array.isArray(manifest.surfaces) || manifest.surfaces.length === 0) {
+      console.error(`[validate] ${plugin.id} manifest.surfaces must be a non-empty array when set`);
+      failed = true;
+    }
+  }
+  if (plugin.i18n) {
+    for (const locale of ['en', 'ru']) {
+      const block = plugin.i18n[locale];
+      if (!block || typeof block.name !== 'string' || typeof block.description !== 'string') {
+        console.error(`[validate] ${plugin.id} registry i18n.${locale} requires name and description`);
+        failed = true;
+      }
+    }
+  }
 }
 
 if (failed) {

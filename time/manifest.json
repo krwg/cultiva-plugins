@@ -8,6 +8,7 @@
   "entry": "index.js",
   "styles": ["cultiva-sheet-base.css", "styles.css"],
   "permissions": ["storage", "ui"],
+  "surfaces": ["header"],
   "minAppVersion": "1.7.0",
   "settings": [
     {
