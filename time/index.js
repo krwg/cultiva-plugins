@@ -177,7 +177,8 @@ class TimePlugin {
       accent: 'Акцент',
       system: 'Системный',
       save: 'Сохранить',
-      noMatches: 'Ничего не найдено'
+      noMatches: 'Ничего не найдено',
+      formatColorInSettings: 'Формат и цвет акцента — в настройках плагина.'
     };
     const en = {
       clock: 'Clock',
@@ -188,7 +189,8 @@ class TimePlugin {
       accent: 'Accent',
       system: 'System',
       save: 'Save',
-      noMatches: 'No matches'
+      noMatches: 'No matches',
+      formatColorInSettings: 'Time format and accent color are in plugin Settings.'
     };
     const dict = this._locale === 'ru' ? ru : en;
     return dict[key] || key;
@@ -368,7 +370,7 @@ class TimePlugin {
       }
     }
     await this._syncThemeAccent();
-    this.updateHeaderDisplay();
+    this.startClock();
   }
 
   onDisable() {
@@ -424,8 +426,6 @@ class TimePlugin {
       }
     }
     const tzLine = this._escapeHtml(cityLabel(draft.timezone || 'UTC', this._locale));
-    const seg = (value, label) =>
-      `<button type="button" class="cultiva-seg${draft.format === value ? ' is-on' : ''}" data-cultiva-act="pickFormat" data-format="${value}">${label}</button>`;
     return `
 <div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
 <div class="cultiva-sheet-card cultiva-sheet-card--time">
@@ -445,23 +445,7 @@ class TimePlugin {
     <label class="cultiva-field-label">${this._t('timezone')}</label>
     <input type="search" name="tzFilter" class="cultiva-sheet-input" data-cultiva-input-act="tzFilter" placeholder="${this._escapeAttr(this._t('filter'))}" value="${this._escapeAttr(this._tzFilter)}" autocomplete="off" />
     <div class="cultiva-tz-scroll">${rows}</div>
-    <label class="cultiva-field-label">${this._t('format')}</label>
-    <div class="cultiva-segmented">
-      ${seg('HH:MM:SS', '24h + sec')}
-      ${seg('HH:MM', '24h')}
-      ${seg('hh:MM:SS A', '12h')}
-    </div>
-    <label class="cultiva-field-label">${this._t('accent')}</label>
-    <select name="color" class="cultiva-sheet-select" data-cultiva-change-act="colorDraft">
-      <option value="default" ${draft.color === 'default' ? 'selected' : ''}>${this._t('system')}</option>
-      <option value="green" ${draft.color === 'green' ? 'selected' : ''}>Green</option>
-      <option value="blue" ${draft.color === 'blue' ? 'selected' : ''}>Blue</option>
-      <option value="purple" ${draft.color === 'purple' ? 'selected' : ''}>Purple</option>
-      <option value="orange" ${draft.color === 'orange' ? 'selected' : ''}>Orange</option>
-      <option value="graphite" ${draft.color === 'graphite' ? 'selected' : ''}>Graphite</option>
-      <option value="rainbow" ${draft.color === 'rainbow' ? 'selected' : ''}>Spectrum</option>
-    </select>
-    <button type="button" class="cultiva-sheet-primary" data-cultiva-act="apply" data-cultiva-collect="1">${this._t('save')}</button>
+    <p class="cultiva-sheet-footnote">${this._escapeHtml(this._t('formatColorInSettings') || 'Time format and accent color are in plugin Settings.')}</p>
   </div>
 </div>`;
   }
@@ -488,42 +472,6 @@ class TimePlugin {
       this.context.ui.openMainSheet(this._buildSheetHtml());
       this._startSheetPreviewClock();
       return;
-    }
-    if (action === 'pickFormat' && payload && payload.format) {
-      if (!this._sheetDraft) {
-        this._sheetDraft = { ...this.settings };
-      }
-      this._sheetDraft.format = payload.format;
-      this.context.ui.openMainSheet(this._buildSheetHtml());
-      this._startSheetPreviewClock();
-      return;
-    }
-    if (action === 'colorDraft' && payload && payload.value) {
-      if (!this._sheetDraft) {
-        this._sheetDraft = { ...this.settings };
-      }
-      this._sheetDraft.color = payload.value;
-      this.context.ui.openMainSheet(this._buildSheetHtml());
-      this._startSheetPreviewClock();
-      return;
-    }
-    if (action === 'apply' && payload) {
-      if (!this._sheetDraft) {
-        this._sheetDraft = { ...this.settings };
-      }
-      if (payload.format) {
-        this._sheetDraft.format = payload.format;
-      }
-      if (payload.color) {
-        this._sheetDraft.color = payload.color;
-      }
-      this.settings = { ...this._sheetDraft };
-      await this.context.storage.set('settings', this.settings);
-      this._sheetDraft = null;
-      this._stopSheetPreviewClock();
-      await this._syncThemeAccent();
-      this.startClock();
-      this.context.ui.closeMainSheet();
     }
   }
 }

@@ -13,6 +13,7 @@ class RadioPlugin {
     this.audio = null;
     this.sleepTimer = null;
     this._locale = 'en';
+    this._streamFailed = false;
     this.stations = {
       groovesalad: {
         name: 'Groove Salad',
@@ -145,7 +146,27 @@ class RadioPlugin {
       .replace(/"/g, '&quot;');
   }
 
+  _normalizeSettings(raw) {
+    const s = { ...this.settings, ...raw };
+    if (typeof s.volume === 'string') {
+      s.volume = parseFloat(s.volume);
+    }
+    if (!Number.isFinite(s.volume)) {
+      s.volume = 0.45;
+    }
+    if (typeof s.sleepMinutes === 'string') {
+      s.sleepMinutes = parseInt(s.sleepMinutes, 10) || 0;
+    }
+    if (!this.stations[s.station]) {
+      s.station = 'groovesalad';
+    }
+    return s;
+  }
+
   _headerLabel() {
+    if (this._streamFailed) {
+      return this._t('unavailable');
+    }
     if (!this.settings.playing) return this._t('radio');
     const s = this.stations[this.settings.station];
     return s ? s.name : this._t('onAir');
@@ -178,7 +199,7 @@ class RadioPlugin {
     }
     const saved = await this.context.storage.get('settings');
     if (saved) {
-      this.settings = { ...this.settings, ...saved };
+      this.settings = this._normalizeSettings(saved);
     }
     this.context.ui.registerHeaderItem({
       label: this._headerLabel(),
@@ -202,13 +223,22 @@ class RadioPlugin {
         this._locale = 'en';
       }
     }
+    const prevStation = this.settings.station;
     if (payload?.pluginSettings) {
-      this.settings = { ...this.settings, ...payload.pluginSettings };
+      this.settings = this._normalizeSettings({ ...this.settings, ...payload.pluginSettings });
     } else {
       const saved = await this.context.storage.get('settings');
       if (saved) {
-        this.settings = { ...this.settings, ...saved };
+        this.settings = this._normalizeSettings({ ...this.settings, ...saved });
       }
+    }
+    if (this.audio) {
+      this.audio.volume = this.settings.volume;
+    }
+    this._armSleep();
+    await this.context.storage.set('settings', this.settings);
+    if (this.settings.playing && prevStation !== this.settings.station) {
+      this.playStation(this.settings.station, false);
     }
     this._updateHeader();
   }
@@ -246,9 +276,12 @@ class RadioPlugin {
 
   _tryPlayUrls(stationId, station, urls, index, notify) {
     if (index >= urls.length) {
+      this._streamFailed = true;
+      this._updateHeader();
       this.context.ui.showNotification('', this._t('unavailable'));
       return;
     }
+    this._streamFailed = false;
     const audio = new Audio(urls[index]);
     audio.preload = 'none';
     audio.volume = this.settings.volume;
@@ -257,6 +290,7 @@ class RadioPlugin {
       this._tryPlayUrls(stationId, station, urls, index + 1, notify);
     };
     const succeed = () => {
+      this._streamFailed = false;
       this.audio = audio;
       this.settings.station = stationId;
       this.settings.playing = true;
@@ -281,6 +315,7 @@ class RadioPlugin {
       this.audio.pause();
       this.audio = null;
     }
+    this._streamFailed = false;
     this.settings.playing = false;
     this.context.storage.set('settings', this.settings);
     this._updateHeader();

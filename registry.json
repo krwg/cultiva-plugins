@@ -1,6 +1,6 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "plugins": [
     {
       "id": "weather",
@@ -27,7 +27,7 @@
     {
       "id": "time",
       "name": "Time Widget",
-      "version": "2.2.1",
+      "version": "2.2.2",
       "author": "krwg",
       "description": "Live clock, time zones, Apple-style sheet.",
       "icon": "",
@@ -39,8 +39,8 @@
         "timezone"
       ],
       "sha256": {
-        "manifest.json": "a3bd74bcfbd3d827c8002000ad25d92bb792e85b9da931a3d6652ca9e7446912",
-        "index.js": "25766b6a881344c7e49989ba492ed34446575a87314d69f9ac622efb5709559d",
+        "manifest.json": "a0b870f64401d41c2aae65284b210d59160a001391e3e808f95b333321cfcf80",
+        "index.js": "dbebdd9cc9076e7d48a4655dd8634abfa219a76367c04f40588c57d341b85e5a",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "632c4f0ba4bf61cd4fd650ceae59d1f7b14009bd14e515479cba0415bba25d39"
       }
@@ -48,7 +48,7 @@
     {
       "id": "radio",
       "name": "Radio Widget",
-      "version": "2.1.1",
+      "version": "2.2.0",
       "author": "krwg",
       "description": "SomaFM streams, sleep timer, volume, glass UI.",
       "icon": "",
@@ -61,8 +61,8 @@
         "ambient"
       ],
       "sha256": {
-        "manifest.json": "baf1a26244642c509bc03efc772401b56dd8d85fb13f6d192bf90aefe8d80e36",
-        "index.js": "0feb178a1c51a686ae65248629232ae5d6bb9882f3fc35b18e75d33b085033a4",
+        "manifest.json": "c2a51899a44cd391810904b7b3a945397a36c230f6a00578dc85f3a12c65f0af",
+        "index.js": "3c4ad2ed148795254c01ec082fcac340677ebbd36758c0093777a02a31d54088",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "d16592955a85029e39724166449db36153d5f10e9caa3fd343beed56ceb66968"
       }

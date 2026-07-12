@@ -6,6 +6,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
+## [3.0.7] — 2026-07-12
+
+### Changed
+- Radio 2.2.0: manifest settings for default station, volume, and sleep timer; stream error in header
+- Time 2.2.2: sheet is timezone-only; format/color live in plugin Settings modal
+
+---
+
 ## [3.0.6] — 2026-07-12
 
 ### Changed
