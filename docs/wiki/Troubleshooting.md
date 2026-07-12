@@ -6,7 +6,7 @@
 |---------|--------------|-----|
 | sha256 mismatch | Registry out of sync with files | Pull latest `main`; maintainer re-runs hash script |
 | 404 on download | Wrong `baseUrl` in registry | Fix path to `raw.githubusercontent.com/.../main/<id>` |
-| minAppVersion | Cultiva too old | Upgrade to **1.7.0+** |
+| minAppVersion | Cultiva too old | Upgrade to **2.0.0 · Rowan** (or the plugin's declared floor) |
 | Network error | Offline or GitHub down | Retry; check firewall |
 
 ## Plugin installs but doesn't show

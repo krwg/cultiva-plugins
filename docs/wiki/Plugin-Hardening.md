@@ -2,14 +2,14 @@
 
 Tracker for quality, security, and consistency across official plugins.
 
-**Registry:** 3.0.2 · **Cultiva:** 1.7.0+
+**Registry:** 3.5.1 · **Cultiva:** 2.0.0+ · Rowan (PLE1)
 
 ---
 
 ## Completed (1.7 / 3.x)
 
 - [x] sha256 integrity on all installable files
-- [x] `minAppVersion: "1.7.0"` on entire catalog
+- [x] `minAppVersion` audit — legacy floors (`1.1.0` / `1.7.0`); **new plugins require `2.0.0`**
 - [x] Shared `cultiva-sheet-base.css` for weather, time, radio
 - [x] Weather offline RU cities bundle (`cities-ru.json`)
 - [x] Quote offline bundle (`quotes-data.json`)

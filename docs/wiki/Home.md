@@ -1,8 +1,8 @@
 # Cultiva Plugins
 
-**Official sandboxed extension registry for [Cultiva](https://github.com/krwg/cultiva) ≥ 1.7.0.**
+**Official sandboxed extension registry for [Cultiva](https://github.com/krwg/cultiva) ≥ 2.0.0 · Rowan** (PLE1 plugin engine).
 
-**Registry version:** [3.0.2](https://github.com/krwg/cultiva-plugins/blob/main/registry.json)  
+**Registry version:** [3.5.1](https://github.com/krwg/cultiva-plugins/blob/main/registry.json)  
 **Catalog UI:** [krwg.github.io/cultiva-plugins](https://krwg.github.io/cultiva-plugins/)
 
 ---
@@ -10,7 +10,7 @@
 ## What this repo is
 
 - `registry.json` — catalog + **sha256** hashes (Cultiva downloads this at runtime)
-- Six official plugin folders (`weather/`, `time/`, …)
+- Nine official plugin folders (`weather/`, `time/`, …)
 - GitHub Pages landing and wiki source
 
 **No store account. No telemetry. Habit data never leaves the device.**
@@ -25,7 +25,7 @@
 | [Catalog](Catalog) | All plugins, versions |
 | [Publishing](Publishing-a-Plugin) | For authors |
 | [Troubleshooting](Troubleshooting) | Hash mismatch, install errors |
-| [Cultiva 1.7.0 release](https://github.com/krwg/cultiva/releases/tag/1.7.0) | Required app version |
+| [Cultiva 2.0.0 · Rowan release](https://github.com/krwg/cultiva/releases/tag/2.0.0) | Required app version for new plugins |
 
 ---
 

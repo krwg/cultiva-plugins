@@ -4,7 +4,7 @@ Canonical: **[CONTRIBUTING.md](https://github.com/krwg/cultiva-plugins/blob/main
 
 ## PR checklist (summary)
 
-- [ ] Tested on Cultiva **≥ 1.7.0**
+- [ ] Tested on Cultiva **≥ 2.0.0 · Rowan**
 - [ ] `manifest.json` version = registry entry version
 - [ ] `node scripts/compute-registry-sha256.mjs` run
 - [ ] All `sha256` files exist on disk

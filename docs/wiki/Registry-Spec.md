@@ -2,7 +2,9 @@
 
 The Cultiva desktop app reads **`registry.json`** from this repository at install time.
 
-**Current version:** `3.0.2` (top-level `version` field)
+**Current version:** `3.5.1` (top-level `version` field)
+
+**Cultiva:** **2.0.0 · Rowan** with **PLE1** plugin engine — expanded bridge APIs (`app.getWeeklySummary()`, habit hooks, manifest-driven settings). New plugins must set `minAppVersion: "2.0.0"`.
 
 ---
 
@@ -11,7 +13,7 @@ The Cultiva desktop app reads **`registry.json`** from this repository at instal
 ```json
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.0.2",
+  "version": "3.5.1",
   "plugins": [ /* array of plugin entries */ ]
 }
 ```
@@ -31,7 +33,7 @@ Bump `version` when any plugin or hash map changes (maintainer script may auto-i
 | `description` | yes | Short summary |
 | `icon` | yes | Use `""` (letter placeholders in UI) |
 | `baseUrl` | yes | Raw GitHub URL to plugin folder on `main` |
-| `minAppVersion` | yes | `"1.7.0"` for current catalog |
+| `minAppVersion` | yes | `"2.0.0"` for **new** plugins; catalog may retain `1.1.0` / `1.7.0` on legacy entries |
 | `tags` | no | String array for discovery |
 | `sha256` | yes | Map of **filename → hex hash** for every installable file |
 

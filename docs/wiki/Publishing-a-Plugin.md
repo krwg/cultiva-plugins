@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-- Cultiva **1.7.0+** for testing
-- Read [PLUGIN_AUTHOR_GUIDE.md](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md)
+- Cultiva **2.0.0 · Rowan** (PLE1) for testing new plugins
+- Read [PLUGIN_AUTHOR_GUIDE.md](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md) — covers the expanded PLE1 bridge (`app.*`, hooks, settings UI)
 - Fork [cultiva-plugins](https://github.com/krwg/cultiva-plugins)
 
 ---
@@ -19,11 +19,11 @@ my-plugin/
 └── styles.css       # optional
 ```
 
-`manifest.json` must include `id`, `version`, `permissions`, `minAppVersion: "1.7.0"`, `entry`.
+`manifest.json` must include `id`, `version`, `permissions`, `minAppVersion: "2.0.0"`, `entry`.
 
 ### 2. Implement entry script
 
-Return a plugin instance with `onEnable` / `onDisable`. Use bridge APIs for UI — no main-window DOM access.
+Return a plugin instance with `onEnable` / `onDisable`. Use PLE1 bridge APIs for UI and habit hooks — no main-window DOM access.
 
 ### 3. Add registry entry
 

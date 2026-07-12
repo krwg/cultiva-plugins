@@ -6,7 +6,7 @@
 
 [![Registry](https://img.shields.io/badge/registry-3.3.0-34c759?style=flat-square)](registry.json)
 [![License](https://img.shields.io/badge/license-MIT-af52de?style=flat-square)](LICENSE)
-[![Cultiva](https://img.shields.io/badge/Cultiva-1.1.0%2B%20(2.0%20Rowan)-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
+[![Cultiva](https://img.shields.io/badge/Cultiva-2.0.0%2B%20Rowan-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
 [![Plugins](https://img.shields.io/badge/plugins-9-ffcc00?style=flat-square)](#catalog)
 [![Integrity](https://img.shields.io/badge/sha256-enforced-5856d6?style=flat-square)](#security)
 [![Pages](https://img.shields.io/badge/docs-GitHub%20Pages-0071e3?style=flat-square)](https://krwg.github.io/cultiva-plugins/)
@@ -87,7 +87,7 @@ flowchart LR
 5. For first-time plugins, user taps **Install** after **Get** to activate the sandbox.
 6. Plugin code runs in an **opaque-origin iframe** with declared permissions only.
 
-Requires **Cultiva 1.1.0+** for header widgets; **1.7.0+** for garden/hooks; **2.0.0 Rowan** for habit analytics plugins (`minAppVersion` in registry).
+Requires **Cultiva 2.0.0 · Rowan** (PLE1 plugin engine) for new plugins. The catalog still lists per-plugin `minAppVersion` floors (1.1.0 header widgets, 1.7.0 garden/hooks, 2.0.0 habit analytics).
 
 ---
 
@@ -150,7 +150,7 @@ Each plugin needs a block in [`registry.json`](registry.json):
   "description": "Short summary for Settings → Plugins.",
   "icon": "",
   "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/my-plugin",
-  "minAppVersion": "1.7.0",
+  "minAppVersion": "2.0.0",
   "tags": ["widget"],
   "sha256": {
     "manifest.json": "...",
@@ -193,7 +193,7 @@ cultiva-plugins/
 
 ## Publishing checklist
 
-- [ ] `manifest.json` — valid id, semver, permissions, `minAppVersion` ≥ 1.7.0
+- [ ] `manifest.json` — valid id, semver, permissions, `minAppVersion` ≥ 2.0.0
 - [ ] Entry script returns plugin instance; `onEnable` / `onDisable` if needed
 - [ ] All files in `styles` / `data` listed and present on disk
 - [ ] `node scripts/compute-registry-sha256.mjs` run; `registry.json` updated

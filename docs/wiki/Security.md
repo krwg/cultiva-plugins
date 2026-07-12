@@ -16,8 +16,8 @@
 
 | Registry | Cultiva | Support |
 |----------|---------|---------|
-| **3.0.2** | 1.7.x | Yes |
-| 3.0.x | 1.7.x | Yes |
+| **3.5.x** | 2.0.x · Rowan (PLE1) | Yes |
+| 3.0.x–3.4.x | 1.7.x | Best effort |
 | 2.x | 1.1.x | Best effort |
 
 ---

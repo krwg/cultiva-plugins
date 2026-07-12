@@ -1,6 +1,6 @@
 # Catalog
 
-Official plugins in registry **3.0.2**. Requires **Cultiva 1.7.0 · Linden** or newer.
+Official plugins in registry **3.5.1**. New plugins require **Cultiva 2.0.0 · Rowan** (PLE1); existing entries may declare lower `minAppVersion` floors.
 
 | Plugin | Version | Surface | Permissions | Description |
 |--------|---------|---------|-------------|-------------|

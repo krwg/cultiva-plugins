@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
+## [Unreleased]
+
+### Changed
+- Documentation: **Cultiva 2.0.0 · Rowan** (PLE1) as required app version for new plugins; `minAppVersion` examples use `2.0.0`
+
+---
+
 ## [3.4.0] — 2026-07-12
 
 ### Removed
