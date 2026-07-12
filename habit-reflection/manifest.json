@@ -1,7 +1,7 @@
 {
   "id": "habit-reflection",
   "name": "Habit Reflection",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "krwg",
   "description": "Capture a one-line reflection in a micro-journal sheet each time you complete a habit.",
   "icon": "",
@@ -9,5 +9,35 @@
   "styles": ["cultiva-sheet-base.css", "styles.css"],
   "permissions": ["storage", "ui"],
   "surfaces": ["hooks"],
-  "minAppVersion": "1.7.0"
+  "minAppVersion": "1.7.0",
+  "i18n": {
+    "en": {
+      "name": "Notes",
+      "tagline": "One line after every completion.",
+      "description": "You finished a habit — then what? Notes prompts a micro-reflection: a single short line right after you check in."
+    },
+    "ru": {
+      "name": "Заметки",
+      "tagline": "Одна строка после каждого дела.",
+      "description": "Выполнили привычку — и что дальше? «Заметки» предлагают мгновенную микро-рефлексию сразу после отметки."
+    }
+  },
+  "settings": [
+    {
+      "key": "journalView",
+      "type": "journal",
+      "storageKey": "journal",
+      "label": "Saved reflections",
+      "i18n": {
+        "en": {
+          "label": "Saved reflections",
+          "emptyMessage": "No reflections saved yet."
+        },
+        "ru": {
+          "label": "Сохранённые заметки",
+          "emptyMessage": "Сохранённых заметок пока нет."
+        }
+      }
+    }
+  ]
 }

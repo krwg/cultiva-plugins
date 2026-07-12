@@ -1,6 +1,6 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "plugins": [
     {
       "id": "weather",
@@ -265,7 +265,7 @@
     {
       "id": "habit-reflection",
       "name": "Habit Reflection",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "krwg",
       "description": "You finished a habit — then what? Notes prompts a micro-reflection: a single short line right after you check in. Capture what you felt, what worked, or what surprised you. Not a three-page journal — just one sentence that turns routine into awareness. A week later, reread and see how your relationship with habits shifts.",
       "icon": "",
@@ -278,7 +278,7 @@
       "surfaces": [
         "hooks"
       ],
-      "settings": false,
+      "settings": true,
       "tags": [
         "habits",
         "journal",
@@ -297,7 +297,7 @@
         }
       },
       "sha256": {
-        "manifest.json": "865d4ec53f4f78eab4d53cb0159c81757c6b35e9db4415f8f11da9be441cb3e5",
+        "manifest.json": "f531c180b9105d43f95aec29b7ae8548ea44e6a2607b856f689e0c2588c1b8ef",
         "index.js": "ab5316f9f9170c3dc9802065f9bee167a98a42a27293c69cf806377bf6ea261e",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "68e535446c6f32cb7d5185d8630fed1a996c3438aab6149eac1d7262a8ce4aa9"
