@@ -31,7 +31,7 @@ class PomodoroPlugin {
   }
 
   _updateHeader() {
-    this.context.ui.updateMainHeader({ label: this._label(), icon: '🍅' });
+    this.context.ui.updateMainHeader({ label: this._label(), icon: '' });
   }
 
   _clearTick() {
@@ -76,9 +76,28 @@ class PomodoroPlugin {
     }
     this.context.ui.registerHeaderItem({
       label: this._label(),
-      icon: '🍅',
+      icon: '',
       onClick: () => this.openModal()
     });
+    this.hooks.on('onSettingsChange', (payload) => {
+      void this.onSettingsChange(payload);
+    });
+  }
+
+  async onSettingsChange(payload) {
+    if (this.context.app && typeof this.context.app.getLocale === 'function') {
+      try {
+        this._locale = await this.context.app.getLocale();
+      } catch {
+        this._locale = 'en';
+      }
+    }
+    if (payload?.pluginSettings) {
+      this.settings = { ...this.settings, ...payload.pluginSettings };
+      this.settings.workMinutes = parseInt(this.settings.workMinutes, 10) || 25;
+      this.settings.breakMinutes = parseInt(this.settings.breakMinutes, 10) || 5;
+    }
+    this._updateHeader();
   }
 
   onDisable() {
@@ -111,7 +130,7 @@ class PomodoroPlugin {
         </div>
         <div class="cultiva-sheet-body">
           <div class="pomodoro-hero">
-            <div class="pomodoro-hero-emoji">🍅</div>
+            <div class="pomodoro-hero-letter">P</div>
             <div class="pomodoro-hero-timer">${this.phase === 'idle' ? `${String(work).padStart(2, '0')}:00` : this._formatRemaining()}</div>
             <div class="pomodoro-hero-status">${this._escapeHtml(status)}</div>
           </div>

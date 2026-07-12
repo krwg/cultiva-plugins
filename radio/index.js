@@ -189,6 +189,28 @@ class RadioPlugin {
       this.playStation(this.settings.station, false);
     }
     this._armSleep();
+    this.hooks.on('onSettingsChange', (payload) => {
+      void this.onSettingsChange(payload);
+    });
+  }
+
+  async onSettingsChange(payload) {
+    if (this.context.app && typeof this.context.app.getLocale === 'function') {
+      try {
+        this._locale = await this.context.app.getLocale();
+      } catch {
+        this._locale = 'en';
+      }
+    }
+    if (payload?.pluginSettings) {
+      this.settings = { ...this.settings, ...payload.pluginSettings };
+    } else {
+      const saved = await this.context.storage.get('settings');
+      if (saved) {
+        this.settings = { ...this.settings, ...saved };
+      }
+    }
+    this._updateHeader();
   }
 
   onDisable() {

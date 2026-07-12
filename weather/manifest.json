@@ -1,7 +1,7 @@
 {
   "id": "weather",
   "name": "Weather Widget",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "author": "krwg",
   "description": "Weather in header and garden, city search, sheet UI in the main window. Cultiva 0.4.0+.",
   "icon": "",

@@ -1,11 +1,11 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "plugins": [
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "2.3.0",
+      "version": "2.3.1",
       "author": "krwg",
       "description": "Shows current weather. Hybrid search: 1100+ Russian cities + Open-Meteo worldwide.",
       "icon": "",
@@ -17,8 +17,8 @@
         "russia"
       ],
       "sha256": {
-        "manifest.json": "c5d6e15046a87e9eac5e1dc185ff01a9768802ca7dbaa06615f5e65da802b67e",
-        "index.js": "634e22036df5eac2353406120c78d82eada64ccf5df9bd4978e9307dfad722e8",
+        "manifest.json": "ccd8ce0f760179458931223e6cc22e3492b332962ddb2076906f21268c0b766a",
+        "index.js": "d93d4548968e7cb928b9ffa284e2b02fce0703df7e0269e6da70a6188b5db459",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "17fea71a4b1b23b2f1c87fb65d384791c48ea107c98bd39da6ca5fe94c02dbd9",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
@@ -27,7 +27,7 @@
     {
       "id": "time",
       "name": "Time Widget",
-      "version": "2.2.0",
+      "version": "2.2.1",
       "author": "krwg",
       "description": "Live clock, time zones, Apple-style sheet.",
       "icon": "",
@@ -39,8 +39,8 @@
         "timezone"
       ],
       "sha256": {
-        "manifest.json": "1671a9775472f07d20c75b4d0c8b881ed84b44347c3acd10b2e7549bd6bb365d",
-        "index.js": "91000ab92e6649e2b2ce77cbc9b8309cc709296771202df23f2f9c27fbe8c1b6",
+        "manifest.json": "a3bd74bcfbd3d827c8002000ad25d92bb792e85b9da931a3d6652ca9e7446912",
+        "index.js": "25766b6a881344c7e49989ba492ed34446575a87314d69f9ac622efb5709559d",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "632c4f0ba4bf61cd4fd650ceae59d1f7b14009bd14e515479cba0415bba25d39"
       }
@@ -48,7 +48,7 @@
     {
       "id": "radio",
       "name": "Radio Widget",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "author": "krwg",
       "description": "SomaFM streams, sleep timer, volume, glass UI.",
       "icon": "",
@@ -61,8 +61,8 @@
         "ambient"
       ],
       "sha256": {
-        "manifest.json": "b915fdd9b28f9d5cd1e110518398745021fcf73cd09d33d3bc714cdd2e970fd1",
-        "index.js": "53e75e12adc7aa7607fd0bfd83b10623d6b7b3fa6d80c9a8b43d891ea70024ff",
+        "manifest.json": "baf1a26244642c509bc03efc772401b56dd8d85fb13f6d192bf90aefe8d80e36",
+        "index.js": "0feb178a1c51a686ae65248629232ae5d6bb9882f3fc35b18e75d33b085033a4",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "d16592955a85029e39724166449db36153d5f10e9caa3fd343beed56ceb66968"
       }
@@ -70,7 +70,7 @@
     {
       "id": "pomodoro",
       "name": "Pomodoro Timer",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": "krwg",
       "description": "Focus timer in the header — 25/5 pomodoro cycles.",
       "icon": "",
@@ -83,16 +83,16 @@
         "productivity"
       ],
       "sha256": {
-        "manifest.json": "385471e16b4b6dddd363e8a1fc8377b13e6ddcb48b1021da841baf953bf06ff7",
-        "index.js": "ca6bc51f35864706e74246b6897ce037b21ef6fcbe9ce75efc45b221275b848e",
+        "manifest.json": "262fa34ba249406748f43b049498db7c313c6569714713c620d2b9908cd23629",
+        "index.js": "51cd8865a63fc5fb149b3d211250b0f853a2082f6b66d7df32be1598976290c7",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "7d58f7b96603f108bfe76779066ec216c65469c4cb3c4098efb0464dc864548d"
+        "styles.css": "e8cbb7d76210b9104aafd124b0689a3e1b4a9d245cb77c40d30effdedd611a51"
       }
     },
     {
       "id": "quote",
       "name": "Quote of the Day",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": "krwg",
       "description": "Daily inspiration widget in your garden — 500 EN/RU quotes.",
       "icon": "",
@@ -104,8 +104,8 @@
         "quote"
       ],
       "sha256": {
-        "manifest.json": "551e0adc89bbebf6df85c1ad6569a7efdc70046bf1a9d6d7ebc9497b96e2aeae",
-        "index.js": "9579fdb609d7817143947d1b43ba71a349929286939652c1091e6f0f6f69bda5",
+        "manifest.json": "555751c36070e1febca925d06c2c87dce334b7c67bfae9bd0e1f046e6f4bd2ce",
+        "index.js": "90ddb0a8df419218888f6b371f64b64677387ebbac3334b7526308280452e820",
         "styles.css": "42d39173179cbd519c851685ea52731540d5c6c04a1a2f8bf381a6877a8dfec0",
         "quotes-data.json": "cb392467a6833d7d95f802207d5b40bda29bc2b18ccfa41ff3f77e1060b8fd5b"
       }
@@ -113,7 +113,7 @@
     {
       "id": "streak",
       "name": "Streak Celebrator",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": "krwg",
       "description": "Celebrates habit completions with notifications.",
       "icon": "",
@@ -125,8 +125,8 @@
         "notification"
       ],
       "sha256": {
-        "manifest.json": "6044345f782b2edfee223cf71bfafd6c7dfbec1c692eb334c44db8faf4d7c7b0",
-        "index.js": "a759e31569bf938f2b811201de1ecec65834e48f716098262be9ff8a8c393ae6"
+        "manifest.json": "a1f1916ee97b3c899c3053f591360cc2ec31663ff0a9e410965eb6abf96f620f",
+        "index.js": "deeb103de238247a5eaa03c8b0692a2eb5f4f17d241779506c876cb813f37010"
       }
     }
   ]

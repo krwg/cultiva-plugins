@@ -9,9 +9,18 @@
   background: linear-gradient(165deg, color-mix(in srgb, #ff6b6b 12%, var(--bg-secondary)) 0%, var(--bg-tertiary) 100%);
   border: 1px solid var(--border-light);
 }
-.pomodoro-hero-emoji {
-  font-size: 34px;
-  line-height: 1;
+.pomodoro-hero-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ff6b6b;
+  background: color-mix(in srgb, #ff6b6b 14%, var(--bg-primary));
+  border: 1px solid color-mix(in srgb, #ff6b6b 28%, var(--border-light));
 }
 .pomodoro-hero-timer {
   margin-top: 6px;

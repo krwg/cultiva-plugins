@@ -48,11 +48,6 @@ class WeatherPlugin {
         if (this.context.data && typeof this.context.data.read === 'function') {
           const list = await this.context.data.read('cities-ru.json');
           this.russianCities = Array.isArray(list) ? list : [];
-        } else {
-          const res = await fetch('https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather/cities-ru.json', { cache: 'force-cache' });
-          if (res.ok) {
-            this.russianCities = await res.json();
-          }
         }
       } catch (e) {
         this.russianCities = [];
@@ -222,9 +217,37 @@ class WeatherPlugin {
     void this.fetchWeather();
     this.updateInterval = setInterval(() => this.fetchWeather(), 30 * 60 * 1000);
 
-    this.hooks.on('onHabitComplete', (habit) => {
-      console.log('[Weather] Habit completed:', habit.name);
+    this.hooks.on('onHabitComplete', () => {
+      this.checkExtremeWeather();
     });
+    this.hooks.on('onSettingsChange', (payload) => {
+      void this.onSettingsChange(payload);
+    });
+  }
+
+  async onSettingsChange(payload) {
+    if (this.context.app && typeof this.context.app.getLocale === 'function') {
+      try {
+        this._locale = await this.context.app.getLocale();
+      } catch {
+        this._locale = 'en';
+      }
+    }
+    if (payload?.pluginSettings) {
+      this.settings = { ...this.settings, ...payload.pluginSettings };
+    } else {
+      const saved = await this.context.storage.get('settings');
+      if (saved) {
+        this.settings = { ...this.settings, ...saved };
+      }
+    }
+    await this._syncCoordsFromCity();
+    if (this.settings.showInGarden) {
+      this.context.ui.updateGardenHtml(this._gardenInnerHtml());
+    } else {
+      this.context.ui.updateGardenHtml('<div style="display:none"></div>');
+    }
+    await this.fetchWeather();
   }
 
   async onDisable() {

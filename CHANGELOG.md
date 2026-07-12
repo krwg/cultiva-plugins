@@ -6,6 +6,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
+## [3.0.3] — 2026-07-12
+
+### Changed
+- All six plugins adopt `onSettingsChange` for locale/theme refresh without disable/re-enable
+- Pomodoro: letter placeholder instead of emoji in sheet UI
+- Streak Celebrator: EN/RU notification strings
+
+### Fixed
+- Quote: removed unused `storage` permission; locale refresh on settings change
+- Weather: extreme-weather alerts on habit complete; cities-ru.json via bundled data only (no GitHub raw fallback)
+
+---
+
 ## [3.0.2] — 2026-07-09
 
 ### Changed

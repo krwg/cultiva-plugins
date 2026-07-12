@@ -97,6 +97,18 @@ class QuotePlugin {
       }
     });
     this._scheduleMidnightRefresh();
+    this.hooks.on('onSettingsChange', () => {
+      void this._handleSettingsChange();
+    });
+  }
+
+  async _handleSettingsChange() {
+    const prevLocale = this._locale;
+    await this._loadLocale();
+    if (prevLocale !== this._locale) {
+      this.currentQuote = this._pickQuote();
+      this.context.ui.updateGardenHtml(this._html());
+    }
   }
 
   _scheduleMidnightRefresh() {
