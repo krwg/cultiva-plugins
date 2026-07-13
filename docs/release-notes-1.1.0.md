@@ -1,83 +1,111 @@
-# Cultiva Plugins 1.1.0 — Плагины, которые слушают ваш сад
+<div align="center">
 
-**Реестр 3.5.1** · **Cultiva 1.7.0+** (хуки) · **Cultiva 2.0.0 Rowan** (аналитика и новые плагины)
+# Cultiva Plugins 1.1.0
 
----
+**Plugins that listen to your garden — not just widgets on a shelf.**
 
-## Что такое «хуки» — без жаргона
+[![Registry](https://img.shields.io/badge/registry-3.5.1-34c759?style=flat-square)](https://github.com/krwg/cultiva-plugins/blob/main/registry.json)
+[![Plugins](https://img.shields.io/badge/plugins-9-ffcc00?style=flat-square)](https://krwg.github.io/cultiva-plugins/)
+[![Hooks](https://img.shields.io/badge/surface-hooks-5856d6?style=flat-square)](#hook-catalog)
+[![Cultiva](https://img.shields.io/badge/Cultiva-1.7.0%2B%20hooks-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva/releases)
+[![License](https://img.shields.io/badge/license-MIT-af52de?style=flat-square)](LICENSE)
 
-В Cultiva плагин — это не просто виджет в шапке или карточка в саду. Часть расширений **подписывается на события приложения**: отметили привычку, сменили тему, открыли настройки, запустили Cultiva утром. Хост вызывает зарегистрированный колбэк — плагин реагирует **в нужный момент**, а не опрашивает приложение в цикле.
+[Catalog](https://krwg.github.io/cultiva-plugins/) · [Cultiva app](https://github.com/krwg/cultiva/releases) · [Author guide](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md#7-hooks-api) · [Publishing wiki](https://github.com/krwg/cultiva-plugins/wiki/Publishing-a-Plugin)
 
-Для пользователя это ощущается так:
-
-- **После отметки** — всплывает заметка, обновляется чеклист рутины, пересчитывается недельный график.
-- **При запуске** — подтягиваются напоминания и сводки за сегодня.
-- **При смене настроек** — таймер, погода и цитата подстраиваются под ваш выбор без перезапуска.
-- **При смене темы или фона** — виджеты остаются читаемыми (для авторов кастомных тем).
-
-Всё по-прежнему **локально**: хуки не отправляют данные в облако — только связывают ваш сад с поведением плагина на устройстве.
+</div>
 
 ---
 
-## События, на которые можно «подписаться»
+## Hooks, explained as a product
 
-| Событие | Когда срабатывает | Что можно сделать в продукте |
-|--------|-------------------|------------------------------|
-| **`onAppStart`** | Cultiva открыли или вернулись в приложение | Напоминание о незакрытых привычках, прогрев сводок |
-| **`onHabitComplete`** | Вы отметили привычку выполненной | Микро-заметка, празднование, обновление рутины и статистики |
-| **`onSettingsChange`** | Изменились настройки Cultiva или плагина | Синхронизация таймера, погоды, цитаты, громкости радио |
-| **`onThemeApplied`** | Применилась тема (включая Auto → светлая/тёмная) | Подстройка своих цветов в кастомных темах плагина |
-| **`onBackgroundApplied`** | Сменился анимированный фон | Реакция UI на новый ambient-слой |
-| **`onLanguageChange`** | Переключили EN/RU | Мгновенная локализация текстов плагина |
-| **`onFocusModeChange`** | Включили или выключили режим фокуса | Скрыть отвлекающие элементы в саде |
+In Cultiva, a plugin is not only a header chip or a garden card. **Hook-based extensions subscribe to moments in the app** — you complete a habit, change a theme, tweak settings, or open Cultiva in the morning. The host fires the callback; the plugin responds **at the right time**, without polling.
 
-Подписка в коде: `hooks.on('onHabitComplete', (habit) => { … })`. Подробная спецификация для авторов — [PLUGIN_AUTHOR_GUIDE.md](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md#7-hooks-api).
+| Moment | What you feel |
+|:-------|:--------------|
+| **After a check-in** | A reflection sheet, routine checklist tick, weekly chart refresh |
+| **On launch** | Gentle reminders and today’s summaries warm up |
+| **When settings change** | Timer, weather, and quotes follow your choices instantly |
+| **Theme & background** | Custom plugin themes stay readable as the garden restyles |
 
----
-
-## Официальный каталог: кто на что реагирует
-
-| Плагин | Поверхность | Хуки в продукте |
-|--------|-------------|-----------------|
-| **Заметки** (Habit Reflection) | `hooks` | После каждой отметки — лист для одной строки рефлексии; журнал в настройках (**1.1.0**) |
-| **Утренняя / вечерняя рутина** | сад + `hooks` | Чеклист по имени привычки обновляется при отметке и при старте приложения |
-| **Недельная статистика** | сад + `hooks` | Столбчатый график 7 дней пересчитывается после каждой отметки |
-| **Мягкий пинок** | `hooks` | Ненавязчивое напоминание в выбранный час, если привычки ещё открыты |
-| **Погода** | шапка + сад | Реакция на отметку и на смену настроек города/единиц |
-| **Время, Радио, Помодоро, Цитата** | шапка / сад | Синхронизация с настройками через `onSettingsChange` |
-
-Плагины только с шапкой (**Время**, **Радио**, **Помодоро**) не требуют хуков для базовой работы — хуки делают их **живыми** при смене настроек.
+Everything stays **on-device**. Hooks wire your garden to plugin behavior locally — no cloud, no telemetry.
 
 ---
 
-## Главное в 1.1.0: «Заметки» и журнал
+## Hook reference
 
-**Habit Reflection 1.1.0** («Заметки» в каталоге):
+Subscribe in plugin code with `hooks.on('hookName', callback)`. Full spec: [PLUGIN_AUTHOR_GUIDE §7](https://github.com/krwg/cultiva/blob/main/docs/PLUGIN_AUTHOR_GUIDE.md#7-hooks-api).
 
-- По-прежнему открывает **микро-лист** сразу после `onHabitComplete` — одна строка, можно пропустить.
-- **Новое:** панель **«Сохранённые заметки»** в настройках плагина (`type: journal`) — просмотр журнала без копания в storage.
-- Локализация EN/RU для пустого состояния и заголовков.
-
-Это эталон **hook-only** плагина: нет виджета в саде, вся ценность — в моменте после отметки.
-
----
-
-## Каталог и совместимость
-
-- **9 плагинов** в [registry.json](https://github.com/krwg/cultiva-plugins/blob/main/registry.json) (версия реестра **3.5.1**).
-- **Минимальные версии Cultiva:** `1.1.0` — виджеты шапки; `1.7.0` — сад и хуки; `2.0.0` — аналитика (`getWeeklySummary`, App Store flow для новых плагинов).
-- Каталог на Pages: [krwg.github.io/cultiva-plugins/](https://krwg.github.io/cultiva-plugins/)
+| Hook | Fires when | Product idea |
+|:-----|:-----------|:-------------|
+| `onAppStart` | Cultiva opens or returns to foreground | Nudge open habits, preload summaries |
+| `onHabitComplete` | You mark a habit done | Micro-journal, celebration, routine + stats refresh |
+| `onSettingsChange` | App or plugin settings change | Sync timer, weather, quotes, radio volume |
+| `onThemeApplied` | Theme applied (`{ theme, resolved }`) | Align custom plugin theme colors |
+| `onBackgroundApplied` | Ambient background changes | React to the new visual layer |
+| `onLanguageChange` | Locale switches (`en` \| `ru`) | Flip copy without reload |
+| `onFocusModeChange` | Focus mode toggles | Hide distractions in the garden |
 
 ---
 
-## Для авторов
+## Official catalog — who listens to what
 
-Хуки — способ сделать плагин **частью ритма**, а не статичной кнопкой. Если вы публикуете в этот реестр:
+| Plugin | Surfaces | Hooks in practice | Min Cultiva |
+|:-------|:---------|:------------------|:------------|
+| **Notes** (Habit Reflection) | `hooks` | One-line sheet after every check-in; **journal panel in settings** *(1.1.0)* | 1.7.0 |
+| **Morning & Evening Routine** | `garden` · `hooks` | Checklist by habit name updates on complete + app start | 2.0.0 |
+| **Weekly Stats** | `garden` · `hooks` | 7-day bar chart recalculates after each check-in | 2.0.0 |
+| **Gentle Nudge** | `hooks` | Friendly reminder after your chosen hour if habits remain open | 2.0.0 |
+| **Weather** | `header` · `garden` | Reacts to check-ins and city/unit settings | 1.7.0 |
+| **Time** | `header` | Stays in sync via `onSettingsChange` | 1.1.0 |
+| **Radio** | `header` | Volume, station, sleep timer follow settings | 1.1.0 |
+| **Pomodoro** | `header` | Timer prefs update live | 1.1.0 |
+| **Quote** | `garden` | Favorites and locale follow settings | 1.7.0 |
 
-1. Укажите `"surfaces": ["hooks"]` или комбинацию с `header` / `garden` в `manifest.json`.
-2. Запросите только нужные `permissions` (`storage`, `ui` — без сети, если она не нужна).
-3. Сверьтесь с [чеклистом публикации](https://github.com/krwg/cultiva-plugins/wiki/Publishing-a-Plugin) и [Plugin Hardening](https://github.com/krwg/cultiva-plugins/wiki/Plugin-Hardening).
+> Header-only widgets work without hooks; hooks make them **feel alive** when preferences change.
 
 ---
 
-**Установка:** Cultiva → **Настройки → Плагины → Каталог** → **Получить** / **Установить**.
+## Spotlight — Notes 1.1.0
+
+[![Notes](https://img.shields.io/badge/Notes-1.1.0-34c759?style=flat-square)](habit-reflection/)
+[![Surface](https://img.shields.io/badge/surface-hooks_only-5856d6?style=flat-square)](habit-reflection/manifest.json)
+[![Hook](https://img.shields.io/badge/hook-onHabitComplete-ff9500?style=flat-square)](#hook-reference)
+
+**Habit Reflection** (catalog name: **Notes**) is the reference **hook-only** plugin — no garden widget; value lives in the moment after you check in.
+
+| | |
+|:--|:--|
+| **Unchanged** | Bottom sheet right after `onHabitComplete` — one optional line, skip anytime |
+| **New in 1.1.0** | **Saved reflections** panel in plugin settings (`type: journal`) — browse the log without touching storage APIs |
+| **i18n** | EN/RU empty states and labels |
+
+---
+
+## Compatibility
+
+| | |
+|:--|:--|
+| **Registry** | [3.5.1](https://github.com/krwg/cultiva-plugins/blob/main/registry.json) — **9** official plugins |
+| **Cultiva 1.1.0** | Header widgets (Time, Radio, Pomodoro) |
+| **Cultiva 1.7.0** | Garden + hooks (Weather, Quote, Notes) |
+| **Cultiva 2.0.0 Rowan** | Analytics plugins, PLE1 bridge, App Store **Get → Install** flow |
+
+---
+
+## For plugin authors
+
+Hooks turn an extension into **part of the rhythm**, not a static button.
+
+1. Declare `"surfaces": ["hooks"]` — or combine with `"header"` / `"garden"` in `manifest.json`.
+2. Request only the `permissions` you need (`storage`, `ui`; skip `network` when possible).
+3. Follow [Publishing a Plugin](https://github.com/krwg/cultiva-plugins/wiki/Publishing-a-Plugin) and [Plugin Hardening](https://github.com/krwg/cultiva-plugins/wiki/Plugin-Hardening).
+
+---
+
+<div align="center">
+
+**Install:** Cultiva → **Settings → Plugins → Catalog** → **Get** / **Install**
+
+[![Pages](https://img.shields.io/badge/browse-krwg.github.io%2Fcultiva--plugins-0071e3?style=flat-square)](https://krwg.github.io/cultiva-plugins/)
+
+</div>
