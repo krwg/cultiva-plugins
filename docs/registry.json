@@ -40,7 +40,7 @@
       },
       "sha256": {
         "manifest.json": "60bf3c3e9d5437b71badb852d55d28ddbdb80e9c74d0581178775eb777f23412",
-        "index.js": "d93d4548968e7cb928b9ffa284e2b02fce0703df7e0269e6da70a6188b5db459",
+        "index.js": "5552fc60a357c0115b64d4d5fd87d12bc093df7ed2246d59dae094d3cd2f6440",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "8cdf2251d77f54ff14b675dd4beb55ab19f9e2ca26eae8cd6ec4691707d5e153",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
@@ -257,7 +257,7 @@
       },
       "sha256": {
         "manifest.json": "e435e6b50bdadac17457a9e023a08823ff19f9994939732c58c93308327c3a93",
-        "index.js": "d57247bd12bf29d12ed3714d1cf3a4667f5206fa4208f453965300edd57ac35f",
+        "index.js": "ac9c002c486b697a840458b55beff96f19c759478e740bbc185f48814d206b8e",
         "styles.css": "65c6a7cabd9eaa01a933293f9dd41f8c0c54d4172e4dd685b7b1e20a515e27fa"
       },
       "storeFlow": "get"

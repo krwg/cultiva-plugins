@@ -553,8 +553,11 @@ class WeatherPlugin {
     if (!this.weatherData) return;
     const temp = this.weatherData.temp;
     const weatherCode = this.weatherData.weatherCode;
-    if (temp > 30) this.context.ui.showNotification('', this._t('hot'));
-    if (temp < 0) this.context.ui.showNotification('', this._t('cold'));
+    const isF = this.weatherData.units === '°F' || this.settings.units === 'fahrenheit';
+    const hot = isF ? temp > 86 : temp > 30;
+    const cold = isF ? temp < 32 : temp < 0;
+    if (hot) this.context.ui.showNotification('', this._t('hot'));
+    if (cold) this.context.ui.showNotification('', this._t('cold'));
     if (weatherCode >= 95) this.context.ui.showNotification('', this._t('storm'));
   }
 }

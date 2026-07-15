@@ -46,13 +46,16 @@ class WeeklyStatsPlugin {
     }
   }
 
-  _weekStart(date) {
-    const d = new Date(date);
-    const day = d.getDay();
+  _weekStartFromTodayKey(todayKey) {
+    const [y, m, d] = String(todayKey || '').split('-').map(Number);
+    const base = (y && m && d)
+      ? new Date(y, m - 1, d, 12, 0, 0, 0)
+      : new Date();
+    const day = base.getDay();
     const diff = day === 0 ? -6 : 1 - day;
-    d.setDate(d.getDate() + diff);
-    d.setHours(0, 0, 0, 0);
-    return d;
+    base.setDate(base.getDate() + diff);
+    base.setHours(0, 0, 0, 0);
+    return base;
   }
 
   _dayKey(date) {
@@ -62,10 +65,26 @@ class WeeklyStatsPlugin {
     return `${y}-${m}-${day}`;
   }
 
+  _habitDoneOn(habit, key, todayKey) {
+    if (Array.isArray(habit.recentHistory) && habit.recentHistory.includes(key)) {
+      return true;
+    }
+    if (Array.isArray(habit.history) && habit.history.includes(key)) {
+      return true;
+    }
+    if (key === todayKey && habit.completedToday) {
+      return true;
+    }
+    if (habit.lastCompleted === key) {
+      return true;
+    }
+    return false;
+  }
+
   async _buildBars() {
     const habits = await this.context.app.getHabits();
     const todayKey = await this.context.app.getToday();
-    const weekStart = this._weekStart(new Date());
+    const weekStart = this._weekStartFromTodayKey(todayKey);
     const bars = [];
     for (let i = 0; i < 7; i++) {
       const d = new Date(weekStart);
@@ -74,9 +93,7 @@ class WeeklyStatsPlugin {
       let done = 0;
       const total = habits.length;
       for (const h of habits) {
-        if (key === todayKey && h.completedToday) {
-          done += 1;
-        } else if (h.lastCompleted === key) {
+        if (this._habitDoneOn(h, key, todayKey)) {
           done += 1;
         }
       }
