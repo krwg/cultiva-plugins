@@ -33,6 +33,30 @@ function allTimezones() {
   return COMMON_TZS.slice();
 }
 
+function isValidTimezone(tz) {
+  if (!tz || typeof tz !== 'string') {
+    return false;
+  }
+  try {
+    const known = allTimezones();
+    if (known.includes(tz)) {
+      return true;
+    }
+  } catch {
+    void 0;
+  }
+  try {
+    Intl.DateTimeFormat('en-US', { timeZone: tz }).format(new Date());
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function normalizeTimezone(tz) {
+  return isValidTimezone(tz) ? tz : 'UTC';
+}
+
 const TZ_CITY_RU = {
   'UTC': 'Всемирное',
   'Europe/London': 'Лондон',
@@ -154,7 +178,9 @@ class TimePlugin {
     this.settings = {
       format: 'HH:MM:SS',
       color: 'default',
-      timezone: typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC' : 'UTC'
+      timezone: normalizeTimezone(
+        typeof Intl !== 'undefined' ? Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC' : 'UTC'
+      )
     };
     this.interval = null;
     this.colorInterval = null;
@@ -214,7 +240,7 @@ class TimePlugin {
 
   formatTime(date, settingsOverride) {
     const cfg = settingsOverride || this._activeSettings();
-    const tz = cfg.timezone || 'UTC';
+    const tz = normalizeTimezone(cfg.timezone || 'UTC');
     const d = date || new Date();
     if (cfg.format === 'HH:MM') {
       return new Intl.DateTimeFormat('en-GB', {
@@ -341,6 +367,7 @@ class TimePlugin {
     if (saved) {
       this.settings = { ...this.settings, ...saved };
     }
+    this.settings.timezone = normalizeTimezone(this.settings.timezone);
     await this._syncThemeAccent();
     this.context.ui.registerHeaderItem({
       label: this.formatTime(new Date()),
@@ -369,6 +396,7 @@ class TimePlugin {
         this.settings = { ...this.settings, ...saved };
       }
     }
+    this.settings.timezone = normalizeTimezone(this.settings.timezone);
     await this._syncThemeAccent();
     this.startClock();
   }
@@ -462,11 +490,12 @@ class TimePlugin {
       return;
     }
     if (action === 'pickTz' && payload && payload.tz) {
+      const tz = normalizeTimezone(payload.tz);
       if (!this._sheetDraft) {
         this._sheetDraft = { ...this.settings };
       }
-      this._sheetDraft.timezone = payload.tz;
-      this.settings.timezone = payload.tz;
+      this._sheetDraft.timezone = tz;
+      this.settings.timezone = tz;
       await this.context.storage.set('settings', this.settings);
       this.startClock();
       this.context.ui.openMainSheet(this._buildSheetHtml());

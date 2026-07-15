@@ -1,3 +1,5 @@
+const MAX_TEXT_LENGTH = 1000;
+
 class HabitReflectionPlugin {
   constructor(context, hooks) {
     this.context = context;
@@ -76,7 +78,7 @@ class HabitReflectionPlugin {
           <button type="button" class="cultiva-sheet-x" data-cultiva-act="close" aria-label="Close">×</button>
         </div>
         <div class="cultiva-sheet-body">
-          <textarea class="reflection-textarea" data-cultiva-field="reflectionText" rows="3" placeholder="${this._escapeHtml(this._t('placeholder'))}"></textarea>
+          <textarea class="reflection-textarea" data-cultiva-field="reflectionText" rows="3" maxlength="${MAX_TEXT_LENGTH}" placeholder="${this._escapeHtml(this._t('placeholder'))}"></textarea>
           <div class="reflection-actions">
             <button type="button" class="cultiva-sheet-primary" data-cultiva-act="saveReflection">${this._t('save')}</button>
             <button type="button" class="cultiva-sheet-secondary reflection-skip" data-cultiva-act="skipReflection">${this._t('skip')}</button>
@@ -110,7 +112,7 @@ class HabitReflectionPlugin {
       return;
     }
     if (action === 'saveReflection') {
-      const text = String(payload?.reflectionText || '').trim();
+      const text = String(payload?.reflectionText || '').trim().slice(0, MAX_TEXT_LENGTH);
       const habit = this._pendingHabit;
       if (text && habit) {
         const today = this.context.app && typeof this.context.app.getToday === 'function'

@@ -1,8 +1,10 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
+import { spawnSync } from 'child_process';
 
-const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const root = join(__dirname, '..');
 const registryPath = join(root, 'registry.json');
 
 const META = {
@@ -135,7 +137,6 @@ const META = {
 };
 
 const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
-registry.version = '3.5.0';
 
 for (const plugin of registry.plugins) {
   const meta = META[plugin.id];
@@ -166,3 +167,8 @@ for (const plugin of registry.plugins) {
 writeFileSync(registryPath, `${JSON.stringify(registry, null, 2)}\n`);
 writeFileSync(join(root, 'docs/registry.json'), `${JSON.stringify(registry, null, 2)}\n`);
 console.log('[registry] synced catalog meta →', registry.version);
+
+const compute = spawnSync(process.execPath, [join(__dirname, 'compute-registry-sha256.mjs')], { stdio: 'inherit' });
+if (compute.status !== 0) {
+  process.exit(compute.status || 1);
+}

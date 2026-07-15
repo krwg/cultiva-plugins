@@ -5,7 +5,9 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.join(__dirname, '..', 'quote', 'quotes-data.json');
 const TARGET = 1000;
-const EN_SOURCE = 'https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json';
+// Pin to a specific commit so floating `master` cannot silently change the EN bank (supply-chain / reproducibility).
+const EN_SOURCE_COMMIT = '418d77f9352cdcc32b43ce64c875258ec755b4e7';
+const EN_SOURCE = `https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/${EN_SOURCE_COMMIT}/quotes.json`;
 const CYR = /[\u0400-\u04FF]/;
 const MIXED_EN = /\b(today|your|the|and|to|for|with|build|create|stronger|tomorrow|habits?)\b/i;
 

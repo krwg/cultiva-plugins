@@ -10,6 +10,29 @@ class PomodoroPlugin {
     this._locale = 'en';
   }
 
+  _t(key) {
+    const ru = {
+      idle: 'Помодоро',
+      focus: 'Фокус',
+      break: 'Перерыв',
+      ready: 'Готовы к фокусу',
+      title: 'Помодоро',
+      workDone: 'Фокус завершён — сделайте перерыв!',
+      breakDone: 'Перерыв окончен — возвращайтесь в сад!'
+    };
+    const en = {
+      idle: 'Pomodoro',
+      focus: 'Focus',
+      break: 'Break',
+      ready: 'Ready to focus',
+      title: 'Pomodoro',
+      workDone: 'Focus session complete — take a break!',
+      breakDone: 'Break over — back to the garden!'
+    };
+    const dict = this._locale === 'ru' ? ru : en;
+    return dict[key] || en[key] || key;
+  }
+
   _escapeHtml(s) {
     return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
@@ -22,11 +45,9 @@ class PomodoroPlugin {
 
   _label() {
     if (this.phase === 'idle') {
-      return this._locale === 'ru' ? 'Помодоро' : 'Pomodoro';
+      return this._t('idle');
     }
-    const tag = this.phase === 'work'
-      ? (this._locale === 'ru' ? 'Фокус' : 'Focus')
-      : (this._locale === 'ru' ? 'Перерыв' : 'Break');
+    const tag = this.phase === 'work' ? this._t('focus') : this._t('break');
     return `${tag} ${this._formatRemaining()}`;
   }
 
@@ -64,14 +85,17 @@ class PomodoroPlugin {
       this.settings.breakMinutes = parseInt(this.settings.breakMinutes, 10) || 5;
     }
     const savedTimer = await this.context.storage.get('timerState');
-    if (savedTimer && savedTimer.phase && savedTimer.endTimestamp) {
-      const now = Date.now();
-      const left = Math.max(0, Math.floor((Number(savedTimer.endTimestamp) - now) / 1000));
-      if (left > 0) {
-        this.phase = savedTimer.phase;
-        this.endTimestamp = Number(savedTimer.endTimestamp);
-        this.remaining = left;
-        this._startTick();
+    if (savedTimer && savedTimer.endTimestamp) {
+      const phase = savedTimer.phase === 'work' || savedTimer.phase === 'break' ? savedTimer.phase : null;
+      if (phase) {
+        const now = Date.now();
+        const left = Math.max(0, Math.floor((Number(savedTimer.endTimestamp) - now) / 1000));
+        if (left > 0) {
+          this.phase = phase;
+          this.endTimestamp = Number(savedTimer.endTimestamp);
+          this.remaining = left;
+          this._startTick();
+        }
       }
     }
     this.context.ui.registerHeaderItem({
@@ -110,9 +134,9 @@ class PomodoroPlugin {
     const brk = this.settings.breakMinutes;
     const ru = this._locale === 'ru';
     const status = this.phase === 'idle'
-      ? (ru ? 'Готовы к фокусу' : 'Ready to focus')
-      : `${this.phase === 'work' ? (ru ? 'Фокус' : 'Focus') : (ru ? 'Перерыв' : 'Break')} — ${this._formatRemaining()}`;
-    const title = ru ? 'Помодоро' : 'Pomodoro';
+      ? this._t('ready')
+      : `${this.phase === 'work' ? this._t('focus') : this._t('break')} — ${this._formatRemaining()}`;
+    const title = this._t('title');
     const sub = ru ? `${work} мин фокус · ${brk} мин перерыв` : `${work}m focus · ${brk}m break`;
     const btnWork = ru ? `Старт ${work} мин` : `Start ${work}m focus`;
     const btnBreak = ru ? `Перерыв ${brk} мин` : `Start ${brk}m break`;
@@ -164,7 +188,7 @@ class PomodoroPlugin {
         this.phase = 'idle';
         this.endTimestamp = 0;
         this._updateHeader();
-        const msg = finishedPhase === 'work' ? 'Focus session complete — take a break!' : 'Break over — back to the garden!';
+        const msg = finishedPhase === 'work' ? this._t('workDone') : this._t('breakDone');
         this.context.ui.showNotification('', msg);
         void this._persistState();
       }

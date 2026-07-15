@@ -86,8 +86,7 @@ class RadioPlugin {
         name: 'Chillhop Radio',
         tag: 'Lo-fi',
         urls: [
-          'https://stream.chillhop.com/chillhop-radio',
-          'https://www.chillhop.com/listen/chillhop-radio'
+          'https://stream.chillhop.com/chillhop-radio'
         ]
       },
       defcon: {

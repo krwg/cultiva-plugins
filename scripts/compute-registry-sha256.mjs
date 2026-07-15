@@ -1,6 +1,6 @@
 import { createHash } from 'crypto';
 import { readFileSync, writeFileSync, existsSync } from 'fs';
-import { dirname, join } from 'path';
+import { dirname, join, resolve, sep, isAbsolute } from 'path';
 import { fileURLToPath } from 'url';
 import { spawnSync } from 'child_process';
 
@@ -23,27 +23,52 @@ function sha256File(filePath, name) {
   return createHash('sha256').update(Buffer.from(normalized, 'utf8')).digest('hex');
 }
 
+/** Reject absolute paths and `..` segments so hashes never follow traversal. */
+function assertSafeRelPath(rel) {
+  const name = String(rel || '').replace(/^[/\\]+/, '');
+  if (!name) {
+    throw new Error('Empty relative path in manifest');
+  }
+  if (isAbsolute(name) || /^[A-Za-z]:[\\/]/.test(name) || name.includes('..')) {
+    throw new Error(`Unsafe relative path rejected: ${rel}`);
+  }
+  if (name.split(/[/\\]/).some((seg) => seg === '..')) {
+    throw new Error(`Unsafe relative path rejected: ${rel}`);
+  }
+  return name;
+}
+
+function resolveInsidePlugin(pluginDir, name) {
+  const safe = assertSafeRelPath(name);
+  const full = resolve(pluginDir, safe);
+  const rootDir = resolve(pluginDir);
+  if (full !== rootDir && !full.startsWith(rootDir + sep)) {
+    throw new Error(`Path escapes plugin directory: ${name}`);
+  }
+  return { name: safe, filePath: full };
+}
+
 function listPluginFiles(pluginDir, manifest) {
   const names = new Set(['manifest.json']);
-  const entry = (manifest.entry || 'index.js').replace(/^[/\\]+/, '');
+  const entry = assertSafeRelPath(manifest.entry || 'index.js');
   names.add(entry);
   for (const rel of manifest.styles || []) {
     if (typeof rel === 'string' && rel.trim()) {
-      names.add(rel.replace(/^[/\\]+/, ''));
+      names.add(assertSafeRelPath(rel));
     }
   }
   for (const rel of manifest.data || []) {
     if (typeof rel === 'string' && rel.trim()) {
-      names.add(rel.replace(/^[/\\]+/, ''));
+      names.add(assertSafeRelPath(rel));
     }
   }
   const hashes = {};
   for (const name of names) {
-    const filePath = join(pluginDir, name);
+    const { name: safeName, filePath } = resolveInsidePlugin(pluginDir, name);
     if (!existsSync(filePath)) {
-      throw new Error(`Missing file for hash: ${pluginDir}/${name}`);
+      throw new Error(`Missing file for hash: ${pluginDir}/${safeName}`);
     }
-    hashes[name] = sha256File(filePath, name);
+    hashes[safeName] = sha256File(filePath, safeName);
   }
   return hashes;
 }

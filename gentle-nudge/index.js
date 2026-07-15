@@ -57,14 +57,45 @@ class GentleNudgePlugin {
     return Number.isFinite(h) && h >= 0 && h <= 23 ? h : 18;
   }
 
+  /**
+   * Hour aligned with `app.getToday()` / app timezone when available.
+   * Cultiva `getToday` uses the app TZ, or UTC ISO date when timezone is `auto`.
+   * Fallback: local wall-clock hour (may disagree with getToday if hosts differ).
+   */
+  async _currentHour() {
+    const app = this.context.app;
+    if (app && typeof app.getTimezone === 'function') {
+      try {
+        const tz = await app.getTimezone();
+        if (tz && tz !== 'auto') {
+          const parts = new Intl.DateTimeFormat('en-US', {
+            timeZone: tz,
+            hour: 'numeric',
+            hourCycle: 'h23',
+            hour12: false
+          }).formatToParts(new Date());
+          const raw = parts.find((p) => p.type === 'hour')?.value;
+          const h = parseInt(raw, 10);
+          if (Number.isFinite(h)) {
+            return ((h % 24) + 24) % 24;
+          }
+        }
+        // Match getTodayInTZ('auto') which uses UTC calendar date.
+        return new Date().getUTCHours();
+      } catch {
+        void 0;
+      }
+    }
+    return new Date().getHours();
+  }
+
   async _maybeNudge() {
     await this._loadLocale();
     const appSettings = await this.context.app.getSettings();
     if (appSettings && appSettings.focusMode) {
       return;
     }
-    const now = new Date();
-    const hour = now.getHours();
+    const hour = await this._currentHour();
     if (hour < this._nudgeHour()) {
       return;
     }

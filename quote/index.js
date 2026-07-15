@@ -5,6 +5,7 @@ const LOCAL_FALLBACK = {
 
 const CYRILLIC = /[\u0400-\u04FF]/;
 const MIXED_EN = /\b(today|your|the|and|to|for|with|build|create|habits?)\b/i;
+const MAX_FAVORITES = 50;
 
 function dayHash(seed = '') {
   const d = new Date();
@@ -34,11 +35,13 @@ class QuotePlugin {
   _t(key) {
     const en = {
       favorited: 'Added to favorites',
-      unfavorited: 'Removed from favorites'
+      unfavorited: 'Removed from favorites',
+      favoritesFull: 'Favorites limit reached (50)'
     };
     const ru = {
       favorited: 'Добавлено в избранное',
-      unfavorited: 'Удалено из избранного'
+      unfavorited: 'Удалено из избранного',
+      favoritesFull: 'Лимит избранного (50)'
     };
     const dict = this._locale === 'ru' ? ru : en;
     return dict[key] || en[key] || key;
@@ -105,7 +108,7 @@ class QuotePlugin {
 
   async _loadFavorites() {
     const raw = await this.context.storage.get('favorites');
-    this._favorites = Array.isArray(raw) ? raw : [];
+    this._favorites = Array.isArray(raw) ? raw.slice(0, MAX_FAVORITES) : [];
   }
 
   async _saveFavorites() {
@@ -167,6 +170,10 @@ class QuotePlugin {
       this._favorites.splice(idx, 1);
       this.context.ui.showNotification('', this._t('unfavorited'));
     } else {
+      if (this._favorites.length >= MAX_FAVORITES) {
+        this.context.ui.showNotification('', this._t('favoritesFull'));
+        return;
+      }
       this._favorites.unshift({ text: q.text, author: q.author, savedAt: new Date().toISOString() });
       this.context.ui.showNotification('', this._t('favorited'));
     }

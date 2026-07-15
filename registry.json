@@ -83,7 +83,7 @@
       },
       "sha256": {
         "manifest.json": "5d75f4d17a945d10c67aaf70a31774b33c956b2626d4b77422eba91cf8f1a2b5",
-        "index.js": "dbebdd9cc9076e7d48a4655dd8634abfa219a76367c04f40588c57d341b85e5a",
+        "index.js": "cd719646704a137532a216726d88b7c8065edd3b96fb0bc1967a21bad06cbbb4",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "632c4f0ba4bf61cd4fd650ceae59d1f7b14009bd14e515479cba0415bba25d39"
       },
@@ -127,7 +127,7 @@
       },
       "sha256": {
         "manifest.json": "8b4489749301b9052677e7650a6b1541b3111d685553f1173a20f7ca53a7d806",
-        "index.js": "3c4ad2ed148795254c01ec082fcac340677ebbd36758c0093777a02a31d54088",
+        "index.js": "a72aaa9918580c383459118faa5ef01c0c43fcead7f5bf9769c73419f95f2303",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "d16592955a85029e39724166449db36153d5f10e9caa3fd343beed56ceb66968"
       },
@@ -170,7 +170,7 @@
       },
       "sha256": {
         "manifest.json": "51c32d68493bb2be0e38edbff800525274d1effff6b8c4a2ecdd02c718a2e21d",
-        "index.js": "51cd8865a63fc5fb149b3d211250b0f853a2082f6b66d7df32be1598976290c7",
+        "index.js": "6ce3572de89ae7f16b02615306fa33b6b613849f98dc0fbef579e1c602393567",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "e8cbb7d76210b9104aafd124b0689a3e1b4a9d245cb77c40d30effdedd611a51"
       },
@@ -212,7 +212,7 @@
       },
       "sha256": {
         "manifest.json": "ab50bcb1442a9a05c0b9f1ed9e9dbcf45f27d24e9db870d16c84bdb684007ba4",
-        "index.js": "36b113ecb596211649dd3335b039fa068a5c33a277980de1198cae6034db5d18",
+        "index.js": "58cdcb1d6824473e18ae694cd98028cf2967368df0c774c0516d70834410252b",
         "styles.css": "e006b19f17fdb7075df45cee3204f62f7d26d9cfeb896060cac46141d287d96e",
         "quotes-data.json": "a96eeee30269fc8d95e7ddf80ff9fa76e2d9b4e407ec7fe9ef5f685c375d7e89"
       },
@@ -298,7 +298,7 @@
       },
       "sha256": {
         "manifest.json": "f531c180b9105d43f95aec29b7ae8548ea44e6a2607b856f689e0c2588c1b8ef",
-        "index.js": "ab5316f9f9170c3dc9802065f9bee167a98a42a27293c69cf806377bf6ea261e",
+        "index.js": "d1ec35b0973f06d1688293a04042ac2db08edb0c6c24c31d4a6e1ef00e9a620e",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "68e535446c6f32cb7d5185d8630fed1a996c3438aab6149eac1d7262a8ce4aa9"
       },
@@ -386,7 +386,7 @@
       },
       "sha256": {
         "manifest.json": "51449c9f2b7feb2a860eef735efe9045dc071afdf19ecaa347247dd13349d44c",
-        "index.js": "6575fd199fe403ff32bbeeabf7e3797cf9ee75b491ae4a66869b1cf2b1c2204d"
+        "index.js": "983951f54bf2ce0adb38988c8b57711ce488d671ac0d22db5d716ba7f32d564a"
       },
       "storeFlow": "get"
     }
