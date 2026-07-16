@@ -9,7 +9,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 ## [Unreleased]
 
 ### Changed
-- Documentation: **Cultiva 2.0.0 · Rowan** (PLE1) as required app version for new plugins; `minAppVersion` examples use `2.0.0`
+- Documentation aligned with **Cultiva 2.0.2 · Rowan** and registry **3.5.1**
+
+---
+
+## [3.5.1] — 2026-07-15
+
+### Fixed
+- Weather extreme thresholds respect Fahrenheit unit setting
+- Weekly Stats day bars use full history (not only `lastCompleted`)
+
+### Security
+- Registry integrity CI fails on stale sha256; Pages deploy gated on validation
 
 ---
 

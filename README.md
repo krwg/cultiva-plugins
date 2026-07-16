@@ -4,9 +4,9 @@
 
 **Official sandboxed extension registry for [Cultiva](https://github.com/krwg/cultiva) — widgets, timers, and garden tools that stay on your device.**
 
-[![Registry](https://img.shields.io/badge/registry-3.3.0-34c759?style=flat-square)](registry.json)
+[![Registry](https://img.shields.io/badge/registry-3.5.1-34c759?style=flat-square)](registry.json)
 [![License](https://img.shields.io/badge/license-MIT-af52de?style=flat-square)](LICENSE)
-[![Cultiva](https://img.shields.io/badge/Cultiva-2.0.0%2B%20Rowan-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
+[![Cultiva](https://img.shields.io/badge/Cultiva-2.0.2%2B%20Rowan-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
 [![Plugins](https://img.shields.io/badge/plugins-9-ffcc00?style=flat-square)](#catalog)
 [![Integrity](https://img.shields.io/badge/sha256-enforced-5856d6?style=flat-square)](#security)
 [![Pages](https://img.shields.io/badge/docs-GitHub%20Pages-0071e3?style=flat-square)](https://krwg.github.io/cultiva-plugins/)
@@ -41,12 +41,12 @@ This repository is the **single source of truth** for Cultiva desktop plugins. T
 
 | Plugin | Min Cultiva | Surface | Description |
 |--------|-------------|---------|-------------|
-| [**Time**](time/) | 1.1.0 | Header | Live clock and time zones in a polished sheet |
-| [**Radio**](radio/) | 1.1.0 | Header | SomaFM streams, sleep timer, glass UI |
-| [**Pomodoro**](pomodoro/) | 1.1.0 | Header | Classic 25/5 focus timer in the header |
-| [**Weather**](weather/) | 1.7.0 | Header + garden | Open-Meteo + 1100+ Russian cities offline search |
-| [**Quote**](quote/) | 1.7.0 | Garden | 1000 EN/RU quotes, favorites, locale-pure banks |
-| [**Habit Reflection**](habit-reflection/) | 1.7.0 | Hooks | One-line micro-journal after each completion |
+| [**Time**](time/) | 1.1.0 | Header | Live clock and time zones in a polished sheet (v2.2.2) |
+| [**Radio**](radio/) | 1.1.0 | Header | SomaFM streams, sleep timer, glass UI (v2.2.0) |
+| [**Pomodoro**](pomodoro/) | 1.1.0 | Header | Classic 25/5 focus timer in the header (v1.2.1) |
+| [**Weather**](weather/) | 1.7.0 | Header + garden | Open-Meteo + 1100+ Russian cities offline search (v2.3.2) |
+| [**Quote**](quote/) | 1.7.0 | Garden | 1000 EN/RU quotes, favorites, locale-pure banks (v1.3.2) |
+| [**Habit Reflection**](habit-reflection/) | 1.7.0 | Hooks | One-line micro-journal after each completion (v1.1.0) |
 | [**Weekly Stats**](weekly-stats/) | 2.0.0 | Garden + hooks | 7-day chart and weekly rate (Cultiva 2.0 analytics) |
 | [**Routine**](routine/) | 2.0.0 | Garden + hooks | Morning/evening checklist matched by habit name |
 | [**Gentle Nudge**](gentle-nudge/) | 2.0.0 | Hooks | Friendly in-app reminder after your chosen hour |
@@ -63,7 +63,10 @@ In the Cultiva app: **Получить** for plugins you have never installed be
 | Radio | `widget`, `radio`, `music`, `ambient` |
 | Pomodoro | `widget`, `timer`, `focus`, `productivity` |
 | Quote | `widget`, `garden`, `quote` |
-| Streak | `habits`, `streak`, `notification` |
+| Habit Reflection | `habits`, `journal` |
+| Weekly Stats | `garden`, `stats` |
+| Routine | `garden`, `checklist` |
+| Gentle Nudge | `habits`, `reminder` |
 
 </details>
 
@@ -87,13 +90,13 @@ flowchart LR
 5. For first-time plugins, user taps **Install** after **Get** to activate the sandbox.
 6. Plugin code runs in an **opaque-origin iframe** with declared permissions only.
 
-Requires **Cultiva 2.0.0 · Rowan** (PLE1 plugin engine) for new plugins. The catalog still lists per-plugin `minAppVersion` floors (1.1.0 header widgets, 1.7.0 garden/hooks, 2.0.0 habit analytics).
+Requires **Cultiva 2.0.2 · Rowan** (recommended; PLE1 from 2.0.0) for the best experience. The catalog still lists per-plugin `minAppVersion` floors (1.1.0 header widgets, 1.7.0 garden/hooks, 2.0.0 habit analytics).
 
 ---
 
 ## For Cultiva users
 
-1. Install **[Cultiva](https://github.com/krwg/cultiva/releases)** (Windows, macOS, or Linux build).
+1. Install **[Cultiva 2.0.2+](https://github.com/krwg/cultiva/releases/latest)** (Windows, macOS, or Linux build).
 2. Open **Settings → Plugins** and enable plugins if needed.
 3. Under **Browse Plugins**, tap **Install** on any catalog entry.
 4. Header widgets appear in the garden bar; garden widgets render in the home view.
@@ -103,6 +106,7 @@ Requires **Cultiva 2.0.0 · Rowan** (PLE1 plugin engine) for new plugins. The ca
 | Desktop only | Install/uninstall requires the Electron app, not the browser preview |
 | Offline habits | Habits and settings stay local; plugins may use network for their own data (e.g. weather API) |
 | Disable all | Toggle **Enable Plugins** off — sandboxes stop, header chips removed |
+| Could not start | Use Cultiva **2.0.2+** — older 2.0.1 builds blocked the sandbox CSP; then reinstall the plugin |
 
 ---
 
