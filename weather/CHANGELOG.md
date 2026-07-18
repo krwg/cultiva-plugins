@@ -8,6 +8,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Versions from `w
 
 ## [Unreleased]
 
+## [2.7.2] — 2026-07-18
+
+### Fixed
+- Tray temperature: tooltip + menu row (`City · °C`), dual path via `ui.setTrayTooltip` and `app.setTrayTooltip`
+
+---
+
 ## [2.7.1] — 2026-07-18
 
 ### Added

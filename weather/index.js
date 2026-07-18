@@ -469,8 +469,7 @@ class WeatherPlugin {
   async onDisable() {
     console.log('[Weather] Plugin disabled');
     if (this.updateInterval) clearInterval(this.updateInterval);
-    this.context.ui.setTrayTooltip?.('');
-    this.context.ui.clearTrayItems?.();
+    this._clearTrayWeather();
   }
 
   _translitRuToLat(input) {
@@ -675,11 +674,52 @@ class WeatherPlugin {
       label: `${temp}${u}`,
       icon: ''
     });
-    if (this.settings.showInTray !== false) {
-      this.context.ui.setTrayTooltip?.(`Cultiva · ${temp}${u}`);
-    } else {
-      this.context.ui.setTrayTooltip?.('');
+    this._syncTrayWeather();
+  }
+
+  _trayTempLabel() {
+    if (!this.weatherData) {
+      return null;
     }
+    const temp = Math.round(this.weatherData.temp);
+    const u = this.weatherData.units || '°C';
+    const city = this._cityLabel(this.settings.city) || this.settings.city || 'Weather';
+    return { temp, u, city, short: `${temp}${u}`, tip: `Cultiva · ${city} · ${temp}${u}`, menu: `${city} · ${temp}${u}` };
+  }
+
+  _clearTrayWeather() {
+    try {
+      this.context.ui.setTrayTooltip?.('');
+    } catch { /* ignore */ }
+    try {
+      this.context.app?.setTrayTooltip?.('');
+    } catch { /* ignore */ }
+    try {
+      this.context.ui.clearTrayItems?.();
+    } catch { /* ignore */ }
+  }
+
+  _syncTrayWeather() {
+    if (this.settings.showInTray === false) {
+      this._clearTrayWeather();
+      return;
+    }
+    const info = this._trayTempLabel();
+    if (!info) {
+      this._clearTrayWeather();
+      return;
+    }
+    try {
+      this.context.ui.setTrayTooltip?.(info.tip);
+    } catch { /* ignore */ }
+    try {
+      this.context.app?.setTrayTooltip?.(info.tip);
+    } catch { /* ignore */ }
+    try {
+      this.context.ui.registerTrayItems?.([
+        { id: 'weather-temp', label: info.menu, enabled: false }
+      ]);
+    } catch { /* ignore */ }
   }
 
   updateGardenWidget() {
