@@ -248,6 +248,36 @@
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--storm .weather-metrics strong {
   color: #f5f5f7;
 }
+.weather-neo.weather-phase--night .weather-section-label,
+.weather-neo.weather-phase--bluehour .weather-section-label,
+.weather-neo.weather-phase--night .weather-hourly,
+.weather-neo.weather-phase--bluehour .weather-hourly,
+.weather-neo.weather-phase--night .weather-hourly-item,
+.weather-neo.weather-phase--bluehour .weather-hourly-item,
+.weather-neo.weather-phase--night .weather-daily,
+.weather-neo.weather-phase--bluehour .weather-daily,
+.weather-neo.weather-phase--night .weather-daily-row,
+.weather-neo.weather-phase--bluehour .weather-daily-row,
+.weather-neo.cultiva-sheet-card--weather.weather-phase--night .weather-section-label,
+.weather-neo.cultiva-sheet-card--weather.weather-phase--bluehour .weather-section-label,
+.weather-neo.cultiva-sheet-card--weather.weather-phase--night .weather-hourly-item,
+.weather-neo.cultiva-sheet-card--weather.weather-phase--bluehour .weather-hourly-item,
+.weather-neo.cultiva-sheet-card--weather.weather-phase--night .weather-daily-row,
+.weather-neo.cultiva-sheet-card--weather.weather-phase--bluehour .weather-daily-row {
+  color: #f5f5f7;
+}
+.weather-neo.weather-phase--night .weather-hourly-item strong,
+.weather-neo.weather-phase--bluehour .weather-hourly-item strong,
+.weather-neo.weather-phase--night .weather-daily-temps,
+.weather-neo.weather-phase--bluehour .weather-daily-temps,
+.weather-neo.weather-phase--night .weather-daily-temps strong,
+.weather-neo.weather-phase--bluehour .weather-daily-temps strong,
+.weather-neo.cultiva-sheet-card--weather.weather-phase--night .weather-hourly-item strong,
+.weather-neo.cultiva-sheet-card--weather.weather-phase--bluehour .weather-hourly-item strong,
+.weather-neo.cultiva-sheet-card--weather.weather-phase--night .weather-daily-temps strong,
+.weather-neo.cultiva-sheet-card--weather.weather-phase--bluehour .weather-daily-temps strong {
+  color: #f5f5f7;
+}
 .weather-neo.weather-phase--sunset .card-title,
 .weather-neo.weather-phase--sunset .cultiva-sheet-title,
 .weather-neo.weather-phase--sunset .weather-hero-temp {

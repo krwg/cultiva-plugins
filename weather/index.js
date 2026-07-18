@@ -7,6 +7,7 @@ class WeatherPlugin {
       city: 'Moscow',
       units: 'celsius',
       showInGarden: true,
+      showInTray: true,
       neoMode: false,
       neoBypassThemes: false,
       showHourly: true,
@@ -468,6 +469,8 @@ class WeatherPlugin {
   async onDisable() {
     console.log('[Weather] Plugin disabled');
     if (this.updateInterval) clearInterval(this.updateInterval);
+    this.context.ui.setTrayTooltip?.('');
+    this.context.ui.clearTrayItems?.();
   }
 
   _translitRuToLat(input) {
@@ -672,6 +675,11 @@ class WeatherPlugin {
       label: `${temp}${u}`,
       icon: ''
     });
+    if (this.settings.showInTray !== false) {
+      this.context.ui.setTrayTooltip?.(`Cultiva · ${temp}${u}`);
+    } else {
+      this.context.ui.setTrayTooltip?.('');
+    }
   }
 
   updateGardenWidget() {

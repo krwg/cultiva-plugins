@@ -1,11 +1,11 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.5.5",
+  "version": "3.5.6",
   "plugins": [
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "2.7.0",
+      "version": "2.7.1",
       "author": "krwg",
       "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo with realistic solar-phase skies, sunrise/sunset, theme bypass, hourly and 7-day forecast.",
       "icon": "",
@@ -39,14 +39,14 @@
         }
       },
       "sha256": {
-        "manifest.json": "a9920c4a7ea945673bd9c1af63edd4e9f5f07424fa9c2cb415492cda68821196",
-        "index.js": "cbf3ad3e6b9585554ac0f74b15b54c323eb808c5d263f3c822afae8f420e3aae",
+        "manifest.json": "5ebf50b1a79dbca2be35732c2fa9d48db83faafa12e58b740dbe6212ff054f48",
+        "index.js": "2292e4f8fee911b1c4a1467b94241e2c8dd3021f9110837fc9e8a14207a72967",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "382ac022bf8edaa5c8f4aa2ac4b7002f8b363ee95383fe0f5c141ddeae09b876",
+        "styles.css": "8b13984067aee5312962eb03f2822c4bc28ad78a3f454914558890819015ef18",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T21:40:00+03:00",
+      "lastUpdated": "2026-07-18T21:43:45+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [

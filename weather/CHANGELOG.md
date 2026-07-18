@@ -8,6 +8,16 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Versions from `w
 
 ## [Unreleased]
 
+## [2.7.1] — 2026-07-18
+
+### Added
+- Tray tooltip temperature (`showInTray`, default on) via PE2 `ui.setTrayTooltip`
+
+### Fixed
+- Hourly / daily / section-label text contrast on Neo night and blue-hour sheets
+
+---
+
 ## [2.7.0] — 2026-07-18
 
 ### Added
