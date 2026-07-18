@@ -1,9 +1,9 @@
 {
   "id": "weather",
   "name": "Weather Widget",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "author": "krwg",
-  "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo (Apple-bright gradients, time-of-day, animations), theme bypass, hourly and 7-day forecast. Cyrillic city search + Open-Meteo merge.",
+  "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo (realistic solar-phase skies, sunrise/sunset, animations), theme bypass, hourly and 7-day forecast. Cyrillic city search + Open-Meteo merge.",
   "icon": "",
   "entry": "index.js",
   "styles": [

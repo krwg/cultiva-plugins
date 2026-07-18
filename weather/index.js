@@ -98,6 +98,8 @@ class WeatherPlugin {
       pressure: 'Pressure',
       clouds: 'Clouds',
       uv: 'UV index',
+      sunrise: 'Sunrise',
+      sunset: 'Sunset',
       hpa: 'hPa',
       close: 'Close',
       cityChanged: 'City updated',
@@ -141,6 +143,8 @@ class WeatherPlugin {
       pressure: 'Давление',
       clouds: 'Облачность',
       uv: 'УФ-индекс',
+      sunrise: 'Восход',
+      sunset: 'Закат',
       hpa: 'гПа',
       close: 'Закрыть',
       cityChanged: 'Город обновлён',
@@ -174,12 +178,55 @@ class WeatherPlugin {
     }
   }
 
+  _parseSolarMs(iso) {
+    if (!iso) return null;
+    const t = new Date(iso).getTime();
+    return Number.isFinite(t) ? t : null;
+  }
+
   _dayPhase(date = new Date()) {
-    const h = date.getHours();
+    const now = date.getTime();
+    const sunrise = this._parseSolarMs(this.weatherData?.sunrise);
+    const sunset = this._parseSolarMs(this.weatherData?.sunset);
+
+    if (sunrise != null && sunset != null && sunset > sunrise) {
+      const min = 60 * 1000;
+      const dawnStart = sunrise - 60 * min;
+      const dawnEnd = sunrise + 45 * min;
+      const eveningStart = sunset - 90 * min;
+      const sunsetStart = sunset - 35 * min;
+      const sunsetEnd = sunset + 25 * min;
+      const blueHourEnd = sunset + 90 * min;
+
+      if (now >= dawnStart && now < dawnEnd) return 'dawn';
+      if (now >= dawnEnd && now < eveningStart) return 'day';
+      if (now >= eveningStart && now < sunsetStart) return 'evening';
+      if (now >= sunsetStart && now < sunsetEnd) return 'sunset';
+      if (now >= sunsetEnd && now < blueHourEnd) return 'bluehour';
+      return 'night';
+    }
+
+    const h = date.getHours() + date.getMinutes() / 60;
     if (h >= 5 && h < 8) return 'dawn';
     if (h >= 8 && h < 17) return 'day';
-    if (h >= 17 && h < 21) return 'evening';
+    if (h >= 17 && h < 19) return 'evening';
+    if (h >= 19 && h < 20.5) return 'sunset';
+    if (h >= 20.5 && h < 22) return 'bluehour';
     return 'night';
+  }
+
+  _formatSolarTime(iso) {
+    if (!iso) return '--';
+    try {
+      const d = new Date(iso);
+      if (!Number.isFinite(d.getTime())) return '--';
+      return d.toLocaleTimeString(this._locale === 'ru' ? 'ru-RU' : 'en-US', {
+        hour: 'numeric',
+        minute: '2-digit'
+      });
+    } catch {
+      return '--';
+    }
   }
 
   _weatherKind() {
@@ -245,7 +292,16 @@ class WeatherPlugin {
           const top = 6 + (i * 19) % 60;
           parts.push(`<span class="weather-neo-star" style="left:${left}%;top:${top}%"></span>`);
         }
-      } else if (phase === 'dawn' || phase === 'evening') {
+      } else if (phase === 'bluehour') {
+        parts.push('<span class="weather-neo-glow weather-neo-glow--soft"></span>');
+        if (!low) {
+          for (let i = 0; i < 5; i++) {
+            const left = 12 + i * 16;
+            const top = 8 + (i % 3) * 16;
+            parts.push(`<span class="weather-neo-star" style="left:${left}%;top:${top}%"></span>`);
+          }
+        }
+      } else if (phase === 'dawn' || phase === 'evening' || phase === 'sunset') {
         parts.push('<span class="weather-neo-glow weather-neo-glow--warm"></span>');
       } else {
         parts.push('<span class="weather-neo-glow weather-neo-glow--sun"></span>');
@@ -255,7 +311,7 @@ class WeatherPlugin {
       }
     } else if (kind === 'partly') {
       parts.push('<span class="weather-neo-glow weather-neo-glow--soft"></span>');
-      if (phase === 'night' && !low) {
+      if ((phase === 'night' || phase === 'bluehour') && !low) {
         for (let i = 0; i < 5; i++) {
           parts.push(`<span class="weather-neo-star" style="left:${15 + i * 16}%;top:${10 + (i % 3) * 18}%"></span>`);
         }
@@ -513,7 +569,7 @@ class WeatherPlugin {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
         + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,surface_pressure,cloud_cover`
         + `&hourly=temperature_2m,weather_code,precipitation_probability`
-        + `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max`
+        + `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max,sunrise,sunset`
         + `&forecast_days=7&timezone=auto`;
       const response = await fetch(url);
       const data = await response.json();
@@ -542,7 +598,9 @@ class WeatherPlugin {
           max: this._toDisplayTemp(data.daily.temperature_2m_max[i]),
           min: this._toDisplayTemp(data.daily.temperature_2m_min[i]),
           precip: data.daily.precipitation_sum?.[i],
-          uv: data.daily.uv_index_max?.[i]
+          uv: data.daily.uv_index_max?.[i],
+          sunrise: data.daily.sunrise?.[i] || null,
+          sunset: data.daily.sunset?.[i] || null
         });
       }
 
@@ -555,6 +613,8 @@ class WeatherPlugin {
         pressure: data.current.surface_pressure != null ? Math.round(data.current.surface_pressure) : null,
         cloudCover: data.current.cloud_cover != null ? Math.round(data.current.cloud_cover) : null,
         uvMax: daily[0]?.uv != null ? Math.round(daily[0].uv) : null,
+        sunrise: data.daily?.sunrise?.[0] || null,
+        sunset: data.daily?.sunset?.[0] || null,
         units,
         hourly,
         daily
@@ -697,6 +757,17 @@ class WeatherPlugin {
     return `<div class="weather-section-label">${this._t('daily')}</div><div class="weather-daily">${rows}</div>`;
   }
 
+  _solarHtml() {
+    const w = this.weatherData;
+    if (!w?.sunrise && !w?.sunset) return '';
+    const rise = this._escapeHtml(this._formatSolarTime(w.sunrise));
+    const set = this._escapeHtml(this._formatSolarTime(w.sunset));
+    return `<div class="weather-solar">
+      <div><span class="cultiva-muted">${this._t('sunrise')}</span><strong>${rise}</strong></div>
+      <div><span class="cultiva-muted">${this._t('sunset')}</span><strong>${set}</strong></div>
+    </div>`;
+  }
+
   _toggleRow(act, checked, label) {
     return `<label class="weather-toggle-row">
       <span>${this._escapeHtml(label)}</span>
@@ -760,6 +831,7 @@ class WeatherPlugin {
       <div><span class="cultiva-muted">${this._t('clouds')}</span><strong>${clouds}</strong></div>
       <div><span class="cultiva-muted">${this._t('uv')}</span><strong>${uv}</strong></div>
     </div>
+    ${this._solarHtml()}
     ${this._hourlyHtml()}
     ${this._dailyHtml()}
     <div class="weather-view-toggles">

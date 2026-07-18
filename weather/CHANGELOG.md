@@ -8,6 +8,20 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Versions from `w
 
 ## [Unreleased]
 
+## [2.7.0] — 2026-07-18
+
+### Added
+- Open-Meteo daily **sunrise** / **sunset**; shown as a sheet row (EN/RU)
+- Neo solar phases: **sunset**, **bluehour**, plus improved dawn / day / evening / night skies
+- Light text (`#f5f5f7`) on dark Neo night/blue-hour/storm skies without requiring theme bypass
+- Soft CSS phase transitions (background 1.2s) and Neo FX opacity pulse
+
+### Changed
+- `_dayPhase()` uses sunrise/sunset when available; hour heuristics as fallback
+- Manifest description notes realistic solar-phase Neo skies
+
+---
+
 ## [2.6.0] — 2026-07-18
 
 ### Added

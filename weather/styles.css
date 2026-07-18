@@ -1,4 +1,4 @@
-/* Weather garden card + Neo sheet — Cultiva Weather 2.5 */
+/* Weather garden card + Neo sheet — Cultiva Weather 2.7 */
 
 .weather-hero-icon,
 .weather-garden-icon {
@@ -75,79 +75,183 @@
 .weather-garden-card--storm::before { background: #6366f1; }
 
 /* ——— Neo: Apple-bright geometry ——— */
+.weather-neo.weather-garden-card,
+.weather-neo.cultiva-sheet-card--weather {
+  transition: background 1.2s ease, color 1.2s ease, background-image 1.2s ease;
+}
 .weather-neo.weather-garden-card--clear,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--clear {
   background:
-    radial-gradient(ellipse 95% 75% at 8% 0%, rgba(255, 204, 0, 0.72) 0%, transparent 52%),
-    linear-gradient(168deg, rgba(255, 230, 140, 0.45) 0%, var(--bg-primary) 68%);
+    radial-gradient(ellipse 100% 80% at 12% -5%, rgba(255, 220, 80, 0.85) 0%, transparent 48%),
+    radial-gradient(ellipse 70% 50% at 88% 30%, rgba(120, 190, 255, 0.35) 0%, transparent 55%),
+    linear-gradient(175deg, rgba(120, 190, 255, 0.55) 0%, rgba(255, 240, 180, 0.35) 42%, var(--bg-primary) 78%);
 }
 .weather-neo.weather-garden-card--clear.weather-phase--dawn,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--clear.weather-phase--dawn {
   background:
-    radial-gradient(ellipse 90% 70% at 20% 100%, rgba(255, 140, 170, 0.7) 0%, transparent 48%),
-    linear-gradient(200deg, rgba(120, 180, 255, 0.55) 0%, var(--bg-primary) 70%);
+    radial-gradient(ellipse 95% 70% at 18% 100%, rgba(255, 150, 160, 0.75) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 55% at 70% 20%, rgba(255, 200, 120, 0.45) 0%, transparent 55%),
+    linear-gradient(195deg, rgba(90, 150, 230, 0.65) 0%, rgba(255, 210, 190, 0.4) 50%, var(--bg-primary) 82%);
 }
 .weather-neo.weather-garden-card--clear.weather-phase--evening,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--clear.weather-phase--evening {
   background:
-    radial-gradient(ellipse 90% 70% at 92% 8%, rgba(255, 140, 40, 0.75) 0%, transparent 50%),
-    linear-gradient(145deg, rgba(255, 90, 120, 0.4) 0%, var(--bg-primary) 72%);
+    radial-gradient(ellipse 90% 65% at 92% 10%, rgba(255, 160, 60, 0.7) 0%, transparent 48%),
+    radial-gradient(ellipse 60% 45% at 20% 80%, rgba(255, 100, 140, 0.35) 0%, transparent 50%),
+    linear-gradient(150deg, rgba(255, 140, 90, 0.45) 0%, rgba(180, 120, 200, 0.25) 45%, var(--bg-primary) 78%);
+}
+.weather-neo.weather-garden-card--clear.weather-phase--sunset,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--clear.weather-phase--sunset {
+  background:
+    radial-gradient(ellipse 110% 75% at 50% 85%, rgba(255, 90, 40, 0.85) 0%, transparent 52%),
+    radial-gradient(ellipse 80% 55% at 85% 25%, rgba(255, 40, 120, 0.55) 0%, transparent 50%),
+    linear-gradient(165deg, rgba(60, 40, 120, 0.55) 0%, rgba(255, 100, 60, 0.5) 48%, var(--bg-primary) 85%);
+}
+.weather-neo.weather-garden-card--clear.weather-phase--bluehour,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--clear.weather-phase--bluehour {
+  background:
+    radial-gradient(ellipse 70% 50% at 78% 12%, rgba(100, 140, 255, 0.4) 0%, transparent 55%),
+    radial-gradient(ellipse 90% 60% at 20% 90%, rgba(40, 60, 140, 0.45) 0%, transparent 50%),
+    linear-gradient(170deg, rgba(20, 40, 100, 0.85) 0%, rgba(30, 50, 120, 0.7) 45%, var(--bg-primary) 88%);
 }
 .weather-neo.weather-garden-card--clear.weather-phase--night,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--clear.weather-phase--night {
   background:
-    radial-gradient(ellipse 70% 50% at 75% 15%, rgba(120, 140, 255, 0.45) 0%, transparent 55%),
-    linear-gradient(160deg, rgba(20, 40, 110, 0.72) 0%, var(--bg-primary) 78%);
+    radial-gradient(ellipse 55% 40% at 72% 18%, rgba(80, 100, 200, 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 25% 70%, rgba(40, 30, 90, 0.4) 0%, transparent 50%),
+    linear-gradient(165deg, #060814 0%, #0c1024 40%, #12101c 78%);
 }
 
 .weather-neo.weather-garden-card--partly,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--partly {
   background:
-    radial-gradient(circle at 82% 12%, rgba(255, 214, 80, 0.55) 0%, transparent 40%),
-    linear-gradient(210deg, rgba(100, 180, 255, 0.5) 0%, var(--bg-primary) 70%);
+    radial-gradient(circle at 82% 12%, rgba(255, 214, 80, 0.6) 0%, transparent 40%),
+    radial-gradient(ellipse 70% 50% at 15% 70%, rgba(140, 190, 255, 0.35) 0%, transparent 55%),
+    linear-gradient(210deg, rgba(100, 180, 255, 0.55) 0%, var(--bg-primary) 72%);
+}
+.weather-neo.weather-garden-card--partly.weather-phase--night,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--partly.weather-phase--night,
+.weather-neo.weather-garden-card--partly.weather-phase--bluehour,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--partly.weather-phase--bluehour {
+  background:
+    radial-gradient(circle at 78% 15%, rgba(100, 130, 220, 0.35) 0%, transparent 42%),
+    linear-gradient(200deg, rgba(18, 28, 70, 0.88) 0%, rgba(20, 18, 40, 0.75) 55%, var(--bg-primary) 90%);
 }
 .weather-neo.weather-garden-card--cloudy,
 .weather-neo.weather-garden-card--loading,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--cloudy,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--loading {
   background:
-    linear-gradient(195deg, rgba(130, 150, 180, 0.55) 0%, transparent 48%),
-    linear-gradient(15deg, rgba(90, 110, 140, 0.28) 0%, var(--bg-primary) 80%);
+    linear-gradient(195deg, rgba(130, 150, 180, 0.58) 0%, transparent 48%),
+    linear-gradient(15deg, rgba(90, 110, 140, 0.32) 0%, var(--bg-primary) 80%);
 }
 .weather-neo.weather-garden-card--fog,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--fog {
   background:
-    radial-gradient(ellipse 130% 90% at 50% 40%, rgba(230, 240, 255, 0.7) 0%, transparent 62%),
-    linear-gradient(0deg, rgba(200, 210, 230, 0.35) 0%, var(--bg-primary) 100%);
+    radial-gradient(ellipse 130% 90% at 50% 40%, rgba(230, 240, 255, 0.72) 0%, transparent 62%),
+    linear-gradient(0deg, rgba(200, 210, 230, 0.38) 0%, var(--bg-primary) 100%);
 }
 .weather-neo.weather-garden-card--rain,
 .weather-neo.weather-garden-card--showers,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--rain,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--showers {
   background:
-    linear-gradient(125deg, rgba(40, 80, 140, 0.65) 0%, transparent 40%),
-    linear-gradient(200deg, rgba(70, 120, 180, 0.4) 0%, var(--bg-primary) 72%);
+    linear-gradient(125deg, rgba(40, 80, 140, 0.68) 0%, transparent 40%),
+    linear-gradient(200deg, rgba(70, 120, 180, 0.42) 0%, var(--bg-primary) 72%);
 }
 .weather-neo.weather-garden-card--rain.weather-phase--evening,
 .weather-neo.weather-garden-card--showers.weather-phase--evening,
+.weather-neo.weather-garden-card--rain.weather-phase--sunset,
+.weather-neo.weather-garden-card--showers.weather-phase--sunset,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--rain.weather-phase--evening,
-.weather-neo.cultiva-sheet-card--weather.weather-sheet--showers.weather-phase--evening {
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--showers.weather-phase--evening,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--rain.weather-phase--sunset,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--showers.weather-phase--sunset {
   background:
-    linear-gradient(125deg, rgba(30, 50, 100, 0.7) 0%, transparent 42%),
-    linear-gradient(200deg, rgba(90, 70, 180, 0.4) 0%, var(--bg-primary) 75%);
+    linear-gradient(125deg, rgba(30, 50, 100, 0.72) 0%, transparent 42%),
+    linear-gradient(200deg, rgba(90, 70, 180, 0.42) 0%, var(--bg-primary) 75%);
+}
+.weather-neo.weather-garden-card--rain.weather-phase--night,
+.weather-neo.weather-garden-card--showers.weather-phase--night,
+.weather-neo.weather-garden-card--rain.weather-phase--bluehour,
+.weather-neo.weather-garden-card--showers.weather-phase--bluehour,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--rain.weather-phase--night,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--showers.weather-phase--night,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--rain.weather-phase--bluehour,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--showers.weather-phase--bluehour {
+  background:
+    linear-gradient(125deg, rgba(20, 35, 80, 0.8) 0%, transparent 42%),
+    linear-gradient(200deg, rgba(25, 30, 70, 0.7) 0%, #0e1018 78%);
 }
 .weather-neo.weather-garden-card--snow,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--snow {
   background:
-    radial-gradient(circle at 28% 12%, rgba(255, 255, 255, 0.7) 0%, transparent 42%),
-    linear-gradient(155deg, rgba(160, 210, 255, 0.65) 0%, var(--bg-primary) 70%);
+    radial-gradient(circle at 28% 12%, rgba(255, 255, 255, 0.72) 0%, transparent 42%),
+    linear-gradient(155deg, rgba(160, 210, 255, 0.68) 0%, var(--bg-primary) 70%);
 }
 .weather-neo.weather-garden-card--storm,
 .weather-neo.cultiva-sheet-card--weather.weather-sheet--storm {
   background:
-    linear-gradient(105deg, rgba(70, 50, 220, 0.7) 0%, transparent 34%),
-    linear-gradient(105deg, transparent 46%, rgba(20, 10, 80, 0.55) 52%, transparent 70%),
-    linear-gradient(200deg, rgba(80, 70, 200, 0.4) 0%, var(--bg-primary) 78%);
+    linear-gradient(105deg, rgba(70, 50, 220, 0.72) 0%, transparent 34%),
+    linear-gradient(105deg, transparent 46%, rgba(20, 10, 80, 0.58) 52%, transparent 70%),
+    linear-gradient(200deg, rgba(80, 70, 200, 0.42) 0%, #120e24 78%);
+}
+
+/* Light text on dark Neo skies (always — not only theme bypass) */
+.weather-neo.weather-phase--night,
+.weather-neo.weather-phase--bluehour,
+.weather-neo.weather-garden-card--storm,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--storm {
+  color: #f5f5f7;
+}
+.weather-neo.weather-phase--night .card-title,
+.weather-neo.weather-phase--night .card-subtitle,
+.weather-neo.weather-phase--night .category-badge,
+.weather-neo.weather-phase--bluehour .card-title,
+.weather-neo.weather-phase--bluehour .card-subtitle,
+.weather-neo.weather-phase--bluehour .category-badge,
+.weather-neo.weather-garden-card--storm .card-title,
+.weather-neo.weather-garden-card--storm .card-subtitle,
+.weather-neo.weather-garden-card--storm .category-badge {
+  color: #f5f5f7 !important;
+}
+.weather-neo.weather-phase--night .cultiva-sheet-title,
+.weather-neo.weather-phase--night .cultiva-sheet-sub,
+.weather-neo.weather-phase--night .weather-hero-temp,
+.weather-neo.weather-phase--night .weather-hero-desc,
+.weather-neo.weather-phase--night .weather-hero-icon,
+.weather-neo.weather-phase--night .cultiva-muted,
+.weather-neo.weather-phase--bluehour .cultiva-sheet-title,
+.weather-neo.weather-phase--bluehour .cultiva-sheet-sub,
+.weather-neo.weather-phase--bluehour .weather-hero-temp,
+.weather-neo.weather-phase--bluehour .weather-hero-desc,
+.weather-neo.weather-phase--bluehour .weather-hero-icon,
+.weather-neo.weather-phase--bluehour .cultiva-muted,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--storm .cultiva-sheet-title,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--storm .cultiva-sheet-sub,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--storm .weather-hero-temp,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--storm .weather-hero-desc,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--storm .weather-hero-icon {
+  color: #f5f5f7;
+}
+.weather-neo.weather-phase--night .weather-metrics,
+.weather-neo.weather-phase--bluehour .weather-metrics,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--storm .weather-metrics,
+.weather-neo.weather-phase--night .weather-solar,
+.weather-neo.weather-phase--bluehour .weather-solar {
+  background: color-mix(in srgb, #ffffff 12%, transparent);
+}
+.weather-neo.weather-phase--night .weather-metrics strong,
+.weather-neo.weather-phase--bluehour .weather-metrics strong,
+.weather-neo.weather-phase--night .weather-solar strong,
+.weather-neo.weather-phase--bluehour .weather-solar strong,
+.weather-neo.cultiva-sheet-card--weather.weather-sheet--storm .weather-metrics strong {
+  color: #f5f5f7;
+}
+.weather-neo.weather-phase--sunset .card-title,
+.weather-neo.weather-phase--sunset .cultiva-sheet-title,
+.weather-neo.weather-phase--sunset .weather-hero-temp {
+  color: #f5f5f7;
 }
 
 /* Theme bypass — win against app theme .habit-card backgrounds */
@@ -157,27 +261,45 @@
 }
 .weather-neo-bypass.weather-garden-card--clear {
   background:
-    radial-gradient(ellipse 95% 75% at 8% 0%, rgba(255, 204, 0, 0.78) 0%, transparent 52%),
-    linear-gradient(168deg, #ffe9a0 0%, #fff8e8 55%, #ffffff 100%) !important;
+    radial-gradient(ellipse 100% 80% at 12% -5%, rgba(255, 220, 80, 0.88) 0%, transparent 48%),
+    radial-gradient(ellipse 70% 50% at 88% 30%, rgba(120, 190, 255, 0.4) 0%, transparent 55%),
+    linear-gradient(175deg, #7ec4ff 0%, #ffe9a0 42%, #fff8e8 70%, #ffffff 100%) !important;
 }
 .weather-neo-bypass.weather-garden-card--clear.weather-phase--dawn {
   background:
-    radial-gradient(ellipse 90% 70% at 20% 100%, rgba(255, 120, 160, 0.75) 0%, transparent 48%),
-    linear-gradient(200deg, #9ec5ff 0%, #ffe4ec 55%, #ffffff 100%) !important;
+    radial-gradient(ellipse 95% 70% at 18% 100%, rgba(255, 140, 160, 0.8) 0%, transparent 50%),
+    linear-gradient(195deg, #6aa0e8 0%, #ffc8b8 48%, #fff0f4 75%, #ffffff 100%) !important;
 }
 .weather-neo-bypass.weather-garden-card--clear.weather-phase--evening {
   background:
-    radial-gradient(ellipse 90% 70% at 92% 8%, rgba(255, 130, 30, 0.8) 0%, transparent 50%),
-    linear-gradient(145deg, #ff8a6a 0%, #ffd0b8 50%, #ffffff 100%) !important;
+    radial-gradient(ellipse 90% 65% at 92% 10%, rgba(255, 150, 50, 0.82) 0%, transparent 48%),
+    linear-gradient(150deg, #ff9a5a 0%, #ffb090 40%, #ffe8dc 70%, #ffffff 100%) !important;
+}
+.weather-neo-bypass.weather-garden-card--clear.weather-phase--sunset {
+  background:
+    radial-gradient(ellipse 110% 75% at 50% 85%, rgba(255, 80, 30, 0.9) 0%, transparent 52%),
+    radial-gradient(ellipse 80% 55% at 85% 25%, rgba(255, 30, 110, 0.6) 0%, transparent 50%),
+    linear-gradient(165deg, #2a1850 0%, #ff6a3a 45%, #ffb090 75%, #1a1028 100%) !important;
+  color: #f5f5f7 !important;
+}
+.weather-neo-bypass.weather-garden-card--clear.weather-phase--bluehour {
+  background:
+    radial-gradient(ellipse 70% 50% at 78% 12%, rgba(100, 140, 255, 0.45) 0%, transparent 55%),
+    linear-gradient(170deg, #0e1a48 0%, #1a2a6e 45%, #12182e 100%) !important;
+  color: #f5f5f7 !important;
 }
 .weather-neo-bypass.weather-garden-card--clear.weather-phase--night {
   background:
-    radial-gradient(ellipse 70% 50% at 75% 15%, rgba(140, 160, 255, 0.5) 0%, transparent 55%),
-    linear-gradient(160deg, #1a2a6e 0%, #2a1a4a 55%, #12101c 100%) !important;
+    radial-gradient(ellipse 55% 40% at 72% 18%, rgba(90, 110, 220, 0.4) 0%, transparent 55%),
+    linear-gradient(165deg, #04060e 0%, #0a1020 40%, #0e0c16 100%) !important;
   color: #f5f5f7 !important;
 }
 .weather-neo-bypass.weather-garden-card--clear.weather-phase--night .card-title,
-.weather-neo-bypass.weather-garden-card--clear.weather-phase--night .card-subtitle {
+.weather-neo-bypass.weather-garden-card--clear.weather-phase--night .card-subtitle,
+.weather-neo-bypass.weather-garden-card--clear.weather-phase--bluehour .card-title,
+.weather-neo-bypass.weather-garden-card--clear.weather-phase--bluehour .card-subtitle,
+.weather-neo-bypass.weather-garden-card--clear.weather-phase--sunset .card-title,
+.weather-neo-bypass.weather-garden-card--clear.weather-phase--sunset .card-subtitle {
   color: #f5f5f7 !important;
 }
 .weather-neo-bypass.weather-garden-card--partly {
@@ -214,8 +336,16 @@
     radial-gradient(ellipse 95% 60% at 10% 0%, rgba(255, 204, 0, 0.55) 0%, transparent 50%),
     linear-gradient(180deg, #fff3c4 0%, #ffffff 45%) !important;
 }
+.weather-neo-bypass.cultiva-sheet-card--weather.weather-sheet--clear.weather-phase--sunset {
+  background: linear-gradient(180deg, #3a1850 0%, #ff6a3a 35%, #1a1028 100%) !important;
+  color: #f5f5f7 !important;
+}
+.weather-neo-bypass.cultiva-sheet-card--weather.weather-sheet--clear.weather-phase--bluehour {
+  background: linear-gradient(180deg, #0e1a48 0%, #1a2a6e 40%, #0e1018 100%) !important;
+  color: #f5f5f7 !important;
+}
 .weather-neo-bypass.cultiva-sheet-card--weather.weather-sheet--clear.weather-phase--night {
-  background: linear-gradient(180deg, #1a2a6e 0%, #12101c 55%) !important;
+  background: linear-gradient(180deg, #04060e 0%, #0a1020 40%, #0e0c16 100%) !important;
   color: #f5f5f7 !important;
 }
 .weather-neo-bypass.cultiva-sheet-card--weather.weather-sheet--rain,
@@ -233,6 +363,8 @@
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
+  transition: opacity 1.2s ease;
+  animation: weather-neo-fx-breathe 4.5s ease-in-out infinite;
 }
 .weather-neo-streak {
   position: absolute;
@@ -307,6 +439,10 @@
   animation: weather-haze-drift 8s ease-in-out infinite;
 }
 
+@keyframes weather-neo-fx-breathe {
+  0%, 100% { opacity: 0.88; }
+  50% { opacity: 1; }
+}
 @keyframes weather-rain-fall {
   0% { transform: translateY(-40%) rotate(18deg); opacity: 0; }
   12% { opacity: 0.9; }
@@ -347,7 +483,8 @@ html[data-low-power="1"] .weather-neo-flake,
 html[data-low-power="1"] .weather-neo-flash,
 html[data-low-power="1"] .weather-neo-glow,
 html[data-low-power="1"] .weather-neo-sunrays,
-html[data-low-power="1"] .weather-neo-star {
+html[data-low-power="1"] .weather-neo-star,
+html[data-low-power="1"] .weather-neo-fx {
   animation: none !important;
 }
 html[data-low-power="1"] .weather-neo-flash,
@@ -356,6 +493,10 @@ html[data-low-power="1"] .weather-neo-sunrays {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .weather-neo.weather-garden-card,
+  .weather-neo.cultiva-sheet-card--weather {
+    transition: none;
+  }
   .weather-neo-fx {
     display: none !important;
   }
@@ -392,6 +533,7 @@ html[data-low-power="1"] .weather-neo-sunrays {
 .cultiva-sheet-card--weather .weather-hero,
 .cultiva-sheet-card--weather .weather-hero-desc,
 .cultiva-sheet-card--weather .weather-metrics,
+.cultiva-sheet-card--weather .weather-solar,
 .cultiva-sheet-card--weather .weather-hourly,
 .cultiva-sheet-card--weather .weather-daily,
 .cultiva-sheet-card--weather .weather-view-toggles,
@@ -437,6 +579,23 @@ html[data-low-power="1"] .weather-neo-sunrays {
 }
 .weather-metrics--6 {
   grid-template-columns: repeat(3, 1fr);
+}
+.weather-solar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg-secondary) 88%, transparent);
+  font-size: 12px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+.weather-solar strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 14px;
+  color: var(--text-primary);
 }
 .weather-metrics strong {
   display: block;

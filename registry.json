@@ -1,13 +1,13 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.5.4",
+  "version": "3.5.5",
   "plugins": [
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "2.6.0",
+      "version": "2.7.0",
       "author": "krwg",
-      "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo, theme bypass, hourly and 7-day forecast.",
+      "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo with realistic solar-phase skies, sunrise/sunset, theme bypass, hourly and 7-day forecast.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
       "minAppVersion": "1.7.0",
@@ -30,23 +30,23 @@
         "en": {
           "name": "Weather",
           "tagline": "Forecast with Neo polish.",
-          "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo, theme bypass, hourly and 7-day forecast."
+          "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo with realistic solar-phase skies, sunrise/sunset, theme bypass, hourly and 7-day forecast."
         },
         "ru": {
           "name": "Погода",
           "tagline": "Прогноз с режимом Нео.",
-          "description": "Актуальная погода в шапке и саду, поиск городов по всему миру. Опциональный режим «Погода Нео» (яркие градиенты, время суток, анимации), обход темы, почасовой и недельный прогноз."
+          "description": "Актуальная погода в шапке и саду, поиск городов по всему миру. Опциональный режим «Погода Нео» (реалистичные фазы неба по восходу/закату, анимации), обход темы, почасовой и недельный прогноз."
         }
       },
       "sha256": {
-        "manifest.json": "ba76f548c4422a02d9e2677ba42a9f0f4b9d7f9010806f5842ad0b7b165619bd",
-        "index.js": "dc71a62b449045fadf7f8925cd8a81378a40c0717b9912d72fc1dd06e072aaca",
+        "manifest.json": "a9920c4a7ea945673bd9c1af63edd4e9f5f07424fa9c2cb415492cda68821196",
+        "index.js": "cbf3ad3e6b9585554ac0f74b15b54c323eb808c5d263f3c822afae8f420e3aae",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "b7a786e33a4ca1ba1d317481199ef245ea9b259f02130dae52b92260affce4d3",
+        "styles.css": "382ac022bf8edaa5c8f4aa2ac4b7002f8b363ee95383fe0f5c141ddeae09b876",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T16:33:01+03:00",
+      "lastUpdated": "2026-07-18T21:40:00+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [
@@ -239,7 +239,7 @@
         "quotes-data.json": "e49c245e7e10794a020ee0d233e347003f0d400a43aaabc4ac085884ec925142"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T16:33:01+03:00",
+      "lastUpdated": "2026-07-18T20:09:12+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [],
