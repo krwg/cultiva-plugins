@@ -47,7 +47,15 @@
   margin-top: 8px;
 }
 
-.quote-favorite-btn {
+.quote-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.quote-favorite-btn,
+.quote-shuffle-btn {
   flex-shrink: 0;
   width: 36px;
   height: 36px;
@@ -68,12 +76,19 @@
   transform: scale(1.05);
 }
 
+.quote-shuffle-btn:hover {
+  background: color-mix(in srgb, var(--accent-blue, #0a84ff) 14%, var(--bg-tertiary));
+  color: var(--accent-blue, #0a84ff);
+  transform: scale(1.05);
+}
+
 .quote-favorite-btn--active {
   color: var(--accent-pink);
   background: color-mix(in srgb, var(--accent-pink) 14%, var(--bg-tertiary));
 }
 
-.quote-heart-svg {
+.quote-heart-svg,
+.quote-shuffle-svg {
   width: 18px;
   height: 18px;
   display: block;

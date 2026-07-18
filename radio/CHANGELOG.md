@@ -6,6 +6,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [2.3.0] — 2026-07-18
+
+### Added
+- Media Session metadata and play/pause/stop handlers while streaming
+- Distinct autoplay-blocked vs stream-unavailable messages (EN/RU)
+- Custom stream URL (`customUrl`) with sheet input and `custom` station
+
+---
+
 ## [2.2.0] — 2026-07-12
 
 ### Added

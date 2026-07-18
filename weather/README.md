@@ -1,63 +1,47 @@
-# Weather Widget
+# Weather
 
-Current conditions in the Cultiva header and garden, with hybrid city search for any location worldwide. Optional **Weather Neo** visuals, hourly and 7-day forecast.
+## English
 
-**Version:** 2.5.1 (see [CHANGELOG.md](./CHANGELOG.md))  
-**minAppVersion:** `1.7.0`
+### What it is
 
----
+Current weather in the Cultiva header and garden, with worldwide city search and an optional forecast sheet.
 
-## Features
+### Highlights
 
-| Surface | What you get |
-|---------|----------------|
-| **Header** | Compact temperature + condition; tap opens the forecast sheet |
-| **Garden** | Habit-style weather card (optional via `showInGarden`) |
-| **Weather Neo** | Opt-in geometry gradients, time-of-day tint, in-card rain/snow/glow/flash (`neoMode`) |
-| **Hourly** | Next-hours strip in the sheet (`showHourly`) |
-| **Daily** | 7-day forecast in the sheet (`showDaily`) |
-| **City search** | Local RU city DB first, then Open-Meteo geocoding worldwide |
+- Compact temperature in the header; tap for hourly and 7-day forecast
+- Optional garden card and Weather Neo visuals
+- Hybrid city search: local RU database, then Open-Meteo worldwide
+- Celsius or Fahrenheit; theme bypass for Neo
 
----
+### Permissions
 
-## Settings
+- `network` — forecast and geocoding (Open-Meteo)
+- `storage` — city, units, and display preferences
+- `ui` — header, garden, and sheet
 
-| Key | Type | Default | Description |
-|-----|------|---------|-------------|
-| `city` | text | `Moscow` | Display / search city name |
-| `units` | select | `celsius` | `celsius` or `fahrenheit` |
-| `showInGarden` | boolean | `true` | Show weather card in the garden |
-| `neoMode` | boolean | `false` | Enable Weather Neo visuals |
-| `neoBypassThemes` | boolean | `false` | Keep Neo palette when Cultiva themes would otherwise recolor the card |
-| `showHourly` | boolean | `true` | Show hourly forecast in the sheet |
-| `showDaily` | boolean | `true` | Show 7-day forecast in the sheet |
+### How to use
 
-Coordinates (`lat` / `lon`) are stored after a successful city pick; they are not exposed as manifest settings.
+Install from Settings → Plugins. Set your city and units in plugin settings. Tap the header widget for the forecast sheet. Enable Weather Neo or garden card if you want them.
 
----
+## Русский
 
-## Permissions
+### Что это
 
-- `network` — Open-Meteo forecast and geocoding
-- `storage` — remember city, units, and Neo toggles
-- `ui` — header, garden, and sheet surfaces
+Актуальная погода в шапке и саду Cultiva, поиск городов по миру и опциональный лист с прогнозом.
 
----
+### Возможности
 
-## Data & API
+- Температура в шапке; нажатие открывает почасовой и недельный прогноз
+- Карточка в саду и режим «Погода Нео» (по желанию)
+- Гибридный поиск: локальная база RU-городов, затем Open-Meteo
+- Цельсий или Фаренгейт; обход темы для Нео
 
-- Forecast and geocoding: **[Open-Meteo](https://open-meteo.com/)** (no API key)
-- Bundled offline RU cities: `cities-ru.json` (~1,071 entries) via manifest `data` + `context.data.read`
-- Hybrid search: local RU match first, then Open-Meteo worldwide
+### Разрешения
 
----
+- `network` — прогноз и геокодинг (Open-Meteo)
+- `storage` — город, единицы и настройки отображения
+- `ui` — шапка, сад и лист
 
-## Low-power behavior
+### Как пользоваться
 
-When Cultiva sets `html[data-low-power="1"]`, Weather Neo CSS effects (rain streaks, snowflakes, flash, glow) are reduced or disabled so the widget stays readable without heavy animation.
-
----
-
-## Changelog
-
-See [CHANGELOG.md](./CHANGELOG.md) for every release from **1.0.0** through **2.5.0**.
+Установите в Настройки → Плагины. Укажите город и единицы. Нажмите виджет в шапке для прогноза. При желании включите Нео или карточку в саду.

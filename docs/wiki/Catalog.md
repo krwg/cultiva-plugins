@@ -1,28 +1,32 @@
 # Catalog
 
-Official plugins in registry **3.5.1**. New plugins require **Cultiva 2.0.0 · Rowan** (PLE1); existing entries may declare lower `minAppVersion` floors.
+Official plugins in registry **3.5.2**. New plugins require **Cultiva 2.0.0 · Rowan** (PLE1); existing entries may declare lower `minAppVersion` floors.
 
 | Plugin | Version | Surface | Permissions | Description |
 |--------|---------|---------|-------------|-------------|
-| **Weather** | [2.5.1] | Header + garden | `network`, `storage`, `ui` | Open-Meteo; **1,071** RU cities; optional **Weather Neo** |
+| **Weather** ★ | [2.5.1] | Header + garden | `network`, `storage`, `ui` | Open-Meteo; RU cities; optional Weather Neo |
+| **Radio** ★ | [2.3.0] | Header | `network`, `storage`, `ui` | SomaFM + custom URL, Media Session, sleep timer |
+| **Quote** ★ | [1.4.0] | Garden | `storage`, `ui` | Locale-pure EN/RU quotes, favorites, shuffle |
+| **Insights** | [1.0.0] | Garden | `habits.read`, `storage`, `ui` | On-device habit correlations |
 | **Time** | [2.2.2] | Header | `storage`, `ui` | Live clock, world timezones, sheet UI |
-| **Radio** | [2.2.0] | Header | `network`, `storage`, `ui` | SomaFM streams, sleep timer, volume |
 | **Pomodoro** | [1.2.1] | Header | `storage`, `ui` | 25/5 focus cycles (configurable) |
-| **Quote** | [1.3.2] | Garden | `storage`, `ui` | Locale-pure EN/RU quotes, favorites |
-| **Weekly Stats** | [1.0.0] | Garden | `ui` | 7-day bars + weekly rate |
+| **Weekly Stats** | [1.0.0] | Garden | `habits.read`, `storage`, `ui` | 7-day bars + weekly rate |
 | **Habit Reflection** | [1.1.0] | Hook + sheet | `storage`, `ui` | Micro-journal on complete |
-| **Routine** | [1.0.0] | Garden | `ui` | Morning/evening checklists |
-| **Gentle Nudge** | [1.0.0] | Hook | `ui` | Evening reminder for incomplete habits |
+| **Routine** | [1.0.0] | Garden | `habits.read`, `storage`, `ui` | Morning/evening checklists |
+| **Gentle Nudge** | [1.0.0] | Hook | `habits.read`, `storage`, `ui`, `settings.read` | Evening reminder for incomplete habits |
+
+★ = **Featured** in the store (`featured: true`): Weather, Radio, Quote.
 
 ---
 
 ## Store UX (in-app + Pages)
 
-- Tag chips and search (registry `tags`)
-- **Featured** (`featured: true`) first; others by `lastUpdated` then name
+- Search plus **Category** `<select>` (registry `tags`) and **Sort** `<select>`: Updated, A–Z, Z–A, А–Я
+- **Featured** (`featured: true`) listed first; others follow the active sort
 - Versions as **`[x.y.z]`** (same style as Cultiva)
 - Permissions confirmed before Install
-- **Details**: tags, permissions, last updated, changelog excerpt, screenshots
+- **Details**: tags, permissions, last updated, **README.md** (rendered markdown), changelog excerpt, screenshots
+- Each registry entry has `"readme": "README.md"` (bilingual EN/RU product copy)
 - `lastUpdated` / `changelog` filled by `scripts/enrich-registry-meta.mjs` (public git dates — not telemetry)
 
 ---
@@ -36,10 +40,11 @@ Official plugins in registry **3.5.1**. New plugins require **Cultiva 2.0.0 · R
 | Radio | `widget`, `radio`, `music`, `ambient` |
 | Pomodoro | `widget`, `timer`, `focus`, `productivity` |
 | Quote | `widget`, `garden`, `quote` |
-| Weekly Stats | `widget`, `garden`, `stats` |
-| Habit Reflection | `habits`, `journal` |
-| Routine | `habits`, `routine` |
-| Gentle Nudge | `habits`, `reminder` |
+| Weekly Stats | `widget`, `garden`, `analytics`, `habits` |
+| Insights | `widget`, `garden`, `stats`, `analytics` |
+| Habit Reflection | `habits`, `journal`, `mindfulness` |
+| Routine | `widget`, `garden`, `habits`, `routine` |
+| Gentle Nudge | `habits`, `notification`, `reminder` |
 
 ---
 
@@ -47,9 +52,9 @@ Official plugins in registry **3.5.1**. New plugins require **Cultiva 2.0.0 · R
 
 Each plugin: `https://github.com/krwg/cultiva-plugins/tree/main/<id>`
 
-Per-plugin release history: `<id>/CHANGELOG.md`. Weather also has a [README](https://github.com/krwg/cultiva-plugins/blob/main/weather/README.md).
+Per-plugin docs: `<id>/README.md` (EN + RU) and `<id>/CHANGELOG.md` (Keep a Changelog).
 
-Browse: [GitHub Pages catalog](https://krwg.github.io/cultiva-plugins/#catalog)
+Browse: [GitHub Pages catalog](https://krwg.github.io/cultiva-plugins/)
 
 ---
 

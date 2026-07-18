@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [1.4.0] — 2026-07-18
+
+### Added
+- **Another quote** button — shuffle a different quote from the local bank (EN/RU)
+
+---
+
 ## [1.3.2] — 2026-07-12
 
 ### Fixed

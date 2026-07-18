@@ -1,0 +1,13 @@
+{
+  "id": "insights",
+  "name": "Insights",
+  "version": "1.0.0",
+  "author": "krwg",
+  "description": "Local-only habit correlation patterns in the garden: co-occurrence, streak-break weekdays, and linked pair streaks.",
+  "icon": "",
+  "entry": "index.js",
+  "styles": ["styles.css"],
+  "permissions": ["habits.read", "storage", "ui"],
+  "surfaces": ["garden", "hooks"],
+  "minAppVersion": "2.0.0"
+}

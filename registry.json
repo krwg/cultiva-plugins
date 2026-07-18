@@ -1,6 +1,6 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "plugins": [
     {
       "id": "weather",
@@ -46,12 +46,13 @@
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "lastUpdated": "2026-07-18T15:25:14+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [
         "screenshots/neo.png"
-      ]
+      ],
+      "readme": "README.md"
     },
     {
       "id": "time",
@@ -96,13 +97,14 @@
       "storeFlow": "direct",
       "lastUpdated": "2026-07-18T14:56:03+03:00",
       "changelog": "CHANGELOG.md",
-      "featured": true,
-      "screenshots": []
+      "featured": false,
+      "screenshots": [],
+      "readme": "README.md"
     },
     {
       "id": "radio",
       "name": "Radio Widget",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "author": "krwg",
       "description": "When silence gets in the way and playlists feel tired, turn on Music. The plugin streams trusted SomaFM channels right from your garden. Adjust volume, set a sleep timer, and enjoy a glassy minimal interface. Whether you are focusing, reading, or setting a mood — let background sound become part of your ritual.",
       "icon": "",
@@ -136,16 +138,17 @@
         }
       },
       "sha256": {
-        "manifest.json": "8b4489749301b9052677e7650a6b1541b3111d685553f1173a20f7ca53a7d806",
-        "index.js": "a72aaa9918580c383459118faa5ef01c0c43fcead7f5bf9769c73419f95f2303",
+        "manifest.json": "40c50eee12f286f0cfdc08057499ce8339916ff283067e8493ebb554bf206a23",
+        "index.js": "3fee0db3ddf2fc06dd2d17c197b59b1007286378daf5127fa858d32d5667e3e8",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "d16592955a85029e39724166449db36153d5f10e9caa3fd343beed56ceb66968"
+        "styles.css": "6571988886c30ad06e887ccc9cb0e785fd6a68ce6879d683f58f8afe7745a197"
       },
       "storeFlow": "direct",
       "lastUpdated": "2026-07-18T14:56:03+03:00",
       "changelog": "CHANGELOG.md",
-      "featured": false,
-      "screenshots": []
+      "featured": true,
+      "screenshots": [],
+      "readme": "README.md"
     },
     {
       "id": "pomodoro",
@@ -191,13 +194,14 @@
       "storeFlow": "direct",
       "lastUpdated": "2026-07-18T14:56:03+03:00",
       "changelog": "CHANGELOG.md",
-      "featured": true,
-      "screenshots": []
+      "featured": false,
+      "screenshots": [],
+      "readme": "README.md"
     },
     {
       "id": "quote",
       "name": "Quote of the Day",
-      "version": "1.3.2",
+      "version": "1.4.0",
       "author": "krwg",
       "description": "Every morning starts with a mood. Thoughts offers an inspiring line — in Russian or English, based on your language. More than 1000 quotes in separate banks so you always find one that resonates. Save favorites and return when you doubt. A small spark that can launch an entire day.",
       "icon": "",
@@ -229,16 +233,17 @@
         }
       },
       "sha256": {
-        "manifest.json": "ab50bcb1442a9a05c0b9f1ed9e9dbcf45f27d24e9db870d16c84bdb684007ba4",
-        "index.js": "58cdcb1d6824473e18ae694cd98028cf2967368df0c774c0516d70834410252b",
-        "styles.css": "e006b19f17fdb7075df45cee3204f62f7d26d9cfeb896060cac46141d287d96e",
+        "manifest.json": "6b165399e4bd092b20b05111a70a0bce10a8bed3ab2c693f0963983b00792769",
+        "index.js": "b49302bfe05b4e3dee9289f0a1bc27fbb3690525897e07163824737c8be2a283",
+        "styles.css": "f042bd6d323cc56a7ab54bb08008e43fe0b1553eef992d10a4e874719535cf73",
         "quotes-data.json": "a96eeee30269fc8d95e7ddf80ff9fa76e2d9b4e407ec7fe9ef5f685c375d7e89"
       },
       "storeFlow": "direct",
       "lastUpdated": "2026-07-18T14:56:03+03:00",
       "changelog": "CHANGELOG.md",
-      "featured": false,
-      "screenshots": []
+      "featured": true,
+      "screenshots": [],
+      "readme": "README.md"
     },
     {
       "id": "weekly-stats",
@@ -286,7 +291,57 @@
       "lastUpdated": "2026-07-18T14:56:03+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
-      "screenshots": []
+      "screenshots": [],
+      "readme": "README.md"
+    },
+    {
+      "id": "insights",
+      "name": "Insights",
+      "version": "1.0.0",
+      "author": "krwg",
+      "description": "Habits rarely live alone. Correlations finds quiet links in your Cultiva history — which habits rise together, which weekday breaks your streaks, and which pair holds the longest shared run. Everything stays on your device: no network, no telemetry, just patterns from your own garden.",
+      "icon": "",
+      "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/insights",
+      "minAppVersion": "2.0.0",
+      "permissions": [
+        "habits.read",
+        "storage",
+        "ui"
+      ],
+      "surfaces": [
+        "garden",
+        "hooks"
+      ],
+      "settings": false,
+      "tags": [
+        "widget",
+        "garden",
+        "stats",
+        "analytics"
+      ],
+      "i18n": {
+        "en": {
+          "name": "Correlations",
+          "tagline": "Quiet links between your habits.",
+          "description": "Habits rarely live alone. Correlations finds quiet links in your Cultiva history — which habits rise together, which weekday breaks your streaks, and which pair holds the longest shared run. Everything stays on your device: no network, no telemetry, just patterns from your own garden."
+        },
+        "ru": {
+          "name": "Связи",
+          "tagline": "Тихие связи между привычками.",
+          "description": "Привычки редко живут поодиночке. «Связи» находят тихие закономерности в вашей истории Cultiva — какие привычки растут вместе, в какой день недели чаще срываются серии и какая пара держит самую длинную общую серию. Всё остаётся на устройстве: без сети и телеметрии, только паттерны из вашего сада."
+        }
+      },
+      "sha256": {
+        "manifest.json": "95d802f87e2265171ea9b05e920fffa24fe65a1d8c72de38e8d06e2fbaa4fdd1",
+        "index.js": "309b9b3f658bf38baa5881c2d0888225d912c340b7b6474b50e5ae8b96c2837d",
+        "styles.css": "0d2c5708f6c28405e7a1730555e326a29be1fe104ebe00bf9b1f5acf6411fa73"
+      },
+      "storeFlow": "get",
+      "lastUpdated": "2026-07-18T15:48:00+03:00",
+      "changelog": "CHANGELOG.md",
+      "featured": false,
+      "screenshots": [],
+      "readme": "README.md"
     },
     {
       "id": "habit-reflection",
@@ -332,7 +387,8 @@
       "lastUpdated": "2026-07-18T14:56:03+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
-      "screenshots": []
+      "screenshots": [],
+      "readme": "README.md"
     },
     {
       "id": "routine",
@@ -380,7 +436,8 @@
       "lastUpdated": "2026-07-18T14:56:03+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
-      "screenshots": []
+      "screenshots": [],
+      "readme": "README.md"
     },
     {
       "id": "gentle-nudge",
@@ -426,7 +483,8 @@
       "lastUpdated": "2026-07-18T14:56:03+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
-      "screenshots": []
+      "screenshots": [],
+      "readme": "README.md"
     }
   ]
 }

@@ -1,9 +1,9 @@
 {
   "id": "radio",
   "name": "Radio Widget",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "author": "krwg",
-  "description": "Stream SomaFM stations from the header with a sleep timer and glass-style sheet controls.",
+  "description": "Stream SomaFM and custom URLs from the header, with Media Session controls, sleep timer, and glass-style sheet.",
   "icon": "",
   "entry": "index.js",
   "styles": ["cultiva-sheet-base.css", "styles.css"],
@@ -25,11 +25,26 @@
         { "value": "secretagent", "label": "Secret Agent" },
         { "value": "radioparadise", "label": "Radio Paradise" },
         { "value": "chillhop", "label": "Chillhop Radio" },
-        { "value": "defcon", "label": "DEF CON Radio" }
+        { "value": "defcon", "label": "DEF CON Radio" },
+        { "value": "custom", "label": "Custom stream" }
       ],
       "default": "groovesalad",
       "i18n": {
-        "ru": { "label": "Станция по умолчанию" }
+        "ru": {
+          "label": "Станция по умолчанию",
+          "options": {
+            "custom": "Свой поток"
+          }
+        }
+      }
+    },
+    {
+      "key": "customUrl",
+      "label": "Custom stream URL",
+      "type": "text",
+      "default": "",
+      "i18n": {
+        "ru": { "label": "URL своего потока" }
       }
     },
     {

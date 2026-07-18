@@ -36,12 +36,14 @@ class QuotePlugin {
     const en = {
       favorited: 'Added to favorites',
       unfavorited: 'Removed from favorites',
-      favoritesFull: 'Favorites limit reached (50)'
+      favoritesFull: 'Favorites limit reached (50)',
+      anotherQuote: 'Another quote'
     };
     const ru = {
       favorited: 'Добавлено в избранное',
       unfavorited: 'Удалено из избранного',
-      favoritesFull: 'Лимит избранного (50)'
+      favoritesFull: 'Лимит избранного (50)',
+      anotherQuote: 'Другая цитата'
     };
     const dict = this._locale === 'ru' ? ru : en;
     return dict[key] || en[key] || key;
@@ -59,6 +61,10 @@ class QuotePlugin {
     const fill = filled ? 'currentColor' : 'none';
     const stroke = 'currentColor';
     return `<svg class="quote-heart-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="${fill}" stroke="${stroke}" stroke-width="1.8" d="M12 20.5s-7.2-4.6-9.5-8.8C.8 8.2 2.6 5 5.8 4.4c1.8-.3 3.5.4 4.6 1.8 1.1-1.4 2.8-2.1 4.6-1.8 3.2.6 5 3.8 3.3 7.3-2.3 4.2-9.5 8.8-9.5 8.8z"/></svg>`;
+  }
+
+  _shuffleSvg() {
+    return '<svg class="quote-shuffle-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M16 3h5v5M21 3l-6.5 6.5M4 20l6.5-6.5M8 3H3v5M3 3l6.5 6.5M16 21h5v-5M21 21l-6.5-6.5"/></svg>';
   }
 
   async _loadLocale() {
@@ -146,6 +152,7 @@ class QuotePlugin {
     const heartLabel = fav
       ? (this._locale === 'ru' ? 'Убрать из избранного' : 'Remove from favorites')
       : (this._locale === 'ru' ? 'В избранное' : 'Add to favorites');
+    const shuffleLabel = this._t('anotherQuote');
     return `<article class="habit-card garden-plugin-card garden-plugin-card--quote" data-category="mindfulness">
       <div class="card-header quote-card-header">
         <div class="plant-visual quote-icon">${this._quoteIconSvg()}</div>
@@ -153,7 +160,10 @@ class QuotePlugin {
           <div class="card-title quote-card-text">"${this._escapeHtml(q.text)}"</div>
           <div class="card-subtitle quote-card-author">— ${this._escapeHtml(q.author)}</div>
         </div>
-        <button type="button" class="quote-favorite-btn${fav ? ' quote-favorite-btn--active' : ''}" data-plugin-act="toggleFavorite" aria-label="${this._escapeHtml(heartLabel)}" title="${this._escapeHtml(heartLabel)}">${this._heartSvg(fav)}</button>
+        <div class="quote-card-actions">
+          <button type="button" class="quote-shuffle-btn" data-plugin-act="shuffleAnother" aria-label="${this._escapeHtml(shuffleLabel)}" title="${this._escapeHtml(shuffleLabel)}">${this._shuffleSvg()}</button>
+          <button type="button" class="quote-favorite-btn${fav ? ' quote-favorite-btn--active' : ''}" data-plugin-act="toggleFavorite" aria-label="${this._escapeHtml(heartLabel)}" title="${this._escapeHtml(heartLabel)}">${this._heartSvg(fav)}</button>
+        </div>
       </div>
     </article>`;
   }
@@ -178,6 +188,18 @@ class QuotePlugin {
       this.context.ui.showNotification('', this._t('favorited'));
     }
     await this._saveFavorites();
+    this._refreshGarden();
+  }
+
+  shuffleAnother() {
+    const bank = this._bank();
+    const current = this._activeQuote();
+    const currentKey = quoteKey(current);
+    const others = bank.filter((q) => quoteKey(q) !== currentKey);
+    if (!others.length) {
+      return;
+    }
+    this.currentQuote = others[Math.floor(Math.random() * others.length)];
     this._refreshGarden();
   }
 

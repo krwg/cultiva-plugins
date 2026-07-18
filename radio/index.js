@@ -1,5 +1,4 @@
 
-
 class RadioPlugin {
   constructor(context, hooks) {
     this.context = context;
@@ -8,13 +7,15 @@ class RadioPlugin {
       station: 'groovesalad',
       volume: 0.45,
       playing: false,
-      sleepMinutes: 0
+      sleepMinutes: 0,
+      customUrl: ''
     };
     this.audio = null;
     this.sleepTimer = null;
     this._locale = 'en';
     this._streamFailed = false;
-    this.stations = {
+    this._lastFailReason = null;
+    this._baseStations = {
       groovesalad: {
         name: 'Groove Salad',
         tag: 'Chillout',
@@ -98,6 +99,7 @@ class RadioPlugin {
         ]
       }
     };
+    this.stations = { ...this._baseStations };
   }
 
   _t(key) {
@@ -112,9 +114,14 @@ class RadioPlugin {
       sleep: 'Таймер сна',
       off: 'Выкл',
       stations: 'Станции',
+      customUrl: 'Свой поток',
+      customPlay: 'Слушать',
+      customName: 'Свой поток',
+      customTag: 'URL',
       footnote: 'Потоки SomaFM, Radio Paradise, Chillhop. Нужен интернет.',
       playing: 'Играет',
       unavailable: 'Поток недоступен — попробуйте другую станцию.',
+      autoplayBlocked: 'Автовоспроизведение заблокировано — нажмите станцию.',
       sleepDone: 'Таймер сна завершён — воспроизведение остановлено.'
     };
     const en = {
@@ -128,9 +135,14 @@ class RadioPlugin {
       sleep: 'Sleep timer',
       off: 'Off',
       stations: 'Stations',
+      customUrl: 'Custom stream',
+      customPlay: 'Play',
+      customName: 'Custom stream',
+      customTag: 'URL',
       footnote: 'Streams from SomaFM, Radio Paradise, Chillhop. Requires network.',
       playing: 'Playing',
       unavailable: 'Stream unavailable — try another station.',
+      autoplayBlocked: 'Autoplay blocked — tap a station to play.',
       sleepDone: 'Sleep timer ended — playback stopped.'
     };
     const dict = this._locale === 'ru' ? ru : en;
@@ -145,6 +157,22 @@ class RadioPlugin {
       .replace(/"/g, '&quot;');
   }
 
+  _escapeAttr(s) {
+    return this._escapeHtml(s);
+  }
+
+  _syncStationsMap() {
+    const url = typeof this.settings.customUrl === 'string' ? this.settings.customUrl.trim() : '';
+    this.stations = { ...this._baseStations };
+    if (url) {
+      this.stations.custom = {
+        name: this._t('customName'),
+        tag: this._t('customTag'),
+        urls: [url]
+      };
+    }
+  }
+
   _normalizeSettings(raw) {
     const s = { ...this.settings, ...raw };
     if (typeof s.volume === 'string') {
@@ -156,15 +184,34 @@ class RadioPlugin {
     if (typeof s.sleepMinutes === 'string') {
       s.sleepMinutes = parseInt(s.sleepMinutes, 10) || 0;
     }
-    if (!this.stations[s.station]) {
+    if (typeof s.customUrl !== 'string') {
+      s.customUrl = s.customUrl == null ? '' : String(s.customUrl);
+    }
+    s.customUrl = s.customUrl.trim();
+    if (s.station === 'custom') {
+      if (!s.customUrl) {
+        s.station = 'groovesalad';
+      }
+    } else if (!this._baseStations[s.station]) {
       s.station = 'groovesalad';
     }
     return s;
   }
 
+  _isAutoplayError(err) {
+    if (!err) return false;
+    if (err.name === 'NotAllowedError') return true;
+    const msg = String(err.message || '');
+    return /autoplay|user.?gesture|not allowed/i.test(msg);
+  }
+
+  _failMessage() {
+    return this._t(this._lastFailReason === 'autoplayBlocked' ? 'autoplayBlocked' : 'unavailable');
+  }
+
   _headerLabel() {
     if (this._streamFailed) {
-      return this._t('unavailable');
+      return this._failMessage();
     }
     if (!this.settings.playing) return this._t('radio');
     const s = this.stations[this.settings.station];
@@ -173,6 +220,41 @@ class RadioPlugin {
 
   _updateHeader() {
     this.context.ui.updateMainHeader({ label: this._headerLabel(), icon: '' });
+  }
+
+  _setMediaSession(station) {
+    if (typeof navigator === 'undefined' || !navigator.mediaSession) return;
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: station?.name || this._t('radio'),
+        artist: 'Cultiva Radio'
+      });
+      navigator.mediaSession.setActionHandler('play', () => {
+        if (this.settings.station) {
+          this.playStation(this.settings.station, false);
+        }
+      });
+      navigator.mediaSession.setActionHandler('pause', () => {
+        this.stopRadio();
+      });
+      navigator.mediaSession.setActionHandler('stop', () => {
+        this.stopRadio();
+      });
+    } catch {
+      void 0;
+    }
+  }
+
+  _clearMediaSession() {
+    if (typeof navigator === 'undefined' || !navigator.mediaSession) return;
+    try {
+      navigator.mediaSession.metadata = null;
+      navigator.mediaSession.setActionHandler('play', null);
+      navigator.mediaSession.setActionHandler('pause', null);
+      navigator.mediaSession.setActionHandler('stop', null);
+    } catch {
+      void 0;
+    }
   }
 
   _armSleep() {
@@ -200,6 +282,7 @@ class RadioPlugin {
     if (saved) {
       this.settings = this._normalizeSettings(saved);
     }
+    this._syncStationsMap();
     this.context.ui.registerHeaderItem({
       label: this._headerLabel(),
       icon: '',
@@ -231,6 +314,7 @@ class RadioPlugin {
         this.settings = this._normalizeSettings({ ...this.settings, ...saved });
       }
     }
+    this._syncStationsMap();
     if (this.audio) {
       this.audio.volume = this.settings.volume;
     }
@@ -247,6 +331,7 @@ class RadioPlugin {
       this.audio.pause();
       this.audio = null;
     }
+    this._clearMediaSession();
     if (this.sleepTimer) {
       clearTimeout(this.sleepTimer);
       this.sleepTimer = null;
@@ -263,6 +348,7 @@ class RadioPlugin {
   }
 
   playStation(stationId, notify) {
+    this._syncStationsMap();
     const station = this.stations[stationId];
     const urls = this._stationUrls(stationId);
     if (!station || !urls.length) return;
@@ -275,24 +361,43 @@ class RadioPlugin {
 
   _tryPlayUrls(stationId, station, urls, index, notify) {
     if (index >= urls.length) {
+      if (!this._lastFailReason) {
+        this._lastFailReason = 'unavailable';
+      }
       this._streamFailed = true;
+      this.settings.playing = false;
+      this._clearMediaSession();
       this._updateHeader();
-      this.context.ui.showNotification('', this._t('unavailable'));
+      this.context.ui.showNotification('', this._failMessage());
+      this.context.storage.set('settings', this.settings);
       return;
     }
     this._streamFailed = false;
     const audio = new Audio(urls[index]);
     audio.preload = 'none';
     audio.volume = this.settings.volume;
-    const fail = () => {
+    const fail = (err) => {
       audio.pause();
+      if (this._isAutoplayError(err)) {
+        this._lastFailReason = 'autoplayBlocked';
+        this._streamFailed = true;
+        this.settings.playing = false;
+        this._clearMediaSession();
+        this._updateHeader();
+        this.context.ui.showNotification('', this._t('autoplayBlocked'));
+        this.context.storage.set('settings', this.settings);
+        return;
+      }
+      this._lastFailReason = 'unavailable';
       this._tryPlayUrls(stationId, station, urls, index + 1, notify);
     };
     const succeed = () => {
       this._streamFailed = false;
+      this._lastFailReason = null;
       this.audio = audio;
       this.settings.station = stationId;
       this.settings.playing = true;
+      this._setMediaSession(station);
       this._updateHeader();
       this._armSleep();
       if (notify !== false) {
@@ -300,7 +405,7 @@ class RadioPlugin {
       }
       this.context.storage.set('settings', this.settings);
     };
-    audio.addEventListener('error', fail, { once: true });
+    audio.addEventListener('error', () => fail(null), { once: true });
     const playPromise = audio.play();
     if (playPromise && typeof playPromise.then === 'function') {
       playPromise.then(succeed).catch(fail);
@@ -314,7 +419,9 @@ class RadioPlugin {
       this.audio.pause();
       this.audio = null;
     }
+    this._clearMediaSession();
     this._streamFailed = false;
+    this._lastFailReason = null;
     this.settings.playing = false;
     this.context.storage.set('settings', this.settings);
     this._updateHeader();
@@ -329,8 +436,10 @@ class RadioPlugin {
   }
 
   _buildSheetHtml() {
+    this._syncStationsMap();
     const vol = Math.round((this.settings.volume || 0) * 100);
     const sleep = this.settings.sleepMinutes | 0;
+    const customVal = this._escapeAttr(this.settings.customUrl || '');
     const rows = Object.entries(this.stations)
       .map(([id, s]) => {
         const active = this.settings.station === id && this.settings.playing;
@@ -367,6 +476,11 @@ class RadioPlugin {
       <button type="button" class="cultiva-pill${sleep === 30 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="30">30m</button>
       <button type="button" class="cultiva-pill${sleep === 60 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="60">60m</button>
     </div>
+    <label class="cultiva-field-label">${this._t('customUrl')}</label>
+    <div class="radio-custom-row">
+      <input type="url" name="customUrl" class="cultiva-sheet-input" value="${customVal}" placeholder="https://" autocomplete="off" />
+      <button type="button" class="cultiva-sheet-secondary" data-cultiva-act="playCustom" data-cultiva-collect="1">${this._t('customPlay')}</button>
+    </div>
     <label class="cultiva-field-label">${this._t('stations')}</label>
     <div class="cultiva-radio-scroll">${rows}</div>
     <p class="cultiva-sheet-footnote">${this._t('footnote')}</p>
@@ -385,6 +499,17 @@ class RadioPlugin {
       this.settings.sleepMinutes = parseInt(payload.minutes, 10) || 0;
       await this.context.storage.set('settings', this.settings);
       this._armSleep();
+      this.context.ui.openMainSheet(this._buildSheetHtml());
+      return;
+    }
+    if (action === 'playCustom' && payload) {
+      const url = String(payload.customUrl || '').trim();
+      this.settings.customUrl = url;
+      this._syncStationsMap();
+      await this.context.storage.set('settings', this.settings);
+      if (url) {
+        this.playStation('custom', true);
+      }
       this.context.ui.openMainSheet(this._buildSheetHtml());
       return;
     }

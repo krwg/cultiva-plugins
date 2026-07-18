@@ -6,10 +6,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
-## [Unreleased]
+## [3.5.2] — 2026-07-18
+
+### Added
+- **Insights [1.0.0]** — local habit correlations (co-occurrence, streak-break weekday, linked pair streak)
+- Product **README.md** (EN + RU in one file) for every plugin; store Details renders README
+- Radio **[2.3.0]** — Media Session, autoplay vs stream-fail messaging, custom stream URL
+- Quote **[1.4.0]** — shuffle another quote from the local bank
 
 ### Changed
-- Documentation aligned with **Cultiva 2.0.2 · Rowan** and registry **3.5.1**
+- Featured: **Weather**, **Radio**, **Quote**; registry `"readme": "README.md"` on all entries
+- Pages + in-app store: Category and Sort dropdowns (Updated / A–Z / Z–A / А–Я)
+- Registry version **3.5.2** (10 plugins)
 
 ---
 

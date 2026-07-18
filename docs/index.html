@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Official Cultiva plugin store — 9 sandboxed extensions. Requires Cultiva 2.0.0+ Rowan (PLE1) for new plugins.">
+  <meta name="description" content="Official Cultiva plugin store — sandboxed extensions. Requires Cultiva 2.0.0+ Rowan (PLE1) for new plugins.">
   <meta name="theme-color" content="#000000">
   <title>Cultiva Plugins · Store</title>
   <style>
@@ -78,19 +78,40 @@
       color: var(--text-primary); font-size: 13px; font-family: inherit;
     }
     .plugin-store-search::placeholder { color: var(--text-tertiary); }
-    .plugin-store-chips { display: flex; flex-wrap: wrap; gap: 6px; }
-    .plugin-store-chip {
-      border: 1px solid var(--border-light); background: transparent;
-      color: var(--text-secondary); border-radius: 999px;
-      padding: 5px 10px; font-size: 11px; font-weight: 600; cursor: pointer;
+    .plugin-store-filters {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
     }
-    .plugin-store-chip.is-active {
-      background: var(--text-primary); color: var(--bg-primary); border-color: transparent;
+    .plugin-store-filter {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-secondary); font-weight: 600;
+    }
+    .plugin-store-select {
+      padding: 7px 10px; border-radius: 10px;
+      border: 1px solid var(--border-light); background: var(--bg-tertiary);
+      color: var(--text-primary); font-size: 12px; font-family: inherit;
+      min-width: 140px;
     }
     .plugin-store-heading {
       font-size: 12px; font-weight: 700; color: var(--text-secondary);
       margin: 4px 2px 8px;
     }
+    .details-readme {
+      font-size: 13px; color: var(--text-secondary); line-height: 1.55;
+    }
+    .details-readme h1, .details-readme h2, .details-readme h3 {
+      color: var(--text-primary); margin: 14px 0 6px; letter-spacing: -0.02em;
+    }
+    .details-readme h1 { font-size: 17px; }
+    .details-readme h2 { font-size: 15px; }
+    .details-readme h3 { font-size: 13px; }
+    .details-readme p { margin: 0 0 8px; }
+    .details-readme ul { margin: 0 0 10px; padding-left: 18px; }
+    .details-readme li { margin: 2px 0; }
+    .details-readme code {
+      font-family: var(--mono); font-size: 11px;
+      background: var(--bg-tertiary); padding: 1px 5px; border-radius: 4px;
+    }
+    .details-readme strong { color: var(--text-primary); font-weight: 600; }
 
     .plugins-list {
       display: flex; flex-direction: column; gap: 8px;
@@ -245,8 +266,15 @@
         pluginDetails: 'Details',
         pluginFeatured: 'Featured',
         pluginFilterAll: 'All',
+        pluginCategory: 'Category',
+        pluginSort: 'Sort',
+        pluginSortUpdated: 'Updated',
+        pluginSortAZ: 'A-Z',
+        pluginSortZA: 'Z-A',
+        pluginSortRu: 'А-Я',
         pluginLastUpdated: 'Updated',
         pluginStoreSearchPlaceholder: 'Search plugins…',
+        pluginReadme: 'About',
         close: 'Close'
       },
       ru: {
@@ -267,8 +295,15 @@
         pluginDetails: 'Подробнее',
         pluginFeatured: 'Избранные',
         pluginFilterAll: 'Все',
+        pluginCategory: 'Категория',
+        pluginSort: 'Сортировка',
+        pluginSortUpdated: 'Обновлённые',
+        pluginSortAZ: 'A-Z',
+        pluginSortZA: 'Z-A',
+        pluginSortRu: 'А-Я',
         pluginLastUpdated: 'Обновлён',
         pluginStoreSearchPlaceholder: 'Поиск плагинов…',
+        pluginReadme: 'О плагине',
         close: 'Закрыть'
       }
     };
@@ -276,6 +311,7 @@
     let lang = 'en';
     let registry = null;
     let tagFilter = '';
+    let sortMode = 'updated';
     let searchQuery = '';
 
     function t(key) { return (COPY[lang] && COPY[lang][key]) || COPY.en[key] || key; }
@@ -313,9 +349,19 @@
 
     function sortPlugins(list) {
       return [...list].sort((a, b) => {
+        if (sortMode === 'az') {
+          return String(meta(a).name || a.id || '').localeCompare(String(meta(b).name || b.id || ''), 'en', { sensitivity: 'base' });
+        }
+        if (sortMode === 'za') {
+          return String(meta(b).name || b.id || '').localeCompare(String(meta(a).name || a.id || ''), 'en', { sensitivity: 'base' });
+        }
+        if (sortMode === 'ru') {
+          const nameRu = (p) => (p.i18n && p.i18n.ru && p.i18n.ru.name) || p.name || p.id || '';
+          return String(nameRu(a)).localeCompare(String(nameRu(b)), 'ru', { sensitivity: 'base' });
+        }
         const byDate = sortKey(b) - sortKey(a);
         if (byDate !== 0) return byDate;
-        return String(a.name || a.id || '').localeCompare(String(b.name || b.id || ''));
+        return String(meta(a).name || a.id || '').localeCompare(String(meta(b).name || b.id || ''), lang === 'ru' ? 'ru' : 'en', { sensitivity: 'base' });
       });
     }
 
@@ -346,6 +392,56 @@
       if (/^https?:\/\//i.test(rel)) return rel;
       const base = String(baseUrl || '').replace(/\/$/, '');
       return base ? `${base}/${String(rel).replace(/^\//, '')}` : String(rel);
+    }
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function inlineMd(text) {
+      let s = escapeHtml(text);
+      s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      return s;
+    }
+
+    function renderMd(md) {
+      const lines = String(md || '').replace(/\r\n/g, '\n').split('\n');
+      const out = [];
+      let list = [];
+      const flushList = () => {
+        if (!list.length) return;
+        out.push('<ul>' + list.map((item) => `<li>${inlineMd(item)}</li>`).join('') + '</ul>');
+        list = [];
+      };
+      for (const raw of lines) {
+        const line = raw.trimEnd();
+        if (!line.trim()) {
+          flushList();
+          continue;
+        }
+        const bullet = line.match(/^[-*]\s+(.+)$/);
+        if (bullet) {
+          list.push(bullet[1]);
+          continue;
+        }
+        flushList();
+        if (/^###\s+/.test(line)) {
+          out.push(`<h3>${inlineMd(line.replace(/^###\s+/, ''))}</h3>`);
+        } else if (/^##\s+/.test(line)) {
+          out.push(`<h2>${inlineMd(line.replace(/^##\s+/, ''))}</h2>`);
+        } else if (/^#\s+/.test(line)) {
+          out.push(`<h1>${inlineMd(line.replace(/^#\s+/, ''))}</h1>`);
+        } else {
+          out.push(`<p>${inlineMd(line)}</p>`);
+        }
+      }
+      flushList();
+      return out.join('');
     }
 
     function applyChrome() {
@@ -383,20 +479,56 @@
       });
       toolbar.appendChild(search);
 
-      const chips = document.createElement('div');
-      chips.className = 'plugin-store-chips';
+      const filters = document.createElement('div');
+      filters.className = 'plugin-store-filters';
+
+      const catWrap = document.createElement('label');
+      catWrap.className = 'plugin-store-filter';
+      catWrap.appendChild(document.createTextNode(t('pluginCategory')));
+      const cat = document.createElement('select');
+      cat.className = 'plugin-store-select';
+      cat.setAttribute('aria-label', t('pluginCategory'));
       for (const tag of ['', ...collectTags(plugins)]) {
-        const chip = document.createElement('button');
-        chip.type = 'button';
-        chip.className = 'plugin-store-chip' + ((tag || '') === (tagFilter || '') ? ' is-active' : '');
-        chip.textContent = tag || t('pluginFilterAll');
-        chip.addEventListener('click', () => {
-          tagFilter = tag || '';
-          renderList();
-        });
-        chips.appendChild(chip);
+        const opt = document.createElement('option');
+        opt.value = tag;
+        opt.textContent = tag || t('pluginFilterAll');
+        if ((tag || '') === (tagFilter || '')) opt.selected = true;
+        cat.appendChild(opt);
       }
-      toolbar.appendChild(chips);
+      cat.addEventListener('change', () => {
+        tagFilter = cat.value || '';
+        renderList();
+      });
+      catWrap.appendChild(cat);
+      filters.appendChild(catWrap);
+
+      const sortWrap = document.createElement('label');
+      sortWrap.className = 'plugin-store-filter';
+      sortWrap.appendChild(document.createTextNode(t('pluginSort')));
+      const sort = document.createElement('select');
+      sort.className = 'plugin-store-select';
+      sort.setAttribute('aria-label', t('pluginSort'));
+      const sortOpts = [
+        ['updated', 'pluginSortUpdated'],
+        ['az', 'pluginSortAZ'],
+        ['za', 'pluginSortZA'],
+        ['ru', 'pluginSortRu']
+      ];
+      for (const [value, key] of sortOpts) {
+        const opt = document.createElement('option');
+        opt.value = value;
+        opt.textContent = t(key);
+        if (sortMode === value) opt.selected = true;
+        sort.appendChild(opt);
+      }
+      sort.addEventListener('change', () => {
+        sortMode = sort.value || 'updated';
+        renderList();
+      });
+      sortWrap.appendChild(sort);
+      filters.appendChild(sortWrap);
+
+      toolbar.appendChild(filters);
     }
 
     function createCard(p) {
@@ -489,6 +621,26 @@
         metaEl.className = 'details-meta';
         metaEl.textContent = `${t('pluginLastUpdated')} ${String(p.lastUpdated).slice(0, 10)}`;
         body.appendChild(metaEl);
+      }
+
+      const readmeUrl = resolveAsset(p.baseUrl, p.readme || 'README.md');
+      if (readmeUrl) {
+        try {
+          const res = await fetch(readmeUrl, { cache: 'no-store' });
+          if (res.ok) {
+            const text = await res.text();
+            if (text.trim()) {
+              const label = document.createElement('div');
+              label.className = 'details-meta';
+              label.textContent = t('pluginReadme');
+              body.appendChild(label);
+              const readme = document.createElement('div');
+              readme.className = 'details-readme';
+              readme.innerHTML = renderMd(text);
+              body.appendChild(readme);
+            }
+          }
+        } catch (_) {}
       }
 
       const changelogUrl = resolveAsset(p.baseUrl, p.changelog || 'CHANGELOG.md');

@@ -5,6 +5,18 @@
   flex-wrap: wrap;
 }
 
+.radio-custom-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.radio-custom-row .cultiva-sheet-input {
+  flex: 1;
+  min-width: 0;
+}
+
 .cultiva-radio-scroll {
   max-height: 240px;
   overflow-y: auto;
