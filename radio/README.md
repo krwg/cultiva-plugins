@@ -2,7 +2,7 @@
 
 Internet radio in the Cultiva header — a real mini-player for SomaFM favorites, Radio Paradise, Chillhop, or your own stream URL (including `.m3u` / `.pls`). Sleep timer, volume, Media Session, stream history, tray now-playing, and optional Radio Neo visuals.
 
-**Version:** 2.5.0 (see [CHANGELOG.md](./CHANGELOG.md))  
+**Version:** 2.5.1 (see [CHANGELOG.md](./CHANGELOG.md))  
 **minAppVersion:** `2.3.2`  
 **Author:** krwg
 
@@ -92,4 +92,4 @@ Groove Salad, Groove Salad Classic, Fluid, Beat Blender, Drone Zone, Lush, Space
 
 ### Требования
 
-Cultiva **1.7.0** или новее. Нужен интернет для потоков.
+Cultiva **2.3.2** или новее. Нужен интернет для потоков.

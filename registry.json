@@ -1,6 +1,6 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.5.8",
+  "version": "3.5.9",
   "plugins": [
     {
       "id": "weather",
@@ -104,7 +104,7 @@
     {
       "id": "radio",
       "name": "Radio Widget",
-      "version": "2.5.0",
+      "version": "2.5.1",
       "author": "krwg",
       "description": "When silence gets in the way and playlists feel tired, turn on Music. The plugin streams trusted SomaFM channels right from your garden. Adjust volume, set a sleep timer, and enjoy a glassy minimal interface. Whether you are focusing, reading, or setting a mood — let background sound become part of your ritual.",
       "icon": "",
@@ -138,13 +138,13 @@
         }
       },
       "sha256": {
-        "manifest.json": "f3d2b045c5fff8c5262b805c2745ae5a7ed02e70a0acfd31c205378182aa64c2",
-        "index.js": "474e0f4adc6fbac6ba12e2c4cf0a65ee91253616c4e11e35fb41d77a88c45ae4",
-        "cultiva-sheet-base.css": "3fdd75bb151ab1e603454f3e503be0107708d6f46a458b4eb94225ecf07d958f",
-        "styles.css": "023b604c18d4b7b60229a6556669e205714dd2d43975c9c7fb029753a616f0f7"
+        "manifest.json": "6485e4a12d7ed7669b7f6a07e71524b5f74dc77f09e5be15aebeb464ee133773",
+        "index.js": "741a995c880404149d7c89d7c3d0f1762258c87b708dbb55315e853bd7ce516e",
+        "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
+        "styles.css": "2400154d81c06452ed792609aa45de4e99435a5a6265329e4058ad07e64025a3"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-19T02:45:00+03:00",
+      "lastUpdated": "2026-07-19T02:55:00+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [],

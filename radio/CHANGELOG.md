@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [2.5.1] — 2026-07-19
+
+### Fixed
+- Store install integrity: registry SHA-256 now matches GitHub raw (LF) bytes — Integrity check failed for index.js on Windows CRLF hashes
+
+---
+
 ## [2.5.0] — 2026-07-19
 
 ### Fixed
