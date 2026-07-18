@@ -1,9 +1,9 @@
 {
   "id": "weather",
   "name": "Weather Widget",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "author": "krwg",
-  "description": "Current conditions in the header and garden, with hybrid city search for any location worldwide.",
+  "description": "Current conditions in the header and garden, with hybrid city search for any location worldwide. Optional Weather Neo visuals, hourly and 7-day forecast.",
   "icon": "",
   "entry": "index.js",
   "styles": [
@@ -62,6 +62,34 @@
       "default": true,
       "i18n": {
         "ru": { "label": "Показывать в саду" }
+      }
+    },
+    {
+      "key": "neoMode",
+      "label": "Weather Neo",
+      "type": "boolean",
+      "default": false,
+      "i18n": {
+        "ru": { "label": "Погода Нео" },
+        "en": { "label": "Weather Neo" }
+      }
+    },
+    {
+      "key": "showHourly",
+      "label": "Hourly forecast",
+      "type": "boolean",
+      "default": true,
+      "i18n": {
+        "ru": { "label": "Почасовой прогноз" }
+      }
+    },
+    {
+      "key": "showDaily",
+      "label": "7-day forecast",
+      "type": "boolean",
+      "default": true,
+      "i18n": {
+        "ru": { "label": "Прогноз на неделю" }
       }
     }
   ]

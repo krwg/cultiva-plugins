@@ -1,5 +1,4 @@
 
-
 class WeatherPlugin {
   constructor(context, hooks) {
     this.context = context;
@@ -8,6 +7,9 @@ class WeatherPlugin {
       city: 'Moscow',
       units: 'celsius',
       showInGarden: true,
+      neoMode: false,
+      showHourly: true,
+      showDaily: true,
       lat: 55.7558,
       lon: 37.6173
     };
@@ -31,8 +33,7 @@ class WeatherPlugin {
       { name: 'New York', nameRu: 'Нью-Йорк', country: 'USA', lat: 40.7128, lon: -74.0060 }
     ];
 
-     this.russianCities = [];
-
+    this.russianCities = [];
     this._citiesLoaded = false;
     this._citiesLoadPromise = null;
 
@@ -43,18 +44,18 @@ class WeatherPlugin {
       if (this._citiesLoadPromise) {
         return this._citiesLoadPromise;
       }
-    this._citiesLoadPromise = (async () => {
-      try {
-        if (this.context.data && typeof this.context.data.read === 'function') {
-          const list = await this.context.data.read('cities-ru.json');
-          this.russianCities = Array.isArray(list) ? list : [];
+      this._citiesLoadPromise = (async () => {
+        try {
+          if (this.context.data && typeof this.context.data.read === 'function') {
+            const list = await this.context.data.read('cities-ru.json');
+            this.russianCities = Array.isArray(list) ? list : [];
+          }
+        } catch (e) {
+          this.russianCities = [];
         }
-      } catch (e) {
-        this.russianCities = [];
-      }
-      this._citiesLoaded = true;
-      return this.russianCities;
-    })();
+        this._citiesLoaded = true;
+        return this.russianCities;
+      })();
       return this._citiesLoadPromise;
     };
   }
@@ -86,7 +87,13 @@ class WeatherPlugin {
       unknown: 'Неизвестно',
       hot: 'Жарко — пейте воду',
       cold: 'Мороз — оденьтесь теплее',
-      storm: 'Гроза — будьте осторожны'
+      storm: 'Гроза — будьте осторожны',
+      hourly: 'По часам',
+      daily: 'На неделю',
+      precip: 'Осадки',
+      showHourly: 'Почасовой прогноз',
+      showDaily: 'Прогноз на неделю',
+      neoHint: 'Погода Нео'
     };
     const en = {
       loading: 'Loading…',
@@ -114,15 +121,55 @@ class WeatherPlugin {
       unknown: 'Unknown',
       hot: 'Stay hydrated! It\'s hot outside.',
       cold: 'Bundle up! It\'s freezing.',
-      storm: 'Thunderstorm warning! Stay safe.'
+      storm: 'Thunderstorm warning! Stay safe.',
+      hourly: 'Hourly',
+      daily: 'This week',
+      precip: 'Precip',
+      showHourly: 'Hourly forecast',
+      showDaily: '7-day forecast',
+      neoHint: 'Weather Neo'
     };
     const dict = this._locale === 'ru' ? ru : en;
     return dict[key] || key;
   }
 
+  _isNeo() {
+    return this.settings.neoMode === true;
+  }
+
+  _isLowPower() {
+    try {
+      return typeof document !== 'undefined'
+        && document.documentElement?.dataset?.lowPower === '1';
+    } catch {
+      return false;
+    }
+  }
+
+  _dayPhase(date = new Date()) {
+    const h = date.getHours();
+    if (h >= 5 && h < 8) return 'dawn';
+    if (h >= 8 && h < 17) return 'day';
+    if (h >= 17 && h < 21) return 'evening';
+    return 'night';
+  }
+
   _weatherKind() {
     if (!this.weatherData) return 'loading';
     const code = this.weatherData.weatherCode;
+    if (code === 0) return 'clear';
+    if (code === 1 || code === 2) return 'partly';
+    if (code === 3) return 'cloudy';
+    if (code >= 45 && code <= 48) return 'fog';
+    if (code >= 51 && code <= 67) return 'rain';
+    if (code >= 71 && code <= 77) return 'snow';
+    if (code >= 80 && code <= 82) return 'showers';
+    if (code >= 85 && code <= 86) return 'snow';
+    if (code >= 95) return 'storm';
+    return 'cloudy';
+  }
+
+  _kindFromCode(code) {
     if (code === 0) return 'clear';
     if (code === 1 || code === 2) return 'partly';
     if (code === 3) return 'cloudy';
@@ -152,6 +199,45 @@ class WeatherPlugin {
     return icons[k] || icons.cloudy;
   }
 
+  _neoFxHtml(kind, phase) {
+    if (!this._isNeo()) return '';
+    const low = this._isLowPower();
+    const parts = ['<div class="weather-neo-fx" aria-hidden="true">'];
+    if (kind === 'rain' || kind === 'showers') {
+      const n = low ? 3 : 6;
+      for (let i = 0; i < n; i++) {
+        const left = 12 + i * (70 / Math.max(1, n - 1));
+        const delay = (i * 0.17).toFixed(2);
+        const dur = (0.9 + (i % 3) * 0.15).toFixed(2);
+        parts.push(`<span class="weather-neo-streak" style="left:${left}%;animation-delay:${delay}s;animation-duration:${dur}s"></span>`);
+      }
+    } else if (kind === 'snow') {
+      const n = low ? 4 : 8;
+      for (let i = 0; i < n; i++) {
+        const left = 8 + (i * 11) % 84;
+        const top = (i * 13) % 60;
+        const delay = (i * 0.4).toFixed(2);
+        parts.push(`<span class="weather-neo-flake" style="left:${left}%;top:${top}%;animation-delay:${delay}s"></span>`);
+      }
+    } else if (kind === 'clear') {
+      parts.push('<span class="weather-neo-glow"></span>');
+      if (phase === 'night') {
+        const n = low ? 4 : 10;
+        for (let i = 0; i < n; i++) {
+          const left = 10 + (i * 17) % 80;
+          const top = 8 + (i * 23) % 55;
+          parts.push(`<span class="weather-neo-star" style="left:${left}%;top:${top}%"></span>`);
+        }
+      }
+    } else if (kind === 'storm' && !low) {
+      parts.push('<span class="weather-neo-flash"></span>');
+    } else if (kind === 'fog') {
+      parts.push('<span class="weather-neo-haze"></span>');
+    }
+    parts.push('</div>');
+    return parts.join('');
+  }
+
   _cityLabel(name) {
     if (this._locale !== 'ru') {
       return name;
@@ -170,6 +256,37 @@ class WeatherPlugin {
 
   _windUnit() {
     return this._locale === 'ru' ? 'км/ч' : 'km/h';
+  }
+
+  _toDisplayTemp(celsius) {
+    if (this.settings.units === 'fahrenheit') {
+      return Math.round(celsius * 9 / 5 + 32);
+    }
+    return Math.round(celsius);
+  }
+
+  _formatHourLabel(iso) {
+    try {
+      const d = new Date(iso);
+      const h = d.getHours();
+      if (this._locale === 'ru') {
+        return `${h}:00`;
+      }
+      const am = h < 12;
+      const h12 = h % 12 || 12;
+      return `${h12}${am ? 'a' : 'p'}`;
+    } catch {
+      return '';
+    }
+  }
+
+  _formatWeekday(iso) {
+    try {
+      const d = new Date(iso);
+      return d.toLocaleDateString(this._locale === 'ru' ? 'ru-RU' : 'en-US', { weekday: 'short' });
+    } catch {
+      return '';
+    }
   }
 
   _patchSearchResults(html) {
@@ -333,24 +450,51 @@ class WeatherPlugin {
       const lat = this.settings.lat || 55.7558;
       const lon = this.settings.lon || 37.6173;
 
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&timezone=auto`;
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
+        + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m`
+        + `&hourly=temperature_2m,weather_code,precipitation_probability`
+        + `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum`
+        + `&forecast_days=7&timezone=auto`;
       const response = await fetch(url);
       const data = await response.json();
 
+      const units = this.settings.units === 'fahrenheit' ? '°F' : '°C';
+      const now = Date.now();
+      const hourly = [];
+      const times = data.hourly?.time || [];
+      for (let i = 0; i < times.length && hourly.length < 24; i++) {
+        const t = new Date(times[i]).getTime();
+        if (t < now - 30 * 60 * 1000) continue;
+        hourly.push({
+          time: times[i],
+          temp: this._toDisplayTemp(data.hourly.temperature_2m[i]),
+          code: data.hourly.weather_code[i],
+          precip: data.hourly.precipitation_probability?.[i]
+        });
+      }
+
+      const daily = [];
+      const dTimes = data.daily?.time || [];
+      for (let i = 0; i < dTimes.length; i++) {
+        daily.push({
+          date: dTimes[i],
+          code: data.daily.weather_code[i],
+          max: this._toDisplayTemp(data.daily.temperature_2m_max[i]),
+          min: this._toDisplayTemp(data.daily.temperature_2m_min[i]),
+          precip: data.daily.precipitation_sum?.[i]
+        });
+      }
+
       this.weatherData = {
-        temp: data.current.temperature_2m,
-        feelsLike: data.current.apparent_temperature,
+        temp: this._toDisplayTemp(data.current.temperature_2m),
+        feelsLike: this._toDisplayTemp(data.current.apparent_temperature),
         humidity: data.current.relative_humidity_2m,
         windSpeed: data.current.wind_speed_10m,
         weatherCode: data.current.weather_code,
-        units: '°C'
+        units,
+        hourly,
+        daily
       };
-
-      if (this.settings.units === 'fahrenheit') {
-        this.weatherData.temp = Math.round(this.weatherData.temp * 9/5 + 32);
-        this.weatherData.feelsLike = Math.round(this.weatherData.feelsLike * 9/5 + 32);
-        this.weatherData.units = '°F';
-      }
 
       console.log('[Weather] Updated:', this.weatherData);
       this.updateHeaderIcon();
@@ -410,11 +554,21 @@ class WeatherPlugin {
     this.context.ui.updateGardenHtml(this._gardenInnerHtml());
   }
 
+  _gardenClassList(kind, phase) {
+    const neo = this._isNeo() ? ' weather-neo' : '';
+    const phaseCls = this._isNeo() ? ` weather-phase--${phase}` : '';
+    return `habit-card garden-plugin-card weather-garden-card weather-garden-card--${kind}${phaseCls}${neo}`;
+  }
+
   _gardenInnerHtml() {
     const kind = this._weatherKind();
+    const phase = this._dayPhase();
     const icon = this._weatherIconSvg(kind);
+    const fx = this._neoFxHtml(kind, phase);
+    const cls = this._gardenClassList(kind, phase);
     if (!this.weatherData) {
-      return `<article class="habit-card garden-plugin-card weather-garden-card weather-garden-card--${kind}" tabindex="0">
+      return `<article class="${cls}" tabindex="0">
+        ${fx}
         <div class="card-header">
           <div class="plant-visual weather-garden-icon">${icon}</div>
           <div class="card-info">
@@ -424,7 +578,8 @@ class WeatherPlugin {
         </div>
       </article>`;
     }
-    return `<article class="habit-card garden-plugin-card weather-garden-card weather-garden-card--${kind}" tabindex="0">
+    return `<article class="${cls}" tabindex="0">
+        ${fx}
         <div class="card-header">
           <div class="plant-visual weather-garden-icon">${icon}</div>
           <div class="card-info">
@@ -446,9 +601,41 @@ class WeatherPlugin {
     this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
   }
 
+  _hourlyHtml() {
+    if (!this.settings.showHourly || !this.weatherData?.hourly?.length) return '';
+    const units = this.weatherData.units || '°C';
+    const items = this.weatherData.hourly.slice(0, 24).map((h) => {
+      const k = this._kindFromCode(h.code);
+      const precip = h.precip != null ? `<div class="cultiva-muted">${h.precip}%</div>` : '';
+      return `<div class="weather-hourly-item">
+        <div>${this._escapeHtml(this._formatHourLabel(h.time))}</div>
+        ${this._weatherIconSvg(k)}
+        <strong>${h.temp}${units}</strong>
+        ${precip}
+      </div>`;
+    }).join('');
+    return `<div class="weather-section-label">${this._t('hourly')}</div><div class="weather-hourly">${items}</div>`;
+  }
+
+  _dailyHtml() {
+    if (!this.settings.showDaily || !this.weatherData?.daily?.length) return '';
+    const units = this.weatherData.units || '°C';
+    const rows = this.weatherData.daily.map((d) => {
+      const k = this._kindFromCode(d.code);
+      return `<div class="weather-daily-row">
+        <span>${this._escapeHtml(this._formatWeekday(d.date))}</span>
+        ${this._weatherIconSvg(k)}
+        <span class="cultiva-muted">${d.precip != null ? `${d.precip} mm` : ''}</span>
+        <span class="weather-daily-temps">${d.min}° <strong>${d.max}°</strong></span>
+      </div>`;
+    }).join('');
+    return `<div class="weather-section-label">${this._t('daily')}</div><div class="weather-daily">${rows}</div>`;
+  }
+
   _buildWeatherSheetHtml(searchResultsHtml) {
     const w = this.weatherData;
     const kind = this._weatherKind();
+    const phase = this._dayPhase();
     const city = this._escapeHtml(this._cityLabel(this.settings.city));
     const mainTemp = w ? Math.round(w.temp) : '--';
     const units = w?.units || '°C';
@@ -466,9 +653,13 @@ class WeatherPlugin {
       .join('');
     const results = searchResultsHtml || '';
     const icon = this._weatherIconSvg(kind);
+    const fx = this._neoFxHtml(kind, phase);
+    const neoCls = this._isNeo() ? ' weather-neo' : '';
+    const phaseCls = this._isNeo() ? ` weather-phase--${phase}` : '';
     return `
 <div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
-<div class="cultiva-sheet-card cultiva-sheet-card--weather weather-sheet--${kind}">
+<div class="cultiva-sheet-card cultiva-sheet-card--weather weather-sheet--${kind}${phaseCls}${neoCls}">
+  ${fx}
   <div class="cultiva-sheet-grabber"></div>
   <div class="cultiva-sheet-head">
     <div>
@@ -482,10 +673,17 @@ class WeatherPlugin {
       <span class="weather-hero-icon">${icon}</span>
       <span class="weather-hero-temp">${mainTemp}<span class="weather-hero-unit">${units}</span></span>
     </div>
+    <p class="weather-hero-desc">${desc}</p>
     <div class="weather-metrics">
       <div><span class="cultiva-muted">${this._t('feels')}</span><strong>${feel}${units}</strong></div>
       <div><span class="cultiva-muted">${this._t('humidity')}</span><strong>${hum}%</strong></div>
       <div><span class="cultiva-muted">${this._t('wind')}</span><strong>${wind} ${this._windUnit()}</strong></div>
+    </div>
+    ${this._hourlyHtml()}
+    ${this._dailyHtml()}
+    <div class="weather-view-toggles">
+      <label><input type="checkbox" data-cultiva-act="toggleHourly" ${this.settings.showHourly !== false ? 'checked' : ''}/> ${this._t('showHourly')}</label>
+      <label><input type="checkbox" data-cultiva-act="toggleDaily" ${this.settings.showDaily !== false ? 'checked' : ''}/> ${this._t('showDaily')}</label>
     </div>
     <label class="cultiva-field-label">${this._t('searchCity')}</label>
     <input type="text" name="citySearch" class="cultiva-sheet-input" data-cultiva-input-act="search" placeholder="${this._escapeAttr(this._t('searchPlaceholder'))}" value="${searchVal}" autocomplete="off" />
@@ -517,6 +715,18 @@ class WeatherPlugin {
       this.settings.units = payload.value;
       await this.context.storage.set('settings', this.settings);
       await this.fetchWeather();
+      this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
+      return;
+    }
+    if (action === 'toggleHourly') {
+      this.settings.showHourly = !this.settings.showHourly;
+      await this.context.storage.set('settings', this.settings);
+      this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
+      return;
+    }
+    if (action === 'toggleDaily') {
+      this.settings.showDaily = !this.settings.showDaily;
+      await this.context.storage.set('settings', this.settings);
       this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
       return;
     }

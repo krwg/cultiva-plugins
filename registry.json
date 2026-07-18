@@ -5,9 +5,9 @@
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "2.3.2",
+      "version": "2.4.0",
       "author": "krwg",
-      "description": "Glanced out the window but still unsure? The Weather plugin shows a live forecast in the header and garden. Built-in search covers 1100+ Russian cities — type a few letters and the rest fills in. Outside Russia, Open-Meteo keeps you covered anywhere in the world. Check cloud cover, temperature, and precipitation in seconds — then decide whether to grab an umbrella or go for a run.",
+      "description": "Glanced out the window but still unsure? The Weather plugin shows a live forecast in the header and garden — with optional Weather Neo visuals, hourly and 7-day outlook. Built-in search covers 1100+ Russian cities; Open-Meteo covers the world.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
       "minAppVersion": "1.7.0",
@@ -29,20 +29,20 @@
       "i18n": {
         "en": {
           "name": "Weather",
-          "tagline": "Forecast always within reach.",
-          "description": "Glanced out the window but still unsure? The Weather plugin shows a live forecast in the header and garden. Built-in search covers 1100+ Russian cities — type a few letters and the rest fills in. Outside Russia, Open-Meteo keeps you covered anywhere in the world. Check cloud cover, temperature, and precipitation in seconds — then decide whether to grab an umbrella or go for a run."
+          "tagline": "Forecast with Neo polish.",
+          "description": "Glanced out the window but still unsure? The Weather plugin shows a live forecast in the header and garden — with optional Weather Neo visuals, hourly and 7-day outlook. Built-in search covers 1100+ Russian cities; Open-Meteo covers the world."
         },
         "ru": {
           "name": "Погода",
-          "tagline": "Прогноз, который всегда под рукой.",
-          "description": "Выглянули в окно, но сомневаетесь? Плагин «Погода» показывает актуальный прогноз прямо в шапке приложения и в саду. Встроенный поиск знает 1100+ городов России — достаточно ввести несколько букв, и всё остальное подхватится. За пределами РФ работает Open-Meteo, так что вы не потеряетесь в любой точке мира. Оцените облачность, температуру и осадки за секунду — и решайте, брать зонт или выходить на пробежку."
+          "tagline": "Прогноз с режимом Нео.",
+          "description": "Выглянули в окно, но сомневаетесь? Плагин «Погода» показывает прогноз в шапке и в саду — с опциональным режимом «Погода Нео», почасовым и недельным прогнозом. Поиск знает 1100+ городов РФ; Open-Meteo работает по всему миру."
         }
       },
       "sha256": {
-        "manifest.json": "60bf3c3e9d5437b71badb852d55d28ddbdb80e9c74d0581178775eb777f23412",
-        "index.js": "5552fc60a357c0115b64d4d5fd87d12bc093df7ed2246d59dae094d3cd2f6440",
+        "manifest.json": "640e618ae1c2668bee5530246e89ab09a220403b3f58a5102ff3b5b1e761eb74",
+        "index.js": "3273dfa76ca4d520e53739da4775432a42653ff951c0133ca2ca0be258af4c15",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "8cdf2251d77f54ff14b675dd4beb55ab19f9e2ca26eae8cd6ec4691707d5e153",
+        "styles.css": "03e140242bc29e2943ccb4144a4d86f7f092f417b3d70e0200d3d319066bd0a9",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       },
       "storeFlow": "direct"

@@ -22,6 +22,9 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 ### Security
 - Registry integrity CI fails on stale sha256; Pages deploy gated on validation
 
+### Added
+- **Weather 2.4.0** — Weather Neo (opt-in), time-of-day tint, in-card CSS effects, hourly + 7-day forecast sheet; still `minAppVersion` **1.7.0**
+
 ---
 
 ## [3.4.0] — 2026-07-12
