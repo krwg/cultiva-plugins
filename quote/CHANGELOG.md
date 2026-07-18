@@ -6,6 +6,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [1.5.0] — 2026-07-18
+
+### Changed
+- Garden card **min-height 184px** (habit-card height) with flex layout so content fills
+- Next-quote control uses a **chevron** instead of the multi-arrow shuffle icon
+- All button labels and toasts via `_t()` (EN/RU), including next quote and favorites
+
+### Added
+- `showNotification` on next quote and favorite / unfavorite
+
+---
+
 ## [1.4.0] — 2026-07-18
 
 ### Added

@@ -6,6 +6,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [2.4.0] — 2026-07-18
+
+### Fixed
+- Dual-stream race: stop/pause previous `Audio` and cancel in-flight `play()` before creating a new one; single `this.audio` owner; generation token ignores late success/fail from superseded attempts
+- Station switch awaits stop, then play; header and sheet active state update synchronously (optimistic UI)
+
+### Added
+- Player-style sheet: large title, genre tag, play/pause, prev/next, volume, sleep timer, now-playing strip
+- Stations: Groove Salad Classic, Underground 80s, Indie Pop Rocks, Deep Space One (multi-mirror SomaFM)
+- Optional **Radio Neo** (`visualFx`, default off): genre gradients + pulse while playing; respects `prefers-reduced-motion`
+- Full RU/EN UI strings and play/stop/error notifications
+
+### Changed
+- `minAppVersion` → **1.7.0**
+
+---
+
 ## [2.3.0] — 2026-07-18
 
 ### Added

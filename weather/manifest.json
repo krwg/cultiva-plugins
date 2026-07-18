@@ -1,7 +1,7 @@
 {
   "id": "weather",
   "name": "Weather Widget",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "author": "krwg",
   "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo (Apple-bright gradients, time-of-day, animations), theme bypass, hourly and 7-day forecast. Cyrillic city search + Open-Meteo merge.",
   "icon": "",
@@ -27,6 +27,7 @@
       "type": "text",
       "default": "Moscow",
       "i18n": {
+        "en": { "label": "City" },
         "ru": { "label": "Город" }
       }
     },
@@ -40,6 +41,13 @@
       ],
       "default": "celsius",
       "i18n": {
+        "en": {
+          "label": "Units",
+          "options": {
+            "celsius": "Celsius (°C)",
+            "fahrenheit": "Fahrenheit (°F)"
+          }
+        },
         "ru": {
           "label": "Единицы",
           "options": {
@@ -55,6 +63,7 @@
       "type": "boolean",
       "default": true,
       "i18n": {
+        "en": { "label": "Show in garden" },
         "ru": { "label": "Показывать в саду" }
       }
     },
@@ -64,8 +73,8 @@
       "type": "boolean",
       "default": false,
       "i18n": {
-        "ru": { "label": "Погода Нео" },
-        "en": { "label": "Weather Neo" }
+        "en": { "label": "Weather Neo" },
+        "ru": { "label": "Погода Нео" }
       }
     },
     {
@@ -74,8 +83,8 @@
       "type": "boolean",
       "default": false,
       "i18n": {
-        "ru": { "label": "Нео игнорирует цвета темы" },
-        "en": { "label": "Neo ignores app theme colors" }
+        "en": { "label": "Neo ignores app theme colors" },
+        "ru": { "label": "Нео игнорирует цвета темы" }
       }
     },
     {
@@ -84,6 +93,7 @@
       "type": "boolean",
       "default": true,
       "i18n": {
+        "en": { "label": "Hourly forecast" },
         "ru": { "label": "Почасовой прогноз" }
       }
     },
@@ -93,6 +103,7 @@
       "type": "boolean",
       "default": true,
       "i18n": {
+        "en": { "label": "7-day forecast" },
         "ru": { "label": "Прогноз на неделю" }
       }
     }

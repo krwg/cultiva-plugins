@@ -62,44 +62,6 @@ class WeatherPlugin {
   }
 
   _t(key) {
-    const ru = {
-      loading: 'Загрузка…',
-      feels: 'Ощущается',
-      humidity: 'Влажность',
-      wind: 'Ветер',
-      searchCity: 'Поиск города',
-      searchPlaceholder: 'Введите минимум 2 буквы…',
-      quickPicks: 'Быстрый выбор',
-      units: 'Единицы',
-      celsius: 'Цельсий °C',
-      fahrenheit: 'Фаренгейт °F',
-      footnote: 'Open-Meteo · Локальная база РФ + геокодинг',
-      noCities: 'Города не найдены',
-      clear: 'Ясно',
-      partlyCloudy: 'Переменная облачность',
-      cloudy: 'Облачно',
-      foggy: 'Туман',
-      drizzle: 'Морось',
-      rainy: 'Дождь',
-      snowy: 'Снег',
-      showers: 'Ливни',
-      snowShowers: 'Снегопад',
-      thunderstorm: 'Гроза',
-      unknown: 'Неизвестно',
-      hot: 'Жарко — пейте воду',
-      cold: 'Мороз — оденьтесь теплее',
-      storm: 'Гроза — будьте осторожны',
-      hourly: 'По часам',
-      daily: 'На неделю',
-      precip: 'Осадки',
-      showHourly: 'Почасовой прогноз',
-      showDaily: 'Прогноз на неделю',
-      neoHint: 'Погода Нео',
-      pressure: 'Давление',
-      clouds: 'Облачность',
-      uv: 'УФ-индекс',
-      hpa: 'гПа'
-    };
     const en = {
       loading: 'Loading…',
       feels: 'Feels',
@@ -136,10 +98,58 @@ class WeatherPlugin {
       pressure: 'Pressure',
       clouds: 'Clouds',
       uv: 'UV index',
-      hpa: 'hPa'
+      hpa: 'hPa',
+      close: 'Close',
+      cityChanged: 'City updated',
+      fetchError: 'Could not load weather',
+      neoOn: 'Weather Neo on',
+      neoOff: 'Weather Neo off'
+    };
+    const ru = {
+      loading: 'Загрузка…',
+      feels: 'Ощущается',
+      humidity: 'Влажность',
+      wind: 'Ветер',
+      searchCity: 'Поиск города',
+      searchPlaceholder: 'Введите минимум 2 буквы…',
+      quickPicks: 'Быстрый выбор',
+      units: 'Единицы',
+      celsius: 'Цельсий °C',
+      fahrenheit: 'Фаренгейт °F',
+      footnote: 'Open-Meteo · Локальная база РФ + геокодинг',
+      noCities: 'Города не найдены',
+      clear: 'Ясно',
+      partlyCloudy: 'Переменная облачность',
+      cloudy: 'Облачно',
+      foggy: 'Туман',
+      drizzle: 'Морось',
+      rainy: 'Дождь',
+      snowy: 'Снег',
+      showers: 'Ливни',
+      snowShowers: 'Снегопад',
+      thunderstorm: 'Гроза',
+      unknown: 'Неизвестно',
+      hot: 'Жарко — пейте воду',
+      cold: 'Мороз — оденьтесь теплее',
+      storm: 'Гроза — будьте осторожны',
+      hourly: 'По часам',
+      daily: 'На неделю',
+      precip: 'Осадки',
+      showHourly: 'Почасовой прогноз',
+      showDaily: 'Прогноз на неделю',
+      neoHint: 'Погода Нео',
+      pressure: 'Давление',
+      clouds: 'Облачность',
+      uv: 'УФ-индекс',
+      hpa: 'гПа',
+      close: 'Закрыть',
+      cityChanged: 'Город обновлён',
+      fetchError: 'Не удалось загрузить погоду',
+      neoOn: 'Погода Нео включена',
+      neoOff: 'Погода Нео выключена'
     };
     const dict = this._locale === 'ru' ? ru : en;
-    return dict[key] || key;
+    return dict[key] || en[key] || key;
   }
 
   _isNeo() {
@@ -370,6 +380,7 @@ class WeatherPlugin {
   }
 
   async onSettingsChange(payload) {
+    const prevNeo = this.settings.neoMode === true;
     if (this.context.app && typeof this.context.app.getLocale === 'function') {
       try {
         this._locale = await this.context.app.getLocale();
@@ -384,6 +395,10 @@ class WeatherPlugin {
       if (saved) {
         this.settings = { ...this.settings, ...saved };
       }
+    }
+    const nextNeo = this.settings.neoMode === true;
+    if (nextNeo !== prevNeo) {
+      this.context.ui.showNotification('', this._t(nextNeo ? 'neoOn' : 'neoOff'));
     }
     await this._syncCoordsFromCity();
     if (this.settings.showInGarden) {
@@ -550,6 +565,7 @@ class WeatherPlugin {
       this.updateGardenWidget();
     } catch (e) {
       console.error('[Weather] Failed to fetch:', e);
+      this.context.ui.showNotification('', this._t('fetchError'));
     }
   }
 
@@ -728,7 +744,7 @@ class WeatherPlugin {
       <div class="cultiva-sheet-title">${city}</div>
       <div class="cultiva-sheet-sub">${desc}</div>
     </div>
-    <button type="button" class="cultiva-sheet-x" data-cultiva-act="close" aria-label="Close">×</button>
+    <button type="button" class="cultiva-sheet-x" data-cultiva-act="close" aria-label="${this._escapeAttr(this._t('close'))}">×</button>
   </div>
   <div class="cultiva-sheet-body">
     <div class="weather-hero">
@@ -773,6 +789,10 @@ class WeatherPlugin {
       this._sheetSearchQuery = '';
       await this.context.storage.set('settings', this.settings);
       await this.fetchWeather();
+      this.context.ui.showNotification(
+        '',
+        `${this._t('cityChanged')}: ${this._cityLabel(this.settings.city)}`
+      );
       this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
       return;
     }

@@ -1,15 +1,15 @@
 {
   "id": "radio",
   "name": "Radio Widget",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "author": "krwg",
-  "description": "Stream SomaFM and custom URLs from the header, with Media Session controls, sleep timer, and glass-style sheet.",
+  "description": "Internet radio player in the header: SomaFM stations, custom URL, Media Session, sleep timer, optional Radio Neo visual FX.",
   "icon": "",
   "entry": "index.js",
   "styles": ["cultiva-sheet-base.css", "styles.css"],
   "permissions": ["network", "storage", "ui"],
   "surfaces": ["header"],
-  "minAppVersion": "1.1.0",
+  "minAppVersion": "1.7.0",
   "settings": [
     {
       "key": "station",
@@ -17,12 +17,16 @@
       "type": "select",
       "options": [
         { "value": "groovesalad", "label": "Groove Salad" },
+        { "value": "gsclassic", "label": "Groove Salad Classic" },
         { "value": "fluid", "label": "Fluid" },
         { "value": "beatblender", "label": "Beat Blender" },
         { "value": "dronezone", "label": "Drone Zone" },
         { "value": "lush", "label": "Lush" },
         { "value": "spacestation", "label": "Space Station" },
         { "value": "secretagent", "label": "Secret Agent" },
+        { "value": "u80s", "label": "Underground 80s" },
+        { "value": "indiepop", "label": "Indie Pop Rocks" },
+        { "value": "deepspaceone", "label": "Deep Space One" },
         { "value": "radioparadise", "label": "Radio Paradise" },
         { "value": "chillhop", "label": "Chillhop Radio" },
         { "value": "defcon", "label": "DEF CON Radio" },
@@ -95,6 +99,16 @@
             "60": "60 мин"
           }
         }
+      }
+    },
+    {
+      "key": "visualFx",
+      "label": "Radio Neo",
+      "type": "boolean",
+      "default": false,
+      "i18n": {
+        "ru": { "label": "Радио Нео" },
+        "en": { "label": "Radio Neo" }
       }
     }
   ]

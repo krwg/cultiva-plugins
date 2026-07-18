@@ -37,13 +37,19 @@ class QuotePlugin {
       favorited: 'Added to favorites',
       unfavorited: 'Removed from favorites',
       favoritesFull: 'Favorites limit reached (50)',
-      anotherQuote: 'Another quote'
+      anotherQuote: 'Next quote',
+      shuffled: 'Showing another quote',
+      addFavorite: 'Add to favorites',
+      removeFavorite: 'Remove from favorites'
     };
     const ru = {
       favorited: 'Добавлено в избранное',
       unfavorited: 'Удалено из избранного',
       favoritesFull: 'Лимит избранного (50)',
-      anotherQuote: 'Другая цитата'
+      anotherQuote: 'Следующая цитата',
+      shuffled: 'Показана другая цитата',
+      addFavorite: 'В избранное',
+      removeFavorite: 'Убрать из избранного'
     };
     const dict = this._locale === 'ru' ? ru : en;
     return dict[key] || en[key] || key;
@@ -64,7 +70,7 @@ class QuotePlugin {
   }
 
   _shuffleSvg() {
-    return '<svg class="quote-shuffle-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M16 3h5v5M21 3l-6.5 6.5M4 20l6.5-6.5M8 3H3v5M3 3l6.5 6.5M16 21h5v-5M21 21l-6.5-6.5"/></svg>';
+    return '<svg class="quote-shuffle-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M9 6l6 6-6 6"/></svg>';
   }
 
   async _loadLocale() {
@@ -149,9 +155,7 @@ class QuotePlugin {
   _html() {
     const q = this._activeQuote();
     const fav = this._isFavorite(q);
-    const heartLabel = fav
-      ? (this._locale === 'ru' ? 'Убрать из избранного' : 'Remove from favorites')
-      : (this._locale === 'ru' ? 'В избранное' : 'Add to favorites');
+    const heartLabel = fav ? this._t('removeFavorite') : this._t('addFavorite');
     const shuffleLabel = this._t('anotherQuote');
     return `<article class="habit-card garden-plugin-card garden-plugin-card--quote" data-category="mindfulness">
       <div class="card-header quote-card-header">
@@ -200,6 +204,7 @@ class QuotePlugin {
       return;
     }
     this.currentQuote = others[Math.floor(Math.random() * others.length)];
+    this.context.ui.showNotification('', this._t('shuffled'));
     this._refreshGarden();
   }
 

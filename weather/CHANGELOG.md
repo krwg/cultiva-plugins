@@ -8,6 +8,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Versions from `w
 
 ## [Unreleased]
 
+## [2.6.0] — 2026-07-18
+
+### Added
+- `showNotification` for city change, weather fetch errors, and Weather Neo on/off (EN/RU)
+- Sheet close button `aria-label` via `_t()` (EN/RU)
+
+### Changed
+- Full EN/RU `_t()` coverage for sheet strings; EN fallback in `_t`
+- Manifest setting **i18n** blocks for both EN and RU
+
+---
+
 ## [2.5.1] — 2026-07-18
 
 ### Fixed

@@ -1,12 +1,12 @@
 # Catalog
 
-Official plugins in registry **3.5.2**. New plugins require **Cultiva 2.0.0 · Rowan** (PLE1); existing entries may declare lower `minAppVersion` floors.
+Official plugins in registry **3.5.3**. New plugins require **Cultiva 2.0.0 · Rowan** (PLE1); existing entries may declare lower `minAppVersion` floors.
 
 | Plugin | Version | Surface | Permissions | Description |
 |--------|---------|---------|-------------|-------------|
-| **Weather** ★ | [2.5.1] | Header + garden | `network`, `storage`, `ui` | Open-Meteo; RU cities; optional Weather Neo |
-| **Radio** ★ | [2.3.0] | Header | `network`, `storage`, `ui` | SomaFM + custom URL, Media Session, sleep timer |
-| **Quote** ★ | [1.4.0] | Garden | `storage`, `ui` | Locale-pure EN/RU quotes, favorites, shuffle |
+| **Weather** ★ | [2.6.0] | Header + garden | `network`, `storage`, `ui` | Open-Meteo; RU cities; optional Weather Neo |
+| **Radio** ★ | [2.4.0] | Header | `network`, `storage`, `ui` | Player UI, custom URL, Media Session, opt-in Neo FX |
+| **Quote** ★ | [1.5.0] | Garden | `storage`, `ui` | Locale-pure EN/RU quotes, favorites, next quote |
 | **Insights** | [1.0.0] | Garden | `habits.read`, `storage`, `ui` | On-device habit correlations |
 | **Time** | [2.2.2] | Header | `storage`, `ui` | Live clock, world timezones, sheet UI |
 | **Pomodoro** | [1.2.1] | Header | `storage`, `ui` | 25/5 focus cycles (configurable) |
@@ -15,17 +15,17 @@ Official plugins in registry **3.5.2**. New plugins require **Cultiva 2.0.0 · R
 | **Routine** | [1.0.0] | Garden | `habits.read`, `storage`, `ui` | Morning/evening checklists |
 | **Gentle Nudge** | [1.0.0] | Hook | `habits.read`, `storage`, `ui`, `settings.read` | Evening reminder for incomplete habits |
 
-★ = **Featured** in the store (`featured: true`): Weather, Radio, Quote.
+★ = **Featured** filter (`featured: true`): Weather, Radio, Quote.
 
 ---
 
 ## Store UX (in-app + Pages)
 
-- Search plus **Category** `<select>` (registry `tags`) and **Sort** `<select>`: Updated, A–Z, Z–A, А–Я
-- **Featured** (`featured: true`) listed first; others follow the active sort
+- Search plus **Category** `<select>` (registry `tags` + **Featured**) and **Sort** `<select>`: Updated, A–Z, Z–A, А–Я
+- **Featured** is a filter option — not a separate heading in the list
 - Versions as **`[x.y.z]`** (same style as Cultiva)
 - Permissions confirmed before Install
-- **Details**: tags, permissions, last updated, **README.md** (rendered markdown), changelog excerpt, screenshots
+- **Details**: tags, permissions, last updated, **README.md** (tables/lists/italics), changelog excerpt, screenshots
 - Each registry entry has `"readme": "README.md"` (bilingual EN/RU product copy)
 - `lastUpdated` / `changelog` filled by `scripts/enrich-registry-meta.mjs` (public git dates — not telemetry)
 

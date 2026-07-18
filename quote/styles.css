@@ -1,7 +1,15 @@
 
 .garden-plugin-card--quote {
-  min-height: auto !important;
+  min-height: 184px !important;
   height: auto !important;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.garden-plugin-card--quote .quote-card-header {
+  flex: 1;
+  min-height: 0;
 }
 
 .habit-card.garden-plugin-card--quote .card-title,
@@ -29,6 +37,9 @@
 .quote-card-info {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .quote-card-text {

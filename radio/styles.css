@@ -1,8 +1,91 @@
 
+.radio-now {
+  text-align: center;
+  padding: 8px 4px 16px;
+}
+
+.radio-now-status {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+
+.radio-now-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.radio-now-tag {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.radio-transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin: 4px 0 16px;
+}
+
+.radio-ctrl {
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.radio-ctrl:hover {
+  background: var(--bg-tertiary);
+}
+
+.radio-ctrl:active {
+  transform: scale(0.96);
+}
+
+.radio-ctrl--side {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 28px;
+  line-height: 1;
+  font-weight: 300;
+}
+
+.radio-ctrl--primary {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  font-size: 22px;
+  background: var(--accent-blue, #0a84ff);
+  color: #fff;
+}
+
+.radio-ctrl--primary:hover {
+  filter: brightness(1.06);
+  background: var(--accent-blue, #0a84ff);
+}
+
 .radio-toolbar {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
 .radio-custom-row {
@@ -18,7 +101,7 @@
 }
 
 .cultiva-radio-scroll {
-  max-height: 240px;
+  max-height: 220px;
   overflow-y: auto;
   border-radius: 14px;
   border: 1px solid var(--border-light);
@@ -38,21 +121,30 @@
   cursor: pointer;
   text-align: left;
 }
+
 .cultiva-radio-row:last-child {
   border-bottom: none;
 }
+
 .cultiva-radio-row:hover {
   background: var(--bg-tertiary);
 }
+
 .cultiva-radio-row.is-active {
-  background: rgba(52, 199, 89, 0.1);
-  box-shadow: inset 3px 0 0 #34c759;
+  background: rgba(10, 132, 255, 0.1);
+  box-shadow: inset 3px 0 0 var(--accent-blue, #0a84ff);
 }
+
+.cultiva-radio-row.is-live .cultiva-radio-state {
+  background: #34c759;
+}
+
 .cultiva-radio-title {
   font-size: 15px;
   font-weight: 600;
   color: var(--text-primary);
 }
+
 .cultiva-radio-tag {
   font-size: 11px;
   font-weight: 600;
@@ -60,24 +152,182 @@
   letter-spacing: 0.06em;
   color: var(--text-tertiary);
 }
+
 .cultiva-radio-state {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: transparent;
 }
-.cultiva-radio-row.is-active .cultiva-radio-state {
-  background: #34c759;
-}
 
 input[type='range'][data-cultiva-change-act='volume'] {
   width: 100%;
   accent-color: var(--accent-blue, #0a84ff);
 }
+
 .cultiva-range-meta {
   display: flex;
   justify-content: flex-end;
   font-size: 12px;
   color: var(--text-tertiary);
   margin-top: -4px;
+}
+
+.cultiva-sheet-card--radio.radio-neo {
+  position: relative;
+  overflow: hidden;
+}
+
+.cultiva-sheet-card--radio.radio-neo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.9;
+}
+
+.cultiva-sheet-card--radio.radio-neo > * {
+  position: relative;
+  z-index: 1;
+}
+
+.radio-neo.radio-genre--chillout::before {
+  background:
+    radial-gradient(ellipse 90% 70% at 12% 0%, rgba(52, 199, 89, 0.45) 0%, transparent 55%),
+    linear-gradient(168deg, rgba(90, 200, 160, 0.28) 0%, var(--bg-primary) 70%);
+}
+
+.radio-neo.radio-genre--downtempo::before {
+  background:
+    radial-gradient(ellipse 85% 65% at 88% 8%, rgba(100, 160, 255, 0.4) 0%, transparent 50%),
+    linear-gradient(200deg, rgba(70, 130, 200, 0.28) 0%, var(--bg-primary) 72%);
+}
+
+.radio-neo.radio-genre--beats::before {
+  background:
+    radial-gradient(circle at 20% 10%, rgba(255, 90, 120, 0.4) 0%, transparent 45%),
+    linear-gradient(155deg, rgba(255, 120, 80, 0.22) 0%, var(--bg-primary) 70%);
+}
+
+.radio-neo.radio-genre--ambient::before {
+  background:
+    radial-gradient(ellipse 100% 80% at 50% 0%, rgba(140, 160, 255, 0.4) 0%, transparent 58%),
+    linear-gradient(180deg, rgba(60, 80, 160, 0.22) 0%, var(--bg-primary) 75%);
+}
+
+.radio-neo.radio-genre--sensual::before {
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 5%, rgba(255, 120, 170, 0.4) 0%, transparent 50%),
+    linear-gradient(190deg, rgba(200, 90, 140, 0.22) 0%, var(--bg-primary) 72%);
+}
+
+.radio-neo.radio-genre--lounge::before {
+  background:
+    radial-gradient(circle at 78% 12%, rgba(255, 190, 80, 0.4) 0%, transparent 42%),
+    linear-gradient(210deg, rgba(180, 140, 60, 0.22) 0%, var(--bg-primary) 70%);
+}
+
+.radio-neo.radio-genre--electronic::before {
+  background:
+    radial-gradient(ellipse 70% 55% at 8% 0%, rgba(120, 80, 255, 0.45) 0%, transparent 48%),
+    linear-gradient(160deg, rgba(80, 60, 200, 0.28) 0%, var(--bg-primary) 72%);
+}
+
+.radio-neo.radio-genre--indie::before {
+  background:
+    radial-gradient(circle at 70% 8%, rgba(255, 140, 60, 0.4) 0%, transparent 44%),
+    linear-gradient(175deg, rgba(220, 100, 80, 0.22) 0%, var(--bg-primary) 70%);
+}
+
+.radio-neo.radio-genre--space::before {
+  background:
+    radial-gradient(ellipse 60% 50% at 85% 10%, rgba(160, 200, 255, 0.45) 0%, transparent 50%),
+    linear-gradient(160deg, rgba(20, 40, 110, 0.45) 0%, var(--bg-primary) 78%);
+}
+
+.radio-neo.radio-genre--eclectic::before {
+  background:
+    radial-gradient(circle at 25% 8%, rgba(80, 200, 180, 0.35) 0%, transparent 42%),
+    radial-gradient(circle at 80% 20%, rgba(255, 160, 80, 0.28) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(100, 140, 180, 0.18) 0%, var(--bg-primary) 72%);
+}
+
+.radio-neo.radio-genre--lofi::before {
+  background:
+    radial-gradient(ellipse 90% 70% at 10% 0%, rgba(180, 140, 100, 0.4) 0%, transparent 52%),
+    linear-gradient(168deg, rgba(160, 120, 90, 0.22) 0%, var(--bg-primary) 70%);
+}
+
+.radio-neo.radio-genre--custom::before {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(10, 132, 255, 0.35) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(10, 132, 255, 0.12) 0%, var(--bg-primary) 72%);
+}
+
+.cultiva-sheet-card--radio.radio-neo.is-playing::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 120px;
+  width: 180px;
+  height: 180px;
+  margin-left: -90px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, transparent 70%);
+  animation: radio-pulse 2.4s ease-in-out infinite;
+}
+
+.cultiva-sheet-card--radio.radio-neo.is-playing .radio-now-tag {
+  animation: radio-tag-glow 2.4s ease-in-out infinite;
+}
+
+.cultiva-sheet-card--radio.radio-neo.is-playing .radio-ctrl--primary {
+  animation: radio-beat 1.2s ease-in-out infinite;
+}
+
+@keyframes radio-pulse {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.7;
+  }
+}
+
+@keyframes radio-tag-glow {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes radio-beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cultiva-sheet-card--radio.radio-neo.is-playing::after,
+  .cultiva-sheet-card--radio.radio-neo.is-playing .radio-now-tag,
+  .cultiva-sheet-card--radio.radio-neo.is-playing .radio-ctrl--primary {
+    animation: none;
+  }
+
+  .radio-ctrl {
+    transition: none;
+  }
 }

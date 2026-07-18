@@ -6,6 +6,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 
 ---
 
+## [3.5.3] — 2026-07-18
+
+### Added
+- **Radio [2.4.0]** — player UI, dual-stream fix, genre Neo FX (opt-in), more stations, Media Session
+- **Quote [1.5.0]** — habit-card height, single-arrow next quote, notifications
+- **Weather [2.6.0]** — RU polish + notifications
+
+### Changed
+- Store: Featured is a **filter**, not a separate heading; richer README markdown on Pages
+- Product READMEs updated for Radio / Quote / Weather
+
+---
+
 ## [3.5.2] — 2026-07-18
 
 ### Added

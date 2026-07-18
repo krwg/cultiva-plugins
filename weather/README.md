@@ -1,5 +1,9 @@
 # Weather
 
+**Version:** 2.6.0 (see [CHANGELOG.md](./CHANGELOG.md))  
+**minAppVersion:** `1.7.0`  
+**Author:** krwg
+
 ## English
 
 ### What it is
@@ -12,6 +16,7 @@ Current weather in the Cultiva header and garden, with worldwide city search and
 - Optional garden card and Weather Neo visuals
 - Hybrid city search: local RU database, then Open-Meteo worldwide
 - Celsius or Fahrenheit; theme bypass for Neo
+- Toasts when you change city, toggle Neo, or weather fails to load
 
 ### Permissions
 
@@ -35,6 +40,7 @@ Install from Settings → Plugins. Set your city and units in plugin settings. T
 - Карточка в саду и режим «Погода Нео» (по желанию)
 - Гибридный поиск: локальная база RU-городов, затем Open-Meteo
 - Цельсий или Фаренгейт; обход темы для Нео
+- Уведомления при смене города, переключении Нео и ошибке загрузки
 
 ### Разрешения
 

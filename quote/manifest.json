@@ -1,9 +1,9 @@
 {
   "id": "quote",
   "name": "Quote of the Day",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": "krwg",
-  "description": "Daily inspiration in your garden from a library of 1000 English and Russian quotes, with favorites and shuffle for another quote.",
+  "description": "Daily inspiration in your garden from a library of 1000 English and Russian quotes, with favorites and a next-quote control.",
   "icon": "",
   "entry": "index.js",
   "styles": ["styles.css"],

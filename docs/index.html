@@ -265,6 +265,7 @@
         pluginPermHabitsWrite: 'Complete habits',
         pluginDetails: 'Details',
         pluginFeatured: 'Featured',
+        pluginFilterFeatured: 'Featured',
         pluginFilterAll: 'All',
         pluginCategory: 'Category',
         pluginSort: 'Sort',
@@ -294,6 +295,7 @@
         pluginPermHabitsWrite: 'Отметка привычек',
         pluginDetails: 'Подробнее',
         pluginFeatured: 'Избранные',
+        pluginFilterFeatured: 'Избранные',
         pluginFilterAll: 'Все',
         pluginCategory: 'Категория',
         pluginSort: 'Сортировка',
@@ -377,14 +379,19 @@
     }
 
     function matchesFilters(p, m) {
-      if (tagFilter) {
+      if (tagFilter === '__featured__') {
+        if (!isFeatured(p)) return false;
+      } else if (tagFilter) {
         const tags = (Array.isArray(p.tags) ? p.tags : []).map((x) => String(x).toLowerCase());
         if (!tags.includes(tagFilter.toLowerCase())) return false;
       }
-      const q = searchQuery.trim().toLowerCase();
+      const q = searchQuery.trim().toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
       if (!q) return true;
-      const hay = [p.id, m.name, m.description, m.tagline, ...(Array.isArray(p.tags) ? p.tags : [])].join(' ').toLowerCase();
-      return hay.includes(q);
+      const i18n = p.i18n || {};
+      const hay = [p.id, m.name, m.description, m.tagline, p.name, p.description,
+        i18n.en?.name, i18n.en?.description, i18n.ru?.name, i18n.ru?.description,
+        ...(Array.isArray(p.tags) ? p.tags : [])].join(' ').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+      return q.split(/\s+/).filter(Boolean).every((token) => hay.includes(token));
     }
 
     function resolveAsset(baseUrl, rel) {
@@ -403,9 +410,18 @@
     }
 
     function inlineMd(text) {
-      let s = escapeHtml(text);
-      s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
-      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      let s = String(text ?? '');
+      const ph = [];
+      const stash = (html) => {
+        const token = `@@PH${ph.length}@@`;
+        ph.push(html);
+        return token;
+      };
+      s = s.replace(/`([^`]+)`/g, (_, c) => stash(`<code>${escapeHtml(c)}</code>`));
+      s = s.replace(/\*\*([^*]+)\*\*/g, (_, b) => stash(`<strong>${escapeHtml(b)}</strong>`));
+      s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, (_, pre, i) => `${pre}${stash(`<em>${escapeHtml(i)}</em>`)}`);
+      s = escapeHtml(s);
+      ph.forEach((html, i) => { s = s.replace(`@@PH${i}@@`, html); });
       return s;
     }
 
@@ -413,20 +429,59 @@
       const lines = String(md || '').replace(/\r\n/g, '\n').split('\n');
       const out = [];
       let list = [];
+      let ordered = false;
+      let table = [];
       const flushList = () => {
         if (!list.length) return;
-        out.push('<ul>' + list.map((item) => `<li>${inlineMd(item)}</li>`).join('') + '</ul>');
+        const tag = ordered ? 'ol' : 'ul';
+        out.push(`<${tag}>` + list.map((item) => `<li>${inlineMd(item)}</li>`).join('') + `</${tag}>`);
         list = [];
+        ordered = false;
+      };
+      const flushTable = () => {
+        if (table.length < 2) { table = []; return; }
+        const head = table[0].split('|').map((c) => c.trim()).filter(Boolean);
+        const body = table.slice(2).map((row) => row.split('|').map((c) => c.trim()).filter(Boolean));
+        out.push('<table><thead><tr>' + head.map((c) => `<th>${inlineMd(c)}</th>`).join('') + '</tr></thead><tbody>' +
+          body.map((r) => '<tr>' + r.map((c) => `<td>${inlineMd(c)}</td>`).join('') + '</tr>').join('') +
+          '</tbody></table>');
+        table = [];
       };
       for (const raw of lines) {
         const line = raw.trimEnd();
         if (!line.trim()) {
           flushList();
+          flushTable();
+          continue;
+        }
+        if (/^\|/.test(line.trim())) {
+          flushList();
+          table.push(line.trim());
+          continue;
+        }
+        if (table.length) flushTable();
+        if (line.trim() === '---' || line.trim() === '***') {
+          flushList();
+          out.push('<hr>');
           continue;
         }
         const bullet = line.match(/^[-*]\s+(.+)$/);
         if (bullet) {
+          if (list.length && ordered) flushList();
+          ordered = false;
           list.push(bullet[1]);
+          continue;
+        }
+        const num = line.match(/^\d+\.\s+(.+)$/);
+        if (num) {
+          if (list.length && !ordered) flushList();
+          ordered = true;
+          list.push(num[1]);
+          continue;
+        }
+        if (/^>\s?/.test(line)) {
+          flushList();
+          out.push(`<blockquote>${inlineMd(line.replace(/^>\s?/, ''))}</blockquote>`);
           continue;
         }
         flushList();
@@ -441,6 +496,7 @@
         }
       }
       flushList();
+      flushTable();
       return out.join('');
     }
 
@@ -488,10 +544,10 @@
       const cat = document.createElement('select');
       cat.className = 'plugin-store-select';
       cat.setAttribute('aria-label', t('pluginCategory'));
-      for (const tag of ['', ...collectTags(plugins)]) {
+      for (const tag of ['', '__featured__', ...collectTags(plugins)]) {
         const opt = document.createElement('option');
         opt.value = tag;
-        opt.textContent = tag || t('pluginFilterAll');
+        opt.textContent = tag === '__featured__' ? t('pluginFilterFeatured') : (tag || t('pluginFilterAll'));
         if ((tag || '') === (tagFilter || '')) opt.selected = true;
         cat.appendChild(opt);
       }
@@ -714,17 +770,7 @@
         return;
       }
 
-      const featured = sortPlugins(filtered.filter((p) => isFeatured(p)));
-      const rest = sortPlugins(filtered.filter((p) => !isFeatured(p)));
-
-      if (featured.length) {
-        const heading = document.createElement('div');
-        heading.className = 'plugin-store-heading';
-        heading.textContent = t('pluginFeatured');
-        list.appendChild(heading);
-        for (const p of featured) list.appendChild(createCard(p));
-      }
-      for (const p of rest) list.appendChild(createCard(p));
+      for (const p of sortPlugins(filtered)) list.appendChild(createCard(p));
     }
 
     async function fetchRegistry() {

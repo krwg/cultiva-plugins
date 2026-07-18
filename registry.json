@@ -1,11 +1,11 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.5.2",
+  "version": "3.5.3",
   "plugins": [
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "2.5.1",
+      "version": "2.6.0",
       "author": "krwg",
       "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo, theme bypass, hourly and 7-day forecast.",
       "icon": "",
@@ -39,14 +39,14 @@
         }
       },
       "sha256": {
-        "manifest.json": "349b9877f7d34be2fac1198b4d9c542f5c8ab6b3c6f8ca67408ecce5a41ced08",
-        "index.js": "62097fd801f0880cb92fd48f24796037990390bab6e0b2f354c4f9718a481675",
+        "manifest.json": "ba76f548c4422a02d9e2677ba42a9f0f4b9d7f9010806f5842ad0b7b165619bd",
+        "index.js": "dc71a62b449045fadf7f8925cd8a81378a40c0717b9912d72fc1dd06e072aaca",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "b7a786e33a4ca1ba1d317481199ef245ea9b259f02130dae52b92260affce4d3",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T15:25:14+03:00",
+      "lastUpdated": "2026-07-18T15:52:26+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [
@@ -95,7 +95,7 @@
         "styles.css": "632c4f0ba4bf61cd4fd650ceae59d1f7b14009bd14e515479cba0415bba25d39"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "lastUpdated": "2026-07-18T15:52:26+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
       "screenshots": [],
@@ -104,7 +104,7 @@
     {
       "id": "radio",
       "name": "Radio Widget",
-      "version": "2.3.0",
+      "version": "2.4.0",
       "author": "krwg",
       "description": "When silence gets in the way and playlists feel tired, turn on Music. The plugin streams trusted SomaFM channels right from your garden. Adjust volume, set a sleep timer, and enjoy a glassy minimal interface. Whether you are focusing, reading, or setting a mood — let background sound become part of your ritual.",
       "icon": "",
@@ -138,13 +138,13 @@
         }
       },
       "sha256": {
-        "manifest.json": "40c50eee12f286f0cfdc08057499ce8339916ff283067e8493ebb554bf206a23",
-        "index.js": "3fee0db3ddf2fc06dd2d17c197b59b1007286378daf5127fa858d32d5667e3e8",
+        "manifest.json": "421c3d2800ee5f1971a5f537093ced4b86528170df275ad5eebeb4dac6afe85b",
+        "index.js": "2f7287a6d750e40d44b0435f51dc537cc22067fa9d99e65558f88b88b6b9af4c",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "6571988886c30ad06e887ccc9cb0e785fd6a68ce6879d683f58f8afe7745a197"
+        "styles.css": "09055384fcd944fe1249974d4633bbc1fb4b1c3fff2c9269593efd42a453476f"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "lastUpdated": "2026-07-18T15:52:26+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [],
@@ -192,7 +192,7 @@
         "styles.css": "e8cbb7d76210b9104aafd124b0689a3e1b4a9d245cb77c40d30effdedd611a51"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "lastUpdated": "2026-07-18T15:52:26+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
       "screenshots": [],
@@ -201,7 +201,7 @@
     {
       "id": "quote",
       "name": "Quote of the Day",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "author": "krwg",
       "description": "Every morning starts with a mood. Thoughts offers an inspiring line — in Russian or English, based on your language. More than 1000 quotes in separate banks so you always find one that resonates. Save favorites and return when you doubt. A small spark that can launch an entire day.",
       "icon": "",
@@ -233,13 +233,13 @@
         }
       },
       "sha256": {
-        "manifest.json": "6b165399e4bd092b20b05111a70a0bce10a8bed3ab2c693f0963983b00792769",
-        "index.js": "b49302bfe05b4e3dee9289f0a1bc27fbb3690525897e07163824737c8be2a283",
-        "styles.css": "f042bd6d323cc56a7ab54bb08008e43fe0b1553eef992d10a4e874719535cf73",
+        "manifest.json": "1032a886fa9868d416425870f54e77319892deea4f5f90da8c6d7ec83763b367",
+        "index.js": "489fa60b51adde9eb5b90e72403b98b2c4b8483e3d1d16bf0c55eed7ffa57ddd",
+        "styles.css": "c4773d78bbc137976e8568bd47d1def960f058ea637d70b5de9f47be8e791593",
         "quotes-data.json": "a96eeee30269fc8d95e7ddf80ff9fa76e2d9b4e407ec7fe9ef5f685c375d7e89"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "lastUpdated": "2026-07-18T15:52:26+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [],
@@ -288,7 +288,7 @@
         "styles.css": "65c6a7cabd9eaa01a933293f9dd41f8c0c54d4172e4dd685b7b1e20a515e27fa"
       },
       "storeFlow": "get",
-      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "lastUpdated": "2026-07-18T15:52:26+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
       "screenshots": [],
@@ -337,7 +337,7 @@
         "styles.css": "0d2c5708f6c28405e7a1730555e326a29be1fe104ebe00bf9b1f5acf6411fa73"
       },
       "storeFlow": "get",
-      "lastUpdated": "2026-07-18T15:48:00+03:00",
+      "lastUpdated": "2026-07-18T15:52:26+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
       "screenshots": [],
@@ -384,7 +384,7 @@
         "styles.css": "68e535446c6f32cb7d5185d8630fed1a996c3438aab6149eac1d7262a8ce4aa9"
       },
       "storeFlow": "get",
-      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "lastUpdated": "2026-07-18T15:52:26+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
       "screenshots": [],
@@ -433,7 +433,7 @@
         "styles.css": "03c7c44d5fd7f3c7c2f23d4459b68389ea360b76369b4f6ccc493636c998d4c1"
       },
       "storeFlow": "get",
-      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "lastUpdated": "2026-07-18T15:52:26+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
       "screenshots": [],
@@ -480,7 +480,7 @@
         "index.js": "983951f54bf2ce0adb38988c8b57711ce488d671ac0d22db5d716ba7f32d564a"
       },
       "storeFlow": "get",
-      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "lastUpdated": "2026-07-18T15:52:26+03:00",
       "changelog": "CHANGELOG.md",
       "featured": false,
       "screenshots": [],
