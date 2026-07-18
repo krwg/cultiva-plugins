@@ -1,9 +1,9 @@
 {
   "id": "weather",
   "name": "Weather Widget",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "author": "krwg",
-  "description": "Current conditions in the header and garden, with hybrid city search for any location worldwide. Optional Weather Neo visuals, hourly and 7-day forecast.",
+  "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo (Apple-bright gradients, time-of-day, animations), theme bypass, hourly and 7-day forecast.",
   "icon": "",
   "entry": "index.js",
   "styles": [
@@ -35,14 +35,8 @@
       "label": "Units",
       "type": "select",
       "options": [
-        {
-          "value": "celsius",
-          "label": "Celsius (°C)"
-        },
-        {
-          "value": "fahrenheit",
-          "label": "Fahrenheit (°F)"
-        }
+        { "value": "celsius", "label": "Celsius (°C)" },
+        { "value": "fahrenheit", "label": "Fahrenheit (°F)" }
       ],
       "default": "celsius",
       "i18n": {
@@ -72,6 +66,16 @@
       "i18n": {
         "ru": { "label": "Погода Нео" },
         "en": { "label": "Weather Neo" }
+      }
+    },
+    {
+      "key": "neoBypassThemes",
+      "label": "Neo ignores app theme colors",
+      "type": "boolean",
+      "default": false,
+      "i18n": {
+        "ru": { "label": "Нео игнорирует цвета темы" },
+        "en": { "label": "Neo ignores app theme colors" }
       }
     },
     {

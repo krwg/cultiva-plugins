@@ -30,6 +30,8 @@ Official plugins in registry **3.5.1**. New plugins require **Cultiva 2.0.0 · R
 
 Each plugin: `https://github.com/krwg/cultiva-plugins/tree/main/<id>`
 
+Per-plugin release history lives in `<id>/CHANGELOG.md` (Keep a Changelog). Weather also has a [README](https://github.com/krwg/cultiva-plugins/blob/main/weather/README.md).
+
 Browse with UI: [GitHub Pages catalog](https://krwg.github.io/cultiva-plugins/#catalog)
 
 ---

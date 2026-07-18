@@ -8,6 +8,7 @@ class WeatherPlugin {
       units: 'celsius',
       showInGarden: true,
       neoMode: false,
+      neoBypassThemes: false,
       showHourly: true,
       showDaily: true,
       lat: 55.7558,
@@ -93,7 +94,11 @@ class WeatherPlugin {
       precip: 'Осадки',
       showHourly: 'Почасовой прогноз',
       showDaily: 'Прогноз на неделю',
-      neoHint: 'Погода Нео'
+      neoHint: 'Погода Нео',
+      pressure: 'Давление',
+      clouds: 'Облачность',
+      uv: 'УФ-индекс',
+      hpa: 'гПа'
     };
     const en = {
       loading: 'Loading…',
@@ -127,7 +132,11 @@ class WeatherPlugin {
       precip: 'Precip',
       showHourly: 'Hourly forecast',
       showDaily: '7-day forecast',
-      neoHint: 'Weather Neo'
+      neoHint: 'Weather Neo',
+      pressure: 'Pressure',
+      clouds: 'Clouds',
+      uv: 'UV index',
+      hpa: 'hPa'
     };
     const dict = this._locale === 'ru' ? ru : en;
     return dict[key] || key;
@@ -135,6 +144,15 @@ class WeatherPlugin {
 
   _isNeo() {
     return this.settings.neoMode === true;
+  }
+
+  _neoBypass() {
+    return this._isNeo() && this.settings.neoBypassThemes === true;
+  }
+
+  _neoClassList() {
+    if (!this._isNeo()) return '';
+    return this._neoBypass() ? ' weather-neo weather-neo-bypass' : ' weather-neo';
   }
 
   _isLowPower() {
@@ -204,33 +222,50 @@ class WeatherPlugin {
     const low = this._isLowPower();
     const parts = ['<div class="weather-neo-fx" aria-hidden="true">'];
     if (kind === 'rain' || kind === 'showers') {
-      const n = low ? 3 : 6;
+      const n = low ? 4 : 8;
       for (let i = 0; i < n; i++) {
-        const left = 12 + i * (70 / Math.max(1, n - 1));
-        const delay = (i * 0.17).toFixed(2);
-        const dur = (0.9 + (i % 3) * 0.15).toFixed(2);
+        const left = 8 + i * (80 / Math.max(1, n - 1));
+        const delay = (i * 0.14).toFixed(2);
+        const dur = (0.85 + (i % 3) * 0.12).toFixed(2);
         parts.push(`<span class="weather-neo-streak" style="left:${left}%;animation-delay:${delay}s;animation-duration:${dur}s"></span>`);
       }
     } else if (kind === 'snow') {
-      const n = low ? 4 : 8;
+      const n = low ? 5 : 12;
       for (let i = 0; i < n; i++) {
-        const left = 8 + (i * 11) % 84;
-        const top = (i * 13) % 60;
-        const delay = (i * 0.4).toFixed(2);
+        const left = 6 + (i * 9) % 88;
+        const top = (i * 11) % 55;
+        const delay = (i * 0.35).toFixed(2);
         parts.push(`<span class="weather-neo-flake" style="left:${left}%;top:${top}%;animation-delay:${delay}s"></span>`);
       }
     } else if (kind === 'clear') {
-      parts.push('<span class="weather-neo-glow"></span>');
       if (phase === 'night') {
-        const n = low ? 4 : 10;
+        const n = low ? 6 : 14;
         for (let i = 0; i < n; i++) {
-          const left = 10 + (i * 17) % 80;
-          const top = 8 + (i * 23) % 55;
+          const left = 8 + (i * 13) % 84;
+          const top = 6 + (i * 19) % 60;
           parts.push(`<span class="weather-neo-star" style="left:${left}%;top:${top}%"></span>`);
+        }
+      } else if (phase === 'dawn' || phase === 'evening') {
+        parts.push('<span class="weather-neo-glow weather-neo-glow--warm"></span>');
+      } else {
+        parts.push('<span class="weather-neo-glow weather-neo-glow--sun"></span>');
+        if (!low) {
+          parts.push('<span class="weather-neo-sunrays"></span>');
+        }
+      }
+    } else if (kind === 'partly') {
+      parts.push('<span class="weather-neo-glow weather-neo-glow--soft"></span>');
+      if (phase === 'night' && !low) {
+        for (let i = 0; i < 5; i++) {
+          parts.push(`<span class="weather-neo-star" style="left:${15 + i * 16}%;top:${10 + (i % 3) * 18}%"></span>`);
         }
       }
     } else if (kind === 'storm' && !low) {
       parts.push('<span class="weather-neo-flash"></span>');
+      const n = 4;
+      for (let i = 0; i < n; i++) {
+        parts.push(`<span class="weather-neo-streak" style="left:${20 + i * 18}%;animation-delay:${(i * 0.2).toFixed(2)}s"></span>`);
+      }
     } else if (kind === 'fog') {
       parts.push('<span class="weather-neo-haze"></span>');
     }
@@ -451,9 +486,9 @@ class WeatherPlugin {
       const lon = this.settings.lon || 37.6173;
 
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
-        + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m`
+        + `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m,surface_pressure,cloud_cover`
         + `&hourly=temperature_2m,weather_code,precipitation_probability`
-        + `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum`
+        + `&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,uv_index_max`
         + `&forecast_days=7&timezone=auto`;
       const response = await fetch(url);
       const data = await response.json();
@@ -481,7 +516,8 @@ class WeatherPlugin {
           code: data.daily.weather_code[i],
           max: this._toDisplayTemp(data.daily.temperature_2m_max[i]),
           min: this._toDisplayTemp(data.daily.temperature_2m_min[i]),
-          precip: data.daily.precipitation_sum?.[i]
+          precip: data.daily.precipitation_sum?.[i],
+          uv: data.daily.uv_index_max?.[i]
         });
       }
 
@@ -491,6 +527,9 @@ class WeatherPlugin {
         humidity: data.current.relative_humidity_2m,
         windSpeed: data.current.wind_speed_10m,
         weatherCode: data.current.weather_code,
+        pressure: data.current.surface_pressure != null ? Math.round(data.current.surface_pressure) : null,
+        cloudCover: data.current.cloud_cover != null ? Math.round(data.current.cloud_cover) : null,
+        uvMax: daily[0]?.uv != null ? Math.round(daily[0].uv) : null,
         units,
         hourly,
         daily
@@ -555,7 +594,7 @@ class WeatherPlugin {
   }
 
   _gardenClassList(kind, phase) {
-    const neo = this._isNeo() ? ' weather-neo' : '';
+    const neo = this._neoClassList();
     const phaseCls = this._isNeo() ? ` weather-phase--${phase}` : '';
     return `habit-card garden-plugin-card weather-garden-card weather-garden-card--${kind}${phaseCls}${neo}`;
   }
@@ -632,6 +671,16 @@ class WeatherPlugin {
     return `<div class="weather-section-label">${this._t('daily')}</div><div class="weather-daily">${rows}</div>`;
   }
 
+  _toggleRow(act, checked, label) {
+    return `<label class="weather-toggle-row">
+      <span>${this._escapeHtml(label)}</span>
+      <span class="weather-toggle toggle-switch">
+        <input type="checkbox" data-cultiva-act="${act}" ${checked ? 'checked' : ''}/>
+        <span class="weather-toggle-slider toggle-slider"></span>
+      </span>
+    </label>`;
+  }
+
   _buildWeatherSheetHtml(searchResultsHtml) {
     const w = this.weatherData;
     const kind = this._weatherKind();
@@ -643,6 +692,9 @@ class WeatherPlugin {
     const feel = w ? Math.round(w.feelsLike) : '--';
     const hum = w ? w.humidity : '--';
     const wind = w ? w.windSpeed : '--';
+    const pressure = w?.pressure != null ? w.pressure : '--';
+    const clouds = w?.cloudCover != null ? `${w.cloudCover}%` : '--';
+    const uv = w?.uvMax != null ? w.uvMax : '--';
     const searchVal = this._escapeAttr(this._sheetSearchQuery || '');
     const pills = this.popularCities
       .slice(0, 8)
@@ -654,7 +706,7 @@ class WeatherPlugin {
     const results = searchResultsHtml || '';
     const icon = this._weatherIconSvg(kind);
     const fx = this._neoFxHtml(kind, phase);
-    const neoCls = this._isNeo() ? ' weather-neo' : '';
+    const neoCls = this._neoClassList();
     const phaseCls = this._isNeo() ? ` weather-phase--${phase}` : '';
     return `
 <div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
@@ -674,16 +726,19 @@ class WeatherPlugin {
       <span class="weather-hero-temp">${mainTemp}<span class="weather-hero-unit">${units}</span></span>
     </div>
     <p class="weather-hero-desc">${desc}</p>
-    <div class="weather-metrics">
+    <div class="weather-metrics weather-metrics--6">
       <div><span class="cultiva-muted">${this._t('feels')}</span><strong>${feel}${units}</strong></div>
       <div><span class="cultiva-muted">${this._t('humidity')}</span><strong>${hum}%</strong></div>
       <div><span class="cultiva-muted">${this._t('wind')}</span><strong>${wind} ${this._windUnit()}</strong></div>
+      <div><span class="cultiva-muted">${this._t('pressure')}</span><strong>${pressure} ${this._t('hpa')}</strong></div>
+      <div><span class="cultiva-muted">${this._t('clouds')}</span><strong>${clouds}</strong></div>
+      <div><span class="cultiva-muted">${this._t('uv')}</span><strong>${uv}</strong></div>
     </div>
     ${this._hourlyHtml()}
     ${this._dailyHtml()}
     <div class="weather-view-toggles">
-      <label><input type="checkbox" data-cultiva-act="toggleHourly" ${this.settings.showHourly !== false ? 'checked' : ''}/> ${this._t('showHourly')}</label>
-      <label><input type="checkbox" data-cultiva-act="toggleDaily" ${this.settings.showDaily !== false ? 'checked' : ''}/> ${this._t('showDaily')}</label>
+      ${this._toggleRow('toggleHourly', this.settings.showHourly !== false, this._t('showHourly'))}
+      ${this._toggleRow('toggleDaily', this.settings.showDaily !== false, this._t('showDaily'))}
     </div>
     <label class="cultiva-field-label">${this._t('searchCity')}</label>
     <input type="text" name="citySearch" class="cultiva-sheet-input" data-cultiva-input-act="search" placeholder="${this._escapeAttr(this._t('searchPlaceholder'))}" value="${searchVal}" autocomplete="off" />

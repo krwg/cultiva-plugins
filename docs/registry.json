@@ -5,9 +5,9 @@
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "2.4.0",
+      "version": "2.5.0",
       "author": "krwg",
-      "description": "Glanced out the window but still unsure? The Weather plugin shows a live forecast in the header and garden — with optional Weather Neo visuals, hourly and 7-day outlook. Built-in search covers 1100+ Russian cities; Open-Meteo covers the world.",
+      "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo (Apple-bright gradients, time-of-day, animations), theme bypass, hourly and 7-day forecast.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
       "minAppVersion": "1.7.0",
@@ -30,19 +30,19 @@
         "en": {
           "name": "Weather",
           "tagline": "Forecast with Neo polish.",
-          "description": "Glanced out the window but still unsure? The Weather plugin shows a live forecast in the header and garden — with optional Weather Neo visuals, hourly and 7-day outlook. Built-in search covers 1100+ Russian cities; Open-Meteo covers the world."
+          "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo (Apple-bright gradients, time-of-day, animations), theme bypass, hourly and 7-day forecast."
         },
         "ru": {
           "name": "Погода",
           "tagline": "Прогноз с режимом Нео.",
-          "description": "Выглянули в окно, но сомневаетесь? Плагин «Погода» показывает прогноз в шапке и в саду — с опциональным режимом «Погода Нео», почасовым и недельным прогнозом. Поиск знает 1100+ городов РФ; Open-Meteo работает по всему миру."
+          "description": "Актуальная погода в шапке и саду, поиск городов по всему миру. Опциональный режим «Погода Нео» (яркие градиенты, время суток, анимации), обход темы, почасовой и недельный прогноз."
         }
       },
       "sha256": {
-        "manifest.json": "640e618ae1c2668bee5530246e89ab09a220403b3f58a5102ff3b5b1e761eb74",
-        "index.js": "3273dfa76ca4d520e53739da4775432a42653ff951c0133ca2ca0be258af4c15",
+        "manifest.json": "dbfaeae5a9edc714319f9fbaa1626b145beaca1d25eb924d70f3b8c4941dbd9e",
+        "index.js": "68456b9a8bdb580e59b8b2a2def3f96da307acae190e2ea46e853db57540f373",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "03e140242bc29e2943ccb4144a4d86f7f092f417b3d70e0200d3d319066bd0a9",
+        "styles.css": "8f76770a80b398c07475cd7b1d640ae544cbbe87f1ac6976d55c5d4def800cc0",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       },
       "storeFlow": "direct"
