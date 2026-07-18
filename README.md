@@ -45,7 +45,7 @@ This repository is the **single source of truth** for Cultiva desktop plugins. T
 | [**Radio**](radio/) | 1.1.0 | Header | SomaFM streams, sleep timer, glass UI (v2.2.0) |
 | [**Pomodoro**](pomodoro/) | 1.1.0 | Header | Classic 25/5 focus timer in the header (v1.2.1) |
 | [**Weather**](weather/) | 1.7.0 | Header + garden | Open-Meteo + 1100+ Russian cities offline search (v2.3.2) |
-| [**Quote**](quote/) | 1.7.0 | Garden | 1000 EN/RU quotes, favorites, locale-pure banks (v1.3.2) |
+| [**Quote**](quote/) | 1.7.0 | Garden | 500 EN + 500 RU curated quotes, favorites (v1.6.0) |
 | [**Habit Reflection**](habit-reflection/) | 1.7.0 | Hooks | One-line micro-journal after each completion (v1.1.0) |
 | [**Weekly Stats**](weekly-stats/) | 2.0.0 | Garden + hooks | 7-day chart and weekly rate (Cultiva 2.0 analytics) |
 | [**Routine**](routine/) | 2.0.0 | Garden + hooks | Morning/evening checklist matched by habit name |

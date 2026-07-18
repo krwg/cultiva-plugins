@@ -1,6 +1,6 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.5.3",
+  "version": "3.5.4",
   "plugins": [
     {
       "id": "weather",
@@ -46,7 +46,7 @@
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T15:52:26+03:00",
+      "lastUpdated": "2026-07-18T16:33:01+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [
@@ -144,7 +144,7 @@
         "styles.css": "09055384fcd944fe1249974d4633bbc1fb4b1c3fff2c9269593efd42a453476f"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T15:52:26+03:00",
+      "lastUpdated": "2026-07-18T16:33:01+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [],
@@ -201,9 +201,9 @@
     {
       "id": "quote",
       "name": "Quote of the Day",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "author": "krwg",
-      "description": "Every morning starts with a mood. Thoughts offers an inspiring line — in Russian or English, based on your language. More than 1000 quotes in separate banks so you always find one that resonates. Save favorites and return when you doubt. A small spark that can launch an entire day.",
+      "description": "Every morning starts with a mood. Thoughts offers an inspiring line — in Russian or English, based on your language. Curated banks of 500 English and 500 authentic Russian quotes so you always find one that resonates. Save favorites and return when you doubt. A small spark that can launch an entire day.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/quote",
       "minAppVersion": "1.7.0",
@@ -224,22 +224,22 @@
         "en": {
           "name": "Thoughts",
           "tagline": "One quote that can shift the day.",
-          "description": "Every morning starts with a mood. Thoughts offers an inspiring line — in Russian or English, based on your language. More than 1000 quotes in separate banks so you always find one that resonates. Save favorites and return when you doubt. A small spark that can launch an entire day."
+          "description": "Every morning starts with a mood. Thoughts offers an inspiring line — in Russian or English, based on your language. Curated banks of 500 English and 500 authentic Russian quotes so you always find one that resonates. Save favorites and return when you doubt. A small spark that can launch an entire day."
         },
         "ru": {
           "name": "Мысли",
           "tagline": "Одна цитата, которая меняет ход дня.",
-          "description": "Каждое утро начинается с настроения. «Мысли» предлагает вам карточку с вдохновляющей фразой — на русском или английском, в зависимости от выбранного языка. Более 1000 цитат в банках, разделённых по языкам, так что вы всегда найдёте ту, что отзовётся. Сохраняйте понравившиеся в избранное и возвращайтесь к ним в моменты сомнений. Небольшая искра, которая может запустить целый день."
+          "description": "Каждое утро начинается с настроения. «Мысли» предлагает карточку с вдохновляющей фразой — на русском или английском, в зависимости от выбранного языка. Курируемые банки: 500 английских и 500 настоящих русских цитат и пословиц. Сохраняйте понравившиеся в избранное и возвращайтесь к ним в моменты сомнений. Небольшая искра, которая может запустить целый день."
         }
       },
       "sha256": {
-        "manifest.json": "1032a886fa9868d416425870f54e77319892deea4f5f90da8c6d7ec83763b367",
+        "manifest.json": "fcab4cba0897c1a3898d8d92748d7919150fa70c34413e5f4ea769c55c5a8cf9",
         "index.js": "489fa60b51adde9eb5b90e72403b98b2c4b8483e3d1d16bf0c55eed7ffa57ddd",
         "styles.css": "c4773d78bbc137976e8568bd47d1def960f058ea637d70b5de9f47be8e791593",
-        "quotes-data.json": "a96eeee30269fc8d95e7ddf80ff9fa76e2d9b4e407ec7fe9ef5f685c375d7e89"
+        "quotes-data.json": "e49c245e7e10794a020ee0d233e347003f0d400a43aaabc4ac085884ec925142"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-18T15:52:26+03:00",
+      "lastUpdated": "2026-07-18T16:33:01+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [],

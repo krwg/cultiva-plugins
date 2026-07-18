@@ -6,6 +6,15 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [1.6.0] — 2026-07-18
+
+### Changed
+- Rebuilt quote banks: **500** curated English quotes and **500** authentic Russian quotes / пословицы / афоризмы
+- English: well-known attributions (philosophers, writers, leaders, classic proverbs) — no Unknown
+- Russian: native Russian/Soviet authors and traditional folk sayings (Пушкин, Толстой, Чехов, Достоевский, Горький, Пришвин, Русская пословица, etc.) — not translations of the English bank
+
+---
+
 ## [1.5.0] — 2026-07-18
 
 ### Changed

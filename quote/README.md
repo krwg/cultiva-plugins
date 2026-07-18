@@ -1,8 +1,8 @@
 # Quote of the Day
 
-A quiet line of inspiration in your Cultiva garden — one quote a day from a thousand English and Russian voices, with favorites and a tap for the next.
+A quiet line of inspiration in your Cultiva garden — one quote a day from curated English and Russian voices, with favorites and a tap for the next.
 
-**Version:** 1.5.0 (see [CHANGELOG.md](./CHANGELOG.md))  
+**Version:** 1.6.0 (see [CHANGELOG.md](./CHANGELOG.md))  
 **minAppVersion:** `1.7.0`  
 **Author:** krwg
 
@@ -25,7 +25,7 @@ Habits need more than checkboxes. A single sentence can reframe the day — and 
 
 ### Library
 
-- **1000** English + **1000** Russian quotes, filtered for locale purity
+- **500** curated English quotes + **500** authentic Russian quotes / пословицы, filtered for locale purity
 - Bundled as `quotes-data.json` (no network)
 
 ### Permissions
@@ -56,7 +56,7 @@ Cultiva **1.7.0** or newer.
 
 ### Библиотека
 
-- **1000** английских + **1000** русских цитат с фильтрацией по языку
+- **500** отобранных английских + **500** подлинных русских цитат и пословиц с фильтрацией по языку
 - Файл `quotes-data.json` (без сети)
 
 ### Разрешения

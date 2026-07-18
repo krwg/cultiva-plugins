@@ -6,7 +6,7 @@ Official plugins in registry **3.5.3**. New plugins require **Cultiva 2.0.0 · R
 |--------|---------|---------|-------------|-------------|
 | **Weather** ★ | [2.6.0] | Header + garden | `network`, `storage`, `ui` | Open-Meteo; RU cities; optional Weather Neo |
 | **Radio** ★ | [2.4.0] | Header | `network`, `storage`, `ui` | Player UI, custom URL, Media Session, opt-in Neo FX |
-| **Quote** ★ | [1.5.0] | Garden | `storage`, `ui` | Locale-pure EN/RU quotes, favorites, next quote |
+| **Quote** ★ | [1.6.0] | Garden | `storage`, `ui` | 500 EN + 500 RU curated quotes, favorites, next quote |
 | **Insights** | [1.0.0] | Garden | `habits.read`, `storage`, `ui` | On-device habit correlations |
 | **Time** | [2.2.2] | Header | `storage`, `ui` | Live clock, world timezones, sheet UI |
 | **Pomodoro** | [1.2.1] | Header | `storage`, `ui` | 25/5 focus cycles (configurable) |
