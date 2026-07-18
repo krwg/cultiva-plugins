@@ -30,6 +30,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Enrich registry meta
+        run: node scripts/enrich-registry-meta.mjs
       - name: Sync registry for Pages
         run: cp registry.json docs/registry.json
       - uses: actions/configure-pages@v5

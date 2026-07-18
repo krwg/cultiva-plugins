@@ -9,6 +9,7 @@ const root = join(__dirname, '..');
 const registryPath = join(root, 'registry.json');
 
 spawnSync(process.execPath, [join(__dirname, 'sync-sheet-css.mjs')], { stdio: 'inherit' });
+spawnSync(process.execPath, [join(__dirname, 'enrich-registry-meta.mjs')], { stdio: 'inherit' });
 
 function isTextAsset(name) {
   return /\.(json|js|css|md|txt|html|yml|yaml)$/i.test(name);

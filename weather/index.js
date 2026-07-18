@@ -173,21 +173,11 @@ class WeatherPlugin {
   }
 
   _weatherKind() {
-    if (!this.weatherData) return 'loading';
-    const code = this.weatherData.weatherCode;
-    if (code === 0) return 'clear';
-    if (code === 1 || code === 2) return 'partly';
-    if (code === 3) return 'cloudy';
-    if (code >= 45 && code <= 48) return 'fog';
-    if (code >= 51 && code <= 67) return 'rain';
-    if (code >= 71 && code <= 77) return 'snow';
-    if (code >= 80 && code <= 82) return 'showers';
-    if (code >= 85 && code <= 86) return 'snow';
-    if (code >= 95) return 'storm';
-    return 'cloudy';
+    return this._kindFromCode(this.weatherData?.weatherCode);
   }
 
   _kindFromCode(code) {
+    if (code == null || code === '') return 'loading';
     if (code === 0) return 'clear';
     if (code === 1 || code === 2) return 'partly';
     if (code === 3) return 'cloudy';
@@ -326,8 +316,10 @@ class WeatherPlugin {
 
   _patchSearchResults(html) {
     if (this.context.ui.patchMainSheet) {
-      this.context.ui.patchMainSheet('.cultiva-search-results', html);
-      return;
+      const ok = this.context.ui.patchMainSheet('.cultiva-search-results', html);
+      if (ok !== false) {
+        return;
+      }
     }
     this.context.ui.openMainSheet(this._buildWeatherSheetHtml(html));
   }
@@ -407,32 +399,40 @@ class WeatherPlugin {
     if (this.updateInterval) clearInterval(this.updateInterval);
   }
 
+  _translitRuToLat(input) {
+    const map = {
+      а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z', и: 'i', й: 'y',
+      к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f',
+      х: 'h', ц: 'ts', ч: 'ch', ш: 'sh', щ: 'sch', ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya'
+    };
+    return String(input || '').toLowerCase().split('').map((ch) => map[ch] ?? ch).join('');
+  }
+
   async searchCity(query) {
     if (!query || query.length < 2) return [];
 
     await this._loadRussianCities();
+    const q = query.toLowerCase().trim();
+    const qLat = this._translitRuToLat(q);
 
     const localResults = this.russianCities
-      .filter(c => c.name.toLowerCase().includes(query.toLowerCase()))
-      .map(c => ({
+      .filter((c) => {
+        const name = String(c.name || '').toLowerCase();
+        return name.includes(q) || name.includes(qLat) || this._translitRuToLat(name).includes(qLat);
+      })
+      .map((c) => ({
         name: c.name,
         country: 'Russia',
         lat: c.lat,
         lon: c.lon
       }));
 
-    if (localResults.length > 0) {
-      console.log('[Weather] Found in local DB:', localResults.length);
-      return localResults.slice(0, 10);
-    }
-
-    console.log('[Weather] Searching via Open-Meteo API...');
+    let remote = [];
     try {
       const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=${this._geoLang()}&format=json`;
       const response = await fetch(url);
       const data = await response.json();
-
-      return (data.results || []).map(r => ({
+      remote = (data.results || []).map((r) => ({
         name: r.name,
         country: r.country,
         admin1: r.admin1,
@@ -441,8 +441,18 @@ class WeatherPlugin {
       }));
     } catch (e) {
       console.error('[Weather] Search failed:', e);
-      return [];
     }
+
+    const seen = new Set();
+    const merged = [];
+    for (const row of [...localResults, ...remote]) {
+      const key = `${String(row.name).toLowerCase()}|${row.lat}|${row.lon}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      merged.push(row);
+      if (merged.length >= 10) break;
+    }
+    return merged;
   }
 
   async geocodeCity(name) {
@@ -774,13 +784,22 @@ class WeatherPlugin {
       return;
     }
     if (action === 'toggleHourly') {
-      this.settings.showHourly = !this.settings.showHourly;
+      // Browser already toggled the checkbox; sync from that when possible
+      if (payload && typeof payload.checked === 'boolean') {
+        this.settings.showHourly = payload.checked;
+      } else {
+        this.settings.showHourly = !this.settings.showHourly;
+      }
       await this.context.storage.set('settings', this.settings);
       this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
       return;
     }
     if (action === 'toggleDaily') {
-      this.settings.showDaily = !this.settings.showDaily;
+      if (payload && typeof payload.checked === 'boolean') {
+        this.settings.showDaily = payload.checked;
+      } else {
+        this.settings.showDaily = !this.settings.showDaily;
+      }
       await this.context.storage.set('settings', this.settings);
       this.context.ui.openMainSheet(this._buildWeatherSheetHtml(''));
       return;
@@ -793,24 +812,30 @@ class WeatherPlugin {
         this._patchSearchResults('');
         return;
       }
+      this._patchSearchResults(`<div class="cultiva-muted cultiva-pad">${this._escapeHtml(this._t('loading'))}</div>`);
       this._sheetSearchT = setTimeout(async () => {
-        const results = await this.searchCity(q);
-        let html = '';
-        if (results.length === 0) {
-          html = `<div class="cultiva-muted cultiva-pad">${this._escapeHtml(this._t('noCities'))}</div>`;
-        } else {
-          html = results
-            .map(
-              (r) =>
-                `<button type="button" class="cultiva-list-row" data-cultiva-act="pickCity" data-lat="${r.lat}" data-lon="${r.lon}" data-city="${this._escapeAttr(r.name)}">
+        try {
+          const results = await this.searchCity(q);
+          let html = '';
+          if (results.length === 0) {
+            html = `<div class="cultiva-muted cultiva-pad">${this._escapeHtml(this._t('noCities'))}</div>`;
+          } else {
+            html = results
+              .map(
+                (r) =>
+                  `<button type="button" class="cultiva-list-row" data-cultiva-act="pickCity" data-lat="${r.lat}" data-lon="${r.lon}" data-city="${this._escapeAttr(r.name)}">
               <span class="cultiva-list-title">${this._escapeHtml(r.name)}</span>
               <span class="cultiva-list-sub">${this._escapeHtml([r.admin1, r.country].filter(Boolean).join(', '))}</span>
             </button>`
-            )
-            .join('');
+              )
+              .join('');
+          }
+          this._patchSearchResults(html);
+        } catch (e) {
+          console.error('[Weather] Search UI failed:', e);
+          this._patchSearchResults(`<div class="cultiva-muted cultiva-pad">${this._escapeHtml(this._t('noCities'))}</div>`);
         }
-        this._patchSearchResults(html);
-      }, 380);
+      }, 280);
     }
   }
 

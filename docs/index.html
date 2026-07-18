@@ -68,6 +68,30 @@
     .store-head h2 { font-size: 15px; font-weight: 700; }
     .store-head span { font-size: 12px; color: var(--text-tertiary); }
 
+    .plugin-store-toolbar {
+      display: flex; flex-direction: column; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .plugin-store-search {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      border: 1px solid var(--border-light); background: var(--bg-tertiary);
+      color: var(--text-primary); font-size: 13px; font-family: inherit;
+    }
+    .plugin-store-search::placeholder { color: var(--text-tertiary); }
+    .plugin-store-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .plugin-store-chip {
+      border: 1px solid var(--border-light); background: transparent;
+      color: var(--text-secondary); border-radius: 999px;
+      padding: 5px 10px; font-size: 11px; font-weight: 600; cursor: pointer;
+    }
+    .plugin-store-chip.is-active {
+      background: var(--text-primary); color: var(--bg-primary); border-color: transparent;
+    }
+    .plugin-store-heading {
+      font-size: 12px; font-weight: 700; color: var(--text-secondary);
+      margin: 4px 2px 8px;
+    }
+
     .plugins-list {
       display: flex; flex-direction: column; gap: 8px;
       background: var(--bg-secondary);
@@ -112,11 +136,55 @@
       font-size: 12px; font-weight: 700; cursor: default;
     }
     .plugin-btn-install { background: var(--text-primary); color: var(--bg-primary); }
+    .plugin-btn-details {
+      background: transparent; color: var(--text-secondary);
+      border: 1px solid var(--border-light); cursor: pointer;
+    }
 
     .plugins-loading, .plugins-empty { padding: 24px; text-align: center; color: var(--text-tertiary); font-size: 14px; }
     .footnote {
       max-width: var(--max); margin: 0 auto; padding: 0 20px 48px;
       font-size: 13px; color: var(--text-tertiary);
+    }
+
+    .details-modal {
+      position: fixed; inset: 0; z-index: 40;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px; background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(8px);
+    }
+    .details-sheet {
+      width: min(520px, 94vw); max-height: 86vh; overflow: auto;
+      background: var(--bg-secondary); border: 1px solid var(--border-light);
+      border-radius: 16px; padding: 18px;
+    }
+    .details-header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 12px;
+    }
+    .details-header h2 { font-size: 18px; letter-spacing: -0.02em; }
+    .details-close {
+      border: none; background: transparent; color: var(--text-secondary);
+      font-size: 22px; cursor: pointer; line-height: 1;
+    }
+    .details-body { display: flex; flex-direction: column; gap: 12px; }
+    .details-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .details-tag {
+      padding: 3px 8px; border-radius: 999px; background: var(--bg-tertiary);
+      color: var(--text-secondary); font-size: 11px; font-weight: 600;
+    }
+    .details-perms { margin: 0; padding-left: 18px; color: var(--text-secondary); font-size: 13px; }
+    .details-meta { font-size: 12px; color: var(--text-tertiary); }
+    .details-changelog {
+      margin: 0; padding: 10px 12px; border-radius: 10px;
+      background: var(--bg-tertiary); border: 1px solid var(--border-light);
+      max-height: 220px; overflow: auto; font-family: var(--mono);
+      font-size: 11px; line-height: 1.45; white-space: pre-wrap; color: var(--text-secondary);
+    }
+    .details-shots { display: flex; flex-direction: column; gap: 8px; }
+    .details-shots img {
+      width: 100%; border-radius: 10px; border: 1px solid var(--border-light);
+      background: var(--bg-tertiary);
     }
   </style>
 </head>
@@ -142,6 +210,7 @@
       <h2 id="browse-title">Available plugins</h2>
       <span id="browse-hint">From catalog</span>
     </div>
+    <div class="plugin-store-toolbar" id="store-toolbar" hidden></div>
     <div class="plugins-list" id="plugins-list">
       <div class="plugins-loading" id="loading">Loading catalog…</div>
     </div>
@@ -168,7 +237,17 @@
         error: 'Could not load registry.',
         minLabel: 'Requires Cultiva',
         install: 'Install',
-        footnote: 'Install and enable plugins inside the Cultiva 2.0.0+ · Rowan desktop app (Settings → Plugins).'
+        footnote: 'Install and enable plugins inside the Cultiva 2.0.0+ · Rowan desktop app (Settings → Plugins).',
+        pluginPermNetwork: 'Internet access',
+        pluginPermStorage: 'Local data storage',
+        pluginPermUi: 'UI widgets',
+        pluginPermHabitsWrite: 'Complete habits',
+        pluginDetails: 'Details',
+        pluginFeatured: 'Featured',
+        pluginFilterAll: 'All',
+        pluginLastUpdated: 'Updated',
+        pluginStoreSearchPlaceholder: 'Search plugins…',
+        close: 'Close'
       },
       ru: {
         heroTitle: 'Магазин плагинов',
@@ -180,18 +259,93 @@
         error: 'Не удалось загрузить каталог.',
         minLabel: 'Требуется Cultiva',
         install: 'Установить',
-        footnote: 'Устанавливайте плагины в десктопном приложении Cultiva 2.0.0+ · Rowan (Настройки → Плагины).'
+        footnote: 'Устанавливайте плагины в десктопном приложении Cultiva 2.0.0+ · Rowan (Настройки → Плагины).',
+        pluginPermNetwork: 'Доступ в интернет',
+        pluginPermStorage: 'Локальные данные',
+        pluginPermUi: 'Виджеты интерфейса',
+        pluginPermHabitsWrite: 'Отметка привычек',
+        pluginDetails: 'Подробнее',
+        pluginFeatured: 'Избранные',
+        pluginFilterAll: 'Все',
+        pluginLastUpdated: 'Обновлён',
+        pluginStoreSearchPlaceholder: 'Поиск плагинов…',
+        close: 'Закрыть'
       }
     };
 
     let lang = 'en';
     let registry = null;
+    let tagFilter = '';
+    let searchQuery = '';
 
     function t(key) { return (COPY[lang] && COPY[lang][key]) || COPY.en[key] || key; }
 
     function meta(p) {
       const row = p.i18n && p.i18n[lang] ? p.i18n[lang] : { name: p.name, description: p.description };
-      return { name: row.name || p.name, description: row.description || p.description || '' };
+      return {
+        name: row.name || p.name,
+        description: row.description || p.description || '',
+        tagline: row.tagline || ''
+      };
+    }
+
+    function permissionLabel(perm) {
+      const map = {
+        network: t('pluginPermNetwork'),
+        storage: t('pluginPermStorage'),
+        ui: t('pluginPermUi'),
+        'habits.write': t('pluginPermHabitsWrite'),
+        'habits.read': lang === 'ru' ? 'Чтение привычек' : 'Read habits',
+        'settings.read': lang === 'ru' ? 'Чтение настроек' : 'Read settings'
+      };
+      return map[perm] || perm;
+    }
+
+    function isFeatured(p) {
+      if (p?.featured === true) return true;
+      return (Array.isArray(p?.tags) ? p.tags : []).some((tag) => String(tag).toLowerCase() === 'featured');
+    }
+
+    function sortKey(p) {
+      const n = p?.lastUpdated ? Date.parse(p.lastUpdated) : 0;
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function sortPlugins(list) {
+      return [...list].sort((a, b) => {
+        const byDate = sortKey(b) - sortKey(a);
+        if (byDate !== 0) return byDate;
+        return String(a.name || a.id || '').localeCompare(String(b.name || b.id || ''));
+      });
+    }
+
+    function collectTags(plugins) {
+      const tags = new Set();
+      for (const p of plugins) {
+        for (const tag of Array.isArray(p.tags) ? p.tags : []) {
+          const cleaned = String(tag || '').trim();
+          if (cleaned) tags.add(cleaned);
+        }
+      }
+      return [...tags].sort((a, b) => a.localeCompare(b));
+    }
+
+    function matchesFilters(p, m) {
+      if (tagFilter) {
+        const tags = (Array.isArray(p.tags) ? p.tags : []).map((x) => String(x).toLowerCase());
+        if (!tags.includes(tagFilter.toLowerCase())) return false;
+      }
+      const q = searchQuery.trim().toLowerCase();
+      if (!q) return true;
+      const hay = [p.id, m.name, m.description, m.tagline, ...(Array.isArray(p.tags) ? p.tags : [])].join(' ').toLowerCase();
+      return hay.includes(q);
+    }
+
+    function resolveAsset(baseUrl, rel) {
+      if (!rel) return '';
+      if (/^https?:\/\//i.test(rel)) return rel;
+      const base = String(baseUrl || '').replace(/\/$/, '');
+      return base ? `${base}/${String(rel).replace(/^\//, '')}` : String(rel);
     }
 
     function applyChrome() {
@@ -205,49 +359,220 @@
       });
     }
 
+    function renderToolbar(plugins) {
+      const toolbar = document.getElementById('store-toolbar');
+      toolbar.hidden = false;
+      toolbar.replaceChildren();
+
+      const search = document.createElement('input');
+      search.type = 'search';
+      search.className = 'plugin-store-search';
+      search.placeholder = t('pluginStoreSearchPlaceholder');
+      search.value = searchQuery;
+      search.addEventListener('input', () => {
+        searchQuery = search.value || '';
+        const active = document.activeElement === search;
+        const start = search.selectionStart;
+        const end = search.selectionEnd;
+        renderList();
+        const next = toolbar.querySelector('.plugin-store-search');
+        if (next && active) {
+          next.focus();
+          try { next.setSelectionRange(start, end); } catch (_) {}
+        }
+      });
+      toolbar.appendChild(search);
+
+      const chips = document.createElement('div');
+      chips.className = 'plugin-store-chips';
+      for (const tag of ['', ...collectTags(plugins)]) {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'plugin-store-chip' + ((tag || '') === (tagFilter || '') ? ' is-active' : '');
+        chip.textContent = tag || t('pluginFilterAll');
+        chip.addEventListener('click', () => {
+          tagFilter = tag || '';
+          renderList();
+        });
+        chips.appendChild(chip);
+      }
+      toolbar.appendChild(chips);
+    }
+
+    function createCard(p) {
+      const m = meta(p);
+      const card = document.createElement('article');
+      card.className = 'plugin-card';
+      card.innerHTML = `
+        <div class="plugin-card-main">
+          <div class="plugin-card-top">
+            <div class="plugin-icon" aria-hidden="true"></div>
+            <div class="plugin-info">
+              <div class="plugin-name"></div>
+              <div class="plugin-description"></div>
+            </div>
+          </div>
+          <div class="plugin-card-footer">
+            <div class="plugin-meta">
+              <span class="plugin-version"></span>
+              <span class="plugin-min-badge"></span>
+              <span class="plugin-author"></span>
+            </div>
+            <div class="plugin-actions">
+              <button type="button" class="plugin-btn plugin-btn-details"></button>
+              <span class="plugin-btn plugin-btn-install"></span>
+            </div>
+          </div>
+        </div>`;
+      card.querySelector('.plugin-name').textContent = m.name;
+      card.querySelector('.plugin-description').textContent = m.description;
+      card.querySelector('.plugin-version').textContent = p.version ? `[${p.version}]` : '';
+      card.querySelector('.plugin-min-badge').textContent = p.minAppVersion ? `${t('minLabel')} ${p.minAppVersion}+` : '';
+      card.querySelector('.plugin-author').textContent = p.author ? String(p.author) : '';
+      card.querySelector('.plugin-btn-install').textContent = t('install');
+      const detailsBtn = card.querySelector('.plugin-btn-details');
+      detailsBtn.textContent = t('pluginDetails');
+      detailsBtn.addEventListener('click', () => openDetails(p));
+      return card;
+    }
+
+    async function openDetails(p) {
+      const m = meta(p);
+      const overlay = document.createElement('div');
+      overlay.className = 'details-modal';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+
+      const sheet = document.createElement('div');
+      sheet.className = 'details-sheet';
+      sheet.innerHTML = `
+        <div class="details-header">
+          <h2></h2>
+          <button type="button" class="details-close" aria-label="Close">&times;</button>
+        </div>
+        <div class="details-body"></div>`;
+      sheet.querySelector('h2').textContent = m.name || p.id;
+      const body = sheet.querySelector('.details-body');
+
+      const desc = document.createElement('p');
+      desc.className = 'plugin-description';
+      desc.textContent = m.description || '';
+      body.appendChild(desc);
+
+      const tags = Array.isArray(p.tags) ? p.tags : [];
+      if (tags.length) {
+        const wrap = document.createElement('div');
+        wrap.className = 'details-tags';
+        for (const tag of tags) {
+          const el = document.createElement('span');
+          el.className = 'details-tag';
+          el.textContent = String(tag);
+          wrap.appendChild(el);
+        }
+        body.appendChild(wrap);
+      }
+
+      const perms = Array.isArray(p.permissions) ? p.permissions : [];
+      if (perms.length) {
+        const list = document.createElement('ul');
+        list.className = 'details-perms';
+        for (const perm of perms) {
+          const li = document.createElement('li');
+          li.textContent = permissionLabel(perm);
+          list.appendChild(li);
+        }
+        body.appendChild(list);
+      }
+
+      if (p.lastUpdated) {
+        const metaEl = document.createElement('div');
+        metaEl.className = 'details-meta';
+        metaEl.textContent = `${t('pluginLastUpdated')} ${String(p.lastUpdated).slice(0, 10)}`;
+        body.appendChild(metaEl);
+      }
+
+      const changelogUrl = resolveAsset(p.baseUrl, p.changelog || 'CHANGELOG.md');
+      if (changelogUrl) {
+        try {
+          const res = await fetch(changelogUrl, { cache: 'no-store' });
+          if (res.ok) {
+            const text = await res.text();
+            const lines = text.split(/\r?\n/).slice(0, 40).join('\n');
+            if (lines.trim()) {
+              const pre = document.createElement('pre');
+              pre.className = 'details-changelog';
+              const code = document.createElement('code');
+              code.textContent = lines;
+              pre.appendChild(code);
+              body.appendChild(pre);
+            }
+          }
+        } catch (_) {}
+      }
+
+      const shots = Array.isArray(p.screenshots) ? p.screenshots : [];
+      if (shots.length) {
+        const wrap = document.createElement('div');
+        wrap.className = 'details-shots';
+        for (const shot of shots) {
+          const src = resolveAsset(p.baseUrl, shot);
+          if (!src) continue;
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = m.name || p.id;
+          img.loading = 'lazy';
+          img.addEventListener('error', () => {
+            img.remove();
+            if (!wrap.childElementCount) wrap.remove();
+          });
+          wrap.appendChild(img);
+        }
+        if (wrap.childElementCount) body.appendChild(wrap);
+      }
+
+      overlay.appendChild(sheet);
+      document.body.appendChild(overlay);
+
+      const close = () => overlay.remove();
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+      sheet.querySelector('.details-close').addEventListener('click', close);
+    }
+
     function renderList() {
       const list = document.getElementById('plugins-list');
       list.replaceChildren();
       const plugins = Array.isArray(registry?.plugins) ? registry.plugins : [];
       if (!plugins.length) {
+        document.getElementById('store-toolbar').hidden = true;
         const empty = document.createElement('div');
         empty.className = 'plugins-empty';
         empty.textContent = t('empty');
         list.appendChild(empty);
         return;
       }
-      for (const p of plugins) {
-        const m = meta(p);
-        const card = document.createElement('article');
-        card.className = 'plugin-card';
-        card.innerHTML = `
-          <div class="plugin-card-main">
-            <div class="plugin-card-top">
-              <div class="plugin-icon" aria-hidden="true"></div>
-              <div class="plugin-info">
-                <div class="plugin-name"></div>
-                <div class="plugin-description"></div>
-              </div>
-            </div>
-            <div class="plugin-card-footer">
-              <div class="plugin-meta">
-                <span class="plugin-version"></span>
-                <span class="plugin-min-badge"></span>
-                <span class="plugin-author"></span>
-              </div>
-              <div class="plugin-actions">
-                <span class="plugin-btn plugin-btn-install"></span>
-              </div>
-            </div>
-          </div>`;
-        card.querySelector('.plugin-name').textContent = m.name;
-        card.querySelector('.plugin-description').textContent = m.description;
-        card.querySelector('.plugin-version').textContent = p.version ? `v${p.version}` : '';
-        card.querySelector('.plugin-min-badge').textContent = p.minAppVersion ? `${t('minLabel')} ${p.minAppVersion}+` : '';
-        card.querySelector('.plugin-author').textContent = p.author ? String(p.author) : '';
-        card.querySelector('.plugin-btn').textContent = t('install');
-        list.appendChild(card);
+
+      renderToolbar(plugins);
+
+      const filtered = plugins.filter((p) => matchesFilters(p, meta(p)));
+      if (!filtered.length) {
+        const empty = document.createElement('div');
+        empty.className = 'plugins-empty';
+        empty.textContent = t('empty');
+        list.appendChild(empty);
+        return;
       }
+
+      const featured = sortPlugins(filtered.filter((p) => isFeatured(p)));
+      const rest = sortPlugins(filtered.filter((p) => !isFeatured(p)));
+
+      if (featured.length) {
+        const heading = document.createElement('div');
+        heading.className = 'plugin-store-heading';
+        heading.textContent = t('pluginFeatured');
+        list.appendChild(heading);
+        for (const p of featured) list.appendChild(createCard(p));
+      }
+      for (const p of rest) list.appendChild(createCard(p));
     }
 
     async function fetchRegistry() {
@@ -255,13 +580,9 @@
       for (const url of REGISTRY_URLS) {
         try {
           const res = await fetch(url, { cache: 'no-store' });
-          if (!res.ok) {
-            throw new Error(`HTTP ${res.status}`);
-          }
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
           const data = await res.json();
-          if (!Array.isArray(data?.plugins) || !data.plugins.length) {
-            throw new Error('Empty plugins list');
-          }
+          if (!Array.isArray(data?.plugins) || !data.plugins.length) throw new Error('Empty plugins list');
           return data;
         } catch (e) {
           lastError = e;
@@ -278,6 +599,7 @@
         renderList();
       } catch {
         list.replaceChildren();
+        document.getElementById('store-toolbar').hidden = true;
         const err = document.createElement('div');
         err.className = 'plugins-empty';
         err.textContent = t('error');

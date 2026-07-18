@@ -23,9 +23,12 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Registry version
 - Registry integrity CI fails on stale sha256; Pages deploy gated on validation
 
 ### Added
-- **Weather 2.5.0** — brighter Neo, theme bypass, hourly height fix, Cultiva toggles, pressure/clouds/UV; still `minAppVersion` **1.7.0**
+- **Weather 2.5.1** — Cyrillic city search + Open-Meteo merge; `_weatherKind` dedupe; `prefers-reduced-motion`
+- **Weather 2.5.0** — brighter Neo, theme bypass, hourly height fix, Cultiva toggles, pressure/clouds/UV
 - **Weather 2.4.0** — Weather Neo (opt-in), time-of-day tint, in-card CSS effects, hourly + 7-day forecast sheet
 - Per-plugin **CHANGELOG.md** in each plugin folder (GitHub-style history)
+- Store: Featured, tag filters, permissions confirm, Details (changelog/screenshots), `lastUpdated` via enrich script
+- Weather Neo screenshot for registry Details gallery
 
 ---
 

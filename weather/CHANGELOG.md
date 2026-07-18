@@ -8,6 +8,18 @@ Format follows [Keep a Changelog](https://keepachangelog.com/). Versions from `w
 
 ## [Unreleased]
 
+## [2.5.1] — 2026-07-18
+
+### Fixed
+- City search for Cyrillic queries (e.g. «Майкоп» → Maykop) via transliteration + always merging Open-Meteo geocoding
+- Search shows a loading state; more reliable results patching
+
+### Changed
+- `_weatherKind()` now delegates to `_kindFromCode()` (single source of truth for WMO codes)
+- Honor `prefers-reduced-motion: reduce` (hide Neo particle layer)
+
+---
+
 ## [2.5.0] — 2026-07-18
 
 ### Added

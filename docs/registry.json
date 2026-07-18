@@ -5,9 +5,9 @@
     {
       "id": "weather",
       "name": "Weather Widget",
-      "version": "2.5.0",
+      "version": "2.5.1",
       "author": "krwg",
-      "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo (Apple-bright gradients, time-of-day, animations), theme bypass, hourly and 7-day forecast.",
+      "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo, theme bypass, hourly and 7-day forecast.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
       "minAppVersion": "1.7.0",
@@ -30,7 +30,7 @@
         "en": {
           "name": "Weather",
           "tagline": "Forecast with Neo polish.",
-          "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo (Apple-bright gradients, time-of-day, animations), theme bypass, hourly and 7-day forecast."
+          "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo, theme bypass, hourly and 7-day forecast."
         },
         "ru": {
           "name": "Погода",
@@ -39,13 +39,19 @@
         }
       },
       "sha256": {
-        "manifest.json": "dbfaeae5a9edc714319f9fbaa1626b145beaca1d25eb924d70f3b8c4941dbd9e",
-        "index.js": "68456b9a8bdb580e59b8b2a2def3f96da307acae190e2ea46e853db57540f373",
+        "manifest.json": "349b9877f7d34be2fac1198b4d9c542f5c8ab6b3c6f8ca67408ecce5a41ced08",
+        "index.js": "62097fd801f0880cb92fd48f24796037990390bab6e0b2f354c4f9718a481675",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "8f76770a80b398c07475cd7b1d640ae544cbbe87f1ac6976d55c5d4def800cc0",
+        "styles.css": "b7a786e33a4ca1ba1d317481199ef245ea9b259f02130dae52b92260affce4d3",
         "cities-ru.json": "1be7df2c68a4bde82c68519ee19306ca04bdaa22fb1339563979a00940045e87"
       },
-      "storeFlow": "direct"
+      "storeFlow": "direct",
+      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "changelog": "CHANGELOG.md",
+      "featured": true,
+      "screenshots": [
+        "screenshots/neo.png"
+      ]
     },
     {
       "id": "time",
@@ -87,7 +93,11 @@
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "632c4f0ba4bf61cd4fd650ceae59d1f7b14009bd14e515479cba0415bba25d39"
       },
-      "storeFlow": "direct"
+      "storeFlow": "direct",
+      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "changelog": "CHANGELOG.md",
+      "featured": true,
+      "screenshots": []
     },
     {
       "id": "radio",
@@ -131,7 +141,11 @@
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "d16592955a85029e39724166449db36153d5f10e9caa3fd343beed56ceb66968"
       },
-      "storeFlow": "direct"
+      "storeFlow": "direct",
+      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "changelog": "CHANGELOG.md",
+      "featured": false,
+      "screenshots": []
     },
     {
       "id": "pomodoro",
@@ -174,7 +188,11 @@
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "e8cbb7d76210b9104aafd124b0689a3e1b4a9d245cb77c40d30effdedd611a51"
       },
-      "storeFlow": "direct"
+      "storeFlow": "direct",
+      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "changelog": "CHANGELOG.md",
+      "featured": true,
+      "screenshots": []
     },
     {
       "id": "quote",
@@ -216,7 +234,11 @@
         "styles.css": "e006b19f17fdb7075df45cee3204f62f7d26d9cfeb896060cac46141d287d96e",
         "quotes-data.json": "a96eeee30269fc8d95e7ddf80ff9fa76e2d9b4e407ec7fe9ef5f685c375d7e89"
       },
-      "storeFlow": "direct"
+      "storeFlow": "direct",
+      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "changelog": "CHANGELOG.md",
+      "featured": false,
+      "screenshots": []
     },
     {
       "id": "weekly-stats",
@@ -260,7 +282,11 @@
         "index.js": "ac9c002c486b697a840458b55beff96f19c759478e740bbc185f48814d206b8e",
         "styles.css": "65c6a7cabd9eaa01a933293f9dd41f8c0c54d4172e4dd685b7b1e20a515e27fa"
       },
-      "storeFlow": "get"
+      "storeFlow": "get",
+      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "changelog": "CHANGELOG.md",
+      "featured": false,
+      "screenshots": []
     },
     {
       "id": "habit-reflection",
@@ -302,7 +328,11 @@
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "68e535446c6f32cb7d5185d8630fed1a996c3438aab6149eac1d7262a8ce4aa9"
       },
-      "storeFlow": "get"
+      "storeFlow": "get",
+      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "changelog": "CHANGELOG.md",
+      "featured": false,
+      "screenshots": []
     },
     {
       "id": "routine",
@@ -346,7 +376,11 @@
         "index.js": "7f5c396cc69fb3d6a12f64aa9143a436f018a17e2e5fc32cee07da064a88e916",
         "styles.css": "03c7c44d5fd7f3c7c2f23d4459b68389ea360b76369b4f6ccc493636c998d4c1"
       },
-      "storeFlow": "get"
+      "storeFlow": "get",
+      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "changelog": "CHANGELOG.md",
+      "featured": false,
+      "screenshots": []
     },
     {
       "id": "gentle-nudge",
@@ -388,7 +422,11 @@
         "manifest.json": "51449c9f2b7feb2a860eef735efe9045dc071afdf19ecaa347247dd13349d44c",
         "index.js": "983951f54bf2ce0adb38988c8b57711ce488d671ac0d22db5d716ba7f32d564a"
       },
-      "storeFlow": "get"
+      "storeFlow": "get",
+      "lastUpdated": "2026-07-18T14:56:03+03:00",
+      "changelog": "CHANGELOG.md",
+      "featured": false,
+      "screenshots": []
     }
   ]
 }

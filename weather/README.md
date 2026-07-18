@@ -2,7 +2,7 @@
 
 Current conditions in the Cultiva header and garden, with hybrid city search for any location worldwide. Optional **Weather Neo** visuals, hourly and 7-day forecast.
 
-**Version:** 2.5.0 (see [CHANGELOG.md](./CHANGELOG.md))  
+**Version:** 2.5.1 (see [CHANGELOG.md](./CHANGELOG.md))  
 **minAppVersion:** `1.7.0`
 
 ---

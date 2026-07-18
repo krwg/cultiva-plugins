@@ -355,6 +355,21 @@ html[data-low-power="1"] .weather-neo-sunrays {
   display: none;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .weather-neo-fx {
+    display: none !important;
+  }
+  .weather-neo-streak,
+  .weather-neo-flake,
+  .weather-neo-flash,
+  .weather-neo-glow,
+  .weather-neo-sunrays,
+  .weather-neo-star,
+  .weather-neo-haze {
+    animation: none !important;
+  }
+}
+
 .weather-sheet--clear .weather-hero-icon { color: #f59e0b; }
 .weather-sheet--rain .weather-hero-icon,
 .weather-sheet--showers .weather-hero-icon { color: #3b82f6; }
@@ -509,11 +524,12 @@ html[data-low-power="1"] .weather-neo-sunrays {
 }
 
 /* Cultiva-style toggles (not native checkboxes) */
-.weather-view-toggles {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 14px;
+.cultiva-search-results {
+  flex-shrink: 0;
+  min-height: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-bottom: 4px;
 }
 .weather-toggle-row {
   display: flex;
