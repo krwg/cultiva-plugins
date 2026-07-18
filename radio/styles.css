@@ -92,12 +92,39 @@
   display: flex;
   gap: 8px;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .radio-custom-row .cultiva-sheet-input {
   flex: 1;
   min-width: 0;
+}
+
+.radio-custom-hint {
+  margin-top: 0 !important;
+  margin-bottom: 10px !important;
+}
+
+.radio-history-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 14px;
+}
+
+.radio-history-chip {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 500;
+}
+
+.radio-station-filter {
+  margin-bottom: 10px;
 }
 
 .cultiva-radio-scroll {

@@ -6,6 +6,23 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [2.5.0] — 2026-07-19
+
+### Fixed
+- Custom stream paste: extract multiple URLs, resolve `.m3u` / `.pls` playlists to direct ice mirrors, reject bare HTML page links with a clearer error
+- Custom field is plain text (not `type=url`) so paste of playlist links is not blocked by browser validation
+
+### Added
+- **Stream history** — last 8 custom URLs as one-tap chips
+- Station filter in the player sheet
+- Ten SomaFM stations: Synphaera, The Trip, Left Coast 70s, Boot Liquor, Illinois Street Lounge, Metal Detector, Sonic Universe, Vaporwaves, cliqhop idm, Mission Control
+- Tray now-playing: tooltip + menu row for the current station (PE2 per-plugin tray merge)
+
+### Changed
+- `minAppVersion` → **2.3.2** (tray APIs)
+
+---
+
 ## [2.4.0] — 2026-07-18
 
 ### Fixed

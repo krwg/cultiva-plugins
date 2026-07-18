@@ -1,115 +1,125 @@
-{
-  "id": "radio",
-  "name": "Radio Widget",
-  "version": "2.4.0",
-  "author": "krwg",
-  "description": "Internet radio player in the header: SomaFM stations, custom URL, Media Session, sleep timer, optional Radio Neo visual FX.",
-  "icon": "",
-  "entry": "index.js",
-  "styles": ["cultiva-sheet-base.css", "styles.css"],
-  "permissions": ["network", "storage", "ui"],
-  "surfaces": ["header"],
-  "minAppVersion": "1.7.0",
-  "settings": [
-    {
-      "key": "station",
-      "label": "Default station",
-      "type": "select",
-      "options": [
-        { "value": "groovesalad", "label": "Groove Salad" },
-        { "value": "gsclassic", "label": "Groove Salad Classic" },
-        { "value": "fluid", "label": "Fluid" },
-        { "value": "beatblender", "label": "Beat Blender" },
-        { "value": "dronezone", "label": "Drone Zone" },
-        { "value": "lush", "label": "Lush" },
-        { "value": "spacestation", "label": "Space Station" },
-        { "value": "secretagent", "label": "Secret Agent" },
-        { "value": "u80s", "label": "Underground 80s" },
-        { "value": "indiepop", "label": "Indie Pop Rocks" },
-        { "value": "deepspaceone", "label": "Deep Space One" },
-        { "value": "radioparadise", "label": "Radio Paradise" },
-        { "value": "chillhop", "label": "Chillhop Radio" },
-        { "value": "defcon", "label": "DEF CON Radio" },
-        { "value": "custom", "label": "Custom stream" }
-      ],
-      "default": "groovesalad",
-      "i18n": {
-        "ru": {
-          "label": "Станция по умолчанию",
-          "options": {
-            "custom": "Свой поток"
-          }
-        }
-      }
-    },
-    {
-      "key": "customUrl",
-      "label": "Custom stream URL",
-      "type": "text",
-      "default": "",
-      "i18n": {
-        "ru": { "label": "URL своего потока" }
-      }
-    },
-    {
-      "key": "volume",
-      "label": "Volume",
-      "type": "select",
-      "options": [
-        { "value": "0.25", "label": "25%" },
-        { "value": "0.35", "label": "35%" },
-        { "value": "0.45", "label": "45%" },
-        { "value": "0.55", "label": "55%" },
-        { "value": "0.65", "label": "65%" },
-        { "value": "0.75", "label": "75%" }
-      ],
-      "default": "0.45",
-      "i18n": {
-        "ru": {
-          "label": "Громкость",
-          "options": {
-            "0.25": "25%",
-            "0.35": "35%",
-            "0.45": "45%",
-            "0.55": "55%",
-            "0.65": "65%",
-            "0.75": "75%"
-          }
-        }
-      }
-    },
-    {
-      "key": "sleepMinutes",
-      "label": "Sleep timer",
-      "type": "select",
-      "options": [
-        { "value": "0", "label": "Off" },
-        { "value": "15", "label": "15 min" },
-        { "value": "30", "label": "30 min" },
-        { "value": "60", "label": "60 min" }
-      ],
-      "default": "0",
-      "i18n": {
-        "ru": {
-          "label": "Таймер сна",
-          "options": {
-            "0": "Выкл",
-            "15": "15 мин",
-            "30": "30 мин",
-            "60": "60 мин"
-          }
-        }
-      }
-    },
-    {
-      "key": "visualFx",
-      "label": "Radio Neo",
-      "type": "boolean",
-      "default": false,
-      "i18n": {
-        "ru": { "label": "Радио Нео" },
-        "en": { "label": "Radio Neo" }
-      }
-    }
-  ]
-}
+{
+  "id": "radio",
+  "name": "Radio Widget",
+  "version": "2.5.0",
+  "author": "krwg",
+  "description": "Internet radio in the header: SomaFM stations, custom URL with .m3u/.pls resolve + history, Media Session, sleep timer, Radio Neo, tray now-playing.",
+  "icon": "",
+  "entry": "index.js",
+  "styles": ["cultiva-sheet-base.css", "styles.css"],
+  "permissions": ["network", "storage", "ui"],
+  "surfaces": ["header"],
+  "minAppVersion": "2.3.2",
+  "settings": [
+    {
+      "key": "station",
+      "label": "Default station",
+      "type": "select",
+      "options": [
+        { "value": "groovesalad", "label": "Groove Salad" },
+        { "value": "gsclassic", "label": "Groove Salad Classic" },
+        { "value": "fluid", "label": "Fluid" },
+        { "value": "beatblender", "label": "Beat Blender" },
+        { "value": "dronezone", "label": "Drone Zone" },
+        { "value": "lush", "label": "Lush" },
+        { "value": "spacestation", "label": "Space Station" },
+        { "value": "secretagent", "label": "Secret Agent" },
+        { "value": "u80s", "label": "Underground 80s" },
+        { "value": "indiepop", "label": "Indie Pop Rocks" },
+        { "value": "deepspaceone", "label": "Deep Space One" },
+        { "value": "radioparadise", "label": "Radio Paradise" },
+        { "value": "chillhop", "label": "Chillhop Radio" },
+        { "value": "defcon", "label": "DEF CON Radio" },
+        { "value": "synphaera", "label": "Synphaera" },
+        { "value": "thetrip", "label": "The Trip" },
+        { "value": "seventies", "label": "Left Coast 70s" },
+        { "value": "bootliquor", "label": "Boot Liquor" },
+        { "value": "illstreet", "label": "Illinois Street Lounge" },
+        { "value": "metal", "label": "Metal Detector" },
+        { "value": "sonicuniverse", "label": "Sonic Universe" },
+        { "value": "vaporwaves", "label": "Vaporwaves" },
+        { "value": "cliqhop", "label": "cliqhop idm" },
+        { "value": "missioncontrol", "label": "Mission Control" },
+        { "value": "custom", "label": "Custom stream" }
+      ],
+      "default": "groovesalad",
+      "i18n": {
+        "ru": {
+          "label": "Станция по умолчанию",
+          "options": {
+            "custom": "Свой поток"
+          }
+        }
+      }
+    },
+    {
+      "key": "customUrl",
+      "label": "Custom stream URL",
+      "type": "text",
+      "default": "",
+      "i18n": {
+        "ru": { "label": "URL своего потока" }
+      }
+    },
+    {
+      "key": "volume",
+      "label": "Volume",
+      "type": "select",
+      "options": [
+        { "value": "0.25", "label": "25%" },
+        { "value": "0.35", "label": "35%" },
+        { "value": "0.45", "label": "45%" },
+        { "value": "0.55", "label": "55%" },
+        { "value": "0.65", "label": "65%" },
+        { "value": "0.75", "label": "75%" }
+      ],
+      "default": "0.45",
+      "i18n": {
+        "ru": {
+          "label": "Громкость",
+          "options": {
+            "0.25": "25%",
+            "0.35": "35%",
+            "0.45": "45%",
+            "0.55": "55%",
+            "0.65": "65%",
+            "0.75": "75%"
+          }
+        }
+      }
+    },
+    {
+      "key": "sleepMinutes",
+      "label": "Sleep timer",
+      "type": "select",
+      "options": [
+        { "value": "0", "label": "Off" },
+        { "value": "15", "label": "15 min" },
+        { "value": "30", "label": "30 min" },
+        { "value": "60", "label": "60 min" }
+      ],
+      "default": "0",
+      "i18n": {
+        "ru": {
+          "label": "Таймер сна",
+          "options": {
+            "0": "Выкл",
+            "15": "15 мин",
+            "30": "30 мин",
+            "60": "60 мин"
+          }
+        }
+      }
+    },
+    {
+      "key": "visualFx",
+      "label": "Radio Neo",
+      "type": "boolean",
+      "default": false,
+      "i18n": {
+        "ru": { "label": "Радио Нео" },
+        "en": { "label": "Radio Neo" }
+      }
+    }
+  ]
+}

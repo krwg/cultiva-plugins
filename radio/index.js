@@ -9,6 +9,7 @@ class RadioPlugin {
       playing: false,
       sleepMinutes: 0,
       customUrl: '',
+      customHistory: [],
       visualFx: false
     };
     this.audio = null;
@@ -18,6 +19,8 @@ class RadioPlugin {
     this._lastFailReason = null;
     this._playId = 0;
     this._playPromise = null;
+    this._customResolvedUrls = null;
+    this._stationFilter = '';
     this._baseStations = {
       groovesalad: {
         name: 'Groove Salad',
@@ -150,6 +153,96 @@ class RadioPlugin {
           'https://ice2.somafm.com/defcon-128-mp3',
           'https://ice6.somafm.com/defcon-128-mp3'
         ]
+      },
+      synphaera: {
+        name: 'Synphaera',
+        tag: 'Space',
+        genre: 'space',
+        urls: [
+          'https://ice6.somafm.com/synphaera-128-mp3',
+          'https://ice2.somafm.com/synphaera-128-mp3'
+        ]
+      },
+      thetrip: {
+        name: 'The Trip',
+        tag: 'Progressive',
+        genre: 'electronic',
+        urls: [
+          'https://ice6.somafm.com/thetrip-128-mp3',
+          'https://ice2.somafm.com/thetrip-128-mp3'
+        ]
+      },
+      seventies: {
+        name: 'Left Coast 70s',
+        tag: 'Mellow',
+        genre: 'eclectic',
+        urls: [
+          'https://ice6.somafm.com/seventies-128-mp3',
+          'https://ice2.somafm.com/seventies-128-mp3'
+        ]
+      },
+      bootliquor: {
+        name: 'Boot Liquor',
+        tag: 'Americana',
+        genre: 'indie',
+        urls: [
+          'https://ice6.somafm.com/bootliquor-128-mp3',
+          'https://ice2.somafm.com/bootliquor-128-mp3'
+        ]
+      },
+      illstreet: {
+        name: 'Illinois Street Lounge',
+        tag: 'Lounge',
+        genre: 'lounge',
+        urls: [
+          'https://ice6.somafm.com/illstreet-128-mp3',
+          'https://ice2.somafm.com/illstreet-128-mp3'
+        ]
+      },
+      metal: {
+        name: 'Metal Detector',
+        tag: 'Metal',
+        genre: 'electronic',
+        urls: [
+          'https://ice6.somafm.com/metal-128-mp3',
+          'https://ice2.somafm.com/metal-128-mp3'
+        ]
+      },
+      sonicuniverse: {
+        name: 'Sonic Universe',
+        tag: 'Jazz',
+        genre: 'eclectic',
+        urls: [
+          'https://ice6.somafm.com/sonicuniverse-128-mp3',
+          'https://ice2.somafm.com/sonicuniverse-128-mp3'
+        ]
+      },
+      vaporwaves: {
+        name: 'Vaporwaves',
+        tag: 'Vaporwave',
+        genre: 'lofi',
+        urls: [
+          'https://ice6.somafm.com/vaporwaves-128-mp3',
+          'https://ice2.somafm.com/vaporwaves-128-mp3'
+        ]
+      },
+      cliqhop: {
+        name: 'cliqhop idm',
+        tag: 'IDM',
+        genre: 'electronic',
+        urls: [
+          'https://ice6.somafm.com/cliqhop-128-mp3',
+          'https://ice2.somafm.com/cliqhop-128-mp3'
+        ]
+      },
+      missioncontrol: {
+        name: 'Mission Control',
+        tag: 'Ambient',
+        genre: 'ambient',
+        urls: [
+          'https://ice6.somafm.com/missioncontrol-128-mp3',
+          'https://ice2.somafm.com/missioncontrol-128-mp3'
+        ]
       }
     };
     this.stations = { ...this._baseStations };
@@ -175,17 +268,23 @@ class RadioPlugin {
       customPlay: 'Слушать',
       customName: 'Свой поток',
       customTag: 'URL',
+      customHint: 'Прямой MP3/AAC, .m3u / .pls или несколько URL через пробел/строку',
+      customHistory: 'Недавние потоки',
+      customClearHistory: 'Очистить',
+      resolving: 'Разбор плейлиста…',
+      invalidUrl: 'Не удалось найти рабочий поток в этой ссылке.',
       footnote: 'Потоки SomaFM, Radio Paradise, Chillhop. Нужен интернет.',
       playing: 'Играет',
       stopped: 'Остановлено',
       nowPlaying: 'Сейчас играет',
       connecting: 'Подключение…',
-      unavailable: 'Поток недоступен — попробуйте другую станцию.',
+      unavailable: 'Поток недоступен — попробуйте другую станцию или .m3u/.pls вместо страницы.',
       autoplayBlocked: 'Автовоспроизведение заблокировано — нажмите станцию.',
       sleepDone: 'Таймер сна завершён — воспроизведение остановлено.',
       visualFx: 'Визуальные эффекты',
       visualFxOn: 'Нео вкл',
       visualFxOff: 'Нео выкл',
+      filterStations: 'Фильтр станций',
       close: 'Закрыть'
     };
     const en = {
@@ -207,17 +306,23 @@ class RadioPlugin {
       customPlay: 'Play',
       customName: 'Custom stream',
       customTag: 'URL',
+      customHint: 'Direct MP3/AAC, .m3u / .pls, or several URLs separated by space/newline',
+      customHistory: 'Recent streams',
+      customClearHistory: 'Clear',
+      resolving: 'Resolving playlist…',
+      invalidUrl: 'Could not find a playable stream in that link.',
       footnote: 'Streams from SomaFM, Radio Paradise, Chillhop. Requires network.',
       playing: 'Playing',
       stopped: 'Stopped',
       nowPlaying: 'Now playing',
       connecting: 'Connecting…',
-      unavailable: 'Stream unavailable — try another station.',
+      unavailable: 'Stream unavailable — try another station, or paste a .m3u/.pls instead of a web page.',
       autoplayBlocked: 'Autoplay blocked — tap a station to play.',
       sleepDone: 'Sleep timer ended — playback stopped.',
       visualFx: 'Visual effects',
       visualFxOn: 'Neo on',
       visualFxOff: 'Neo off',
+      filterStations: 'Filter stations',
       close: 'Close'
     };
     const dict = this._locale === 'ru' ? ru : en;
@@ -245,13 +350,136 @@ class RadioPlugin {
   _syncStationsMap() {
     const url = typeof this.settings.customUrl === 'string' ? this.settings.customUrl.trim() : '';
     this.stations = { ...this._baseStations };
-    if (url) {
+    if (url || (this._customResolvedUrls && this._customResolvedUrls.length)) {
+      const urls = (this._customResolvedUrls && this._customResolvedUrls.length)
+        ? this._customResolvedUrls
+        : [url];
       this.stations.custom = {
         name: this._t('customName'),
         tag: this._t('customTag'),
         genre: 'custom',
-        urls: [url]
+        urls
       };
+    }
+  }
+
+  _extractUrls(raw) {
+    const text = String(raw || '').trim();
+    if (!text) {
+      return [];
+    }
+    const found = text.match(/https?:\/\/[^\s<>"'`]+/gi) || [];
+    if (found.length) {
+      return [...new Set(found.map((u) => u.replace(/[.,;:!?)\]}>]+$/g, '')))];
+    }
+    if (/^[\w.-]+\.[a-z]{2,}([/:].*)?$/i.test(text)) {
+      return [`https://${text}`];
+    }
+    return [];
+  }
+
+  _looksLikePlaylist(url) {
+    const u = String(url || '').toLowerCase();
+    return /\.pls($|\?)/.test(u)
+      || /\.m3u8?($|\?)/.test(u)
+      || /\/m3u\//.test(u)
+      || /somafm\.com\/[^/]+\.pls/.test(u)
+      || /somafm\.com\/[^/]+\d*\.pls/.test(u);
+  }
+
+  _parsePlaylistText(text, playlistUrl) {
+    const body = String(text || '');
+    const urls = [];
+    if (/\[playlist\]/i.test(body) || /\.pls/i.test(playlistUrl)) {
+      for (const m of body.matchAll(/File\d+=\s*(.+)/gi)) {
+        const line = String(m[1] || '').trim();
+        if (/^https?:\/\//i.test(line)) {
+          urls.push(line);
+        }
+      }
+    }
+    for (const line of body.split(/\r?\n/)) {
+      const t = line.trim();
+      if (!t || t.startsWith('#')) {
+        continue;
+      }
+      if (/^https?:\/\//i.test(t)) {
+        urls.push(t.replace(/[.,;:!?)\]}>]+$/g, ''));
+      }
+    }
+    return [...new Set(urls)].filter((u) => !/\.m3u8($|\?)/i.test(u));
+  }
+
+  async _fetchPlaylistUrls(playlistUrl) {
+    try {
+      const res = await fetch(playlistUrl, { method: 'GET', cache: 'no-store' });
+      if (!res.ok) {
+        return [];
+      }
+      const text = await res.text();
+      return this._parsePlaylistText(text, playlistUrl);
+    } catch {
+      return [];
+    }
+  }
+
+  async _resolveStreamUrls(raw) {
+    const candidates = this._extractUrls(raw);
+    if (!candidates.length) {
+      return [];
+    }
+    const out = [];
+    for (const u of candidates) {
+      if (/\.m3u8($|\?)/i.test(u)) {
+        continue;
+      }
+      if (this._looksLikePlaylist(u)) {
+        const resolved = await this._fetchPlaylistUrls(u);
+        out.push(...resolved);
+      } else {
+        out.push(u);
+      }
+    }
+    return [...new Set(out)].slice(0, 10);
+  }
+
+  _pushCustomHistory(entry) {
+    const value = String(entry || '').trim();
+    if (!value) {
+      return;
+    }
+    const prev = Array.isArray(this.settings.customHistory) ? this.settings.customHistory : [];
+    const next = [value, ...prev.filter((x) => x !== value)];
+    this.settings.customHistory = next.slice(0, 8);
+  }
+
+  _syncTray() {
+    const station = this._currentStation();
+    const playing = !!this.settings.playing && station;
+    try {
+      if (playing) {
+        this.context.ui.setTrayTooltip?.(`♪ ${station.name}`);
+        this.context.ui.registerTrayItems?.([
+          { id: 'radio-now', label: `♪ ${station.name}`, enabled: true },
+          { id: 'radio-toggle', label: this._t('pause'), enabled: true }
+        ]);
+      } else {
+        this.context.ui.setTrayTooltip?.('');
+        this.context.ui.clearTrayItems?.();
+      }
+    } catch {
+      void 0;
+    }
+  }
+
+  async onTrayAction(id) {
+    if (id === 'radio-toggle' || id === 'radio-now') {
+      if (id === 'radio-now') {
+        this.openRadioModal();
+        return;
+      }
+      await this.togglePlayPause();
+      this._syncTray();
     }
   }
 
@@ -275,6 +503,13 @@ class RadioPlugin {
       s.customUrl = s.customUrl == null ? '' : String(s.customUrl);
     }
     s.customUrl = s.customUrl.trim();
+    if (!Array.isArray(s.customHistory)) {
+      s.customHistory = [];
+    }
+    s.customHistory = s.customHistory
+      .map((x) => String(x || '').trim())
+      .filter(Boolean)
+      .slice(0, 8);
     s.visualFx = s.visualFx === true || s.visualFx === 'true';
     if (s.station === 'custom') {
       if (!s.customUrl) {
@@ -313,6 +548,7 @@ class RadioPlugin {
 
   _updateHeader() {
     this.context.ui.updateMainHeader({ label: this._headerLabel(), icon: '' });
+    this._syncTray();
   }
 
   _refreshSheet() {
@@ -446,6 +682,12 @@ class RadioPlugin {
     this._playId += 1;
     void this._stopAudio();
     this._clearMediaSession();
+    try {
+      this.context.ui.setTrayTooltip?.('');
+      this.context.ui.clearTrayItems?.();
+    } catch {
+      void 0;
+    }
     if (this.sleepTimer) {
       clearTimeout(this.sleepTimer);
       this.sleepTimer = null;
@@ -497,6 +739,13 @@ class RadioPlugin {
 
   async playStation(stationId, notify) {
     this._syncStationsMap();
+    if (stationId === 'custom' && this.settings.customUrl) {
+      const resolved = await this._resolveStreamUrls(this.settings.customUrl);
+      if (resolved.length) {
+        this._customResolvedUrls = resolved;
+        this._syncStationsMap();
+      }
+    }
     const station = this.stations[stationId];
     const urls = this._stationUrls(stationId);
     if (!station || !urls.length) return;
@@ -680,8 +929,14 @@ class RadioPlugin {
     const statusText = this._streamFailed
       ? this._failMessage()
       : (playing ? this._t('nowPlaying') : this._t('radio'));
+    const filter = String(this._stationFilter || '').trim().toLowerCase();
 
     const rows = Object.entries(this.stations)
+      .filter(([, s]) => {
+        if (!filter) return true;
+        const hay = `${s.name} ${s.tag} ${s.genre}`.toLowerCase();
+        return hay.includes(filter);
+      })
       .map(([id, s]) => {
         const active = this.settings.station === id;
         const live = active && playing;
@@ -692,6 +947,18 @@ class RadioPlugin {
         </button>`;
       })
       .join('');
+
+    const history = Array.isArray(this.settings.customHistory) ? this.settings.customHistory : [];
+    const historyHtml = history.length
+      ? `<label class="cultiva-field-label">${this._t('customHistory')}</label>
+    <div class="radio-history-row">
+      ${history.map((u) => {
+        const short = u.length > 42 ? `${u.slice(0, 39)}…` : u;
+        return `<button type="button" class="cultiva-pill radio-history-chip" data-cultiva-act="playHistory" data-url="${this._escapeAttr(u)}" title="${this._escapeAttr(u)}">${this._escapeHtml(short)}</button>`;
+      }).join('')}
+      <button type="button" class="cultiva-pill" data-cultiva-act="clearHistory">${this._t('customClearHistory')}</button>
+    </div>`
+      : '';
 
     return `
 <div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
@@ -731,11 +998,14 @@ class RadioPlugin {
     </div>
     <label class="cultiva-field-label">${this._t('customUrl')}</label>
     <div class="radio-custom-row">
-      <input type="url" name="customUrl" class="cultiva-sheet-input" value="${customVal}" placeholder="https://" autocomplete="off" />
+      <input type="text" name="customUrl" class="cultiva-sheet-input" value="${customVal}" placeholder="https://… or .m3u / .pls" autocomplete="off" spellcheck="false" />
       <button type="button" class="cultiva-sheet-secondary" data-cultiva-act="playCustom" data-cultiva-collect="1">${this._t('customPlay')}</button>
     </div>
+    <p class="cultiva-sheet-footnote radio-custom-hint">${this._t('customHint')}</p>
+    ${historyHtml}
     <label class="cultiva-field-label">${this._t('stations')}</label>
-    <div class="cultiva-radio-scroll">${rows}</div>
+    <input type="search" name="stationFilter" class="cultiva-sheet-input radio-station-filter" value="${this._escapeAttr(this._stationFilter || '')}" placeholder="${this._escapeAttr(this._t('filterStations'))}" data-cultiva-input-act="stationFilter" autocomplete="off" />
+    <div class="cultiva-radio-scroll">${rows || `<p class="cultiva-sheet-footnote">${this._escapeHtml(this._t('filterStations'))}</p>`}</div>
     <p class="cultiva-sheet-footnote">${this._t('footnote')}</p>
   </div>
 </div>`;
@@ -762,17 +1032,53 @@ class RadioPlugin {
       return;
     }
     if (action === 'playCustom' && payload) {
-      const url = String(payload.customUrl || '').trim();
-      this.settings.customUrl = url;
+      const raw = String(payload.customUrl || '').trim();
+      this._notify(this._t('resolving'));
+      const urls = await this._resolveStreamUrls(raw);
+      if (!urls.length) {
+        this._streamFailed = true;
+        this._lastFailReason = 'unavailable';
+        this._notify(this._t('invalidUrl'));
+        this._refreshSheet();
+        return;
+      }
+      this.settings.customUrl = raw || urls[0];
+      this._customResolvedUrls = urls;
+      this._pushCustomHistory(this.settings.customUrl);
       this._syncStationsMap();
       await this.context.storage.set('settings', this.settings);
-      if (url) {
-        this._optimisticSelect('custom');
-        this._refreshSheet();
-        await this.playStation('custom', true);
-      } else {
-        this._refreshSheet();
+      this._optimisticSelect('custom');
+      this._refreshSheet();
+      await this.playStation('custom', true);
+      return;
+    }
+    if (action === 'playHistory' && payload?.url) {
+      const raw = String(payload.url).trim();
+      this._notify(this._t('resolving'));
+      const urls = await this._resolveStreamUrls(raw);
+      if (!urls.length) {
+        this._notify(this._t('invalidUrl'));
+        return;
       }
+      this.settings.customUrl = raw;
+      this._customResolvedUrls = urls;
+      this._pushCustomHistory(raw);
+      this._syncStationsMap();
+      await this.context.storage.set('settings', this.settings);
+      this._optimisticSelect('custom');
+      this._refreshSheet();
+      await this.playStation('custom', true);
+      return;
+    }
+    if (action === 'clearHistory') {
+      this.settings.customHistory = [];
+      await this.context.storage.set('settings', this.settings);
+      this._refreshSheet();
+      return;
+    }
+    if (action === 'input:stationFilter' && payload) {
+      this._stationFilter = String(payload.value || '');
+      this._refreshSheet();
       return;
     }
     if (action === 'play') {
