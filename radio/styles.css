@@ -97,6 +97,11 @@
   margin: 14px auto 0;
   max-width: 280px;
   padding: 0 8px;
+  min-height: 0;
+}
+
+.radio-viz:empty {
+  display: none;
 }
 
 .radio-viz i {
@@ -106,12 +111,17 @@
   max-width: 8px;
   height: 12%;
   border-radius: 2px 2px 0 0;
-  background: linear-gradient(180deg, var(--accent-blue, #0a84ff) 0%, rgba(10, 132, 255, 0.35) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(10, 132, 255, 0.55) 100%);
+  box-shadow: 0 0 8px rgba(10, 132, 255, 0.35);
   transition: height 0.05s linear;
 }
 
 .cultiva-sheet-card--radio.has-live-viz .radio-viz i {
-  background: linear-gradient(180deg, #5ac8fa 0%, rgba(10, 132, 255, 0.45) 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #5ac8fa 45%, rgba(10, 132, 255, 0.5) 100%);
+}
+
+.cultiva-sheet-card--radio.radio-neo.has-live-viz::before {
+  opacity: 1;
 }
 
 .radio-sleep-pill {

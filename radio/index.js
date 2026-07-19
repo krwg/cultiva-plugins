@@ -1042,7 +1042,11 @@ class RadioPlugin {
   }
 
   _renderVizBars(heights) {
-    const html = heights.map((h) => `<i style="height:${Math.max(6, Math.round(h))}%"></i>`).join('');
+    if (!heights || !heights.length) {
+      this._patchSheet('.radio-viz', '');
+      return;
+    }
+    const html = heights.map((h) => `<i style="height:${Math.max(10, Math.round(h))}%"></i>`).join('');
     this._patchSheet('.radio-viz', html);
   }
 
@@ -1068,13 +1072,16 @@ class RadioPlugin {
         }
         v /= step;
         sum += v;
-        heights.push(8 + (v / 255) * 92);
+        heights.push(12 + (v / 255) * 88);
       }
-      if (sum < 8) {
+      if (sum < 12) {
         this._vizSilentFrames += 1;
-        if (this._vizSilentFrames > 90) {
+        // Keep Neo atmosphere; hide dead flat bars while probing / on CORS silence.
+        if (this._vizSilentFrames === 1 || this._vizSilentFrames % 15 === 0) {
+          this._renderVizBars(null);
+        }
+        if (this._vizSilentFrames > 45) {
           this._teardownVizGraph();
-          // Passthrough so audio keeps playing; fall back to decorative Neo CSS.
           if (this._mediaSource && this._audioCtx) {
             try {
               this._mediaSource.connect(this._audioCtx.destination);
@@ -1088,8 +1095,8 @@ class RadioPlugin {
         }
       } else {
         this._vizSilentFrames = 0;
+        this._renderVizBars(heights);
       }
-      this._renderVizBars(heights);
       this._vizRaf = requestAnimationFrame(tick);
     };
     this._vizRaf = requestAnimationFrame(tick);
@@ -1447,7 +1454,9 @@ class RadioPlugin {
     const visualFx = this.settings.visualFx === true;
     const genreCls = this._genreClass(station);
     const liveViz = visualFx && this._vizMode === 'live';
-    const neoCls = visualFx && !liveViz ? ` radio-neo ${genreCls}` : '';
+    // Genre Neo background + pulse always stay on when Neo is enabled —
+    // live analyser bars layer on top; never replace the atmosphere.
+    const neoCls = visualFx ? ` radio-neo ${genreCls}` : '';
     const playingCls = playing && visualFx ? ' is-playing' : '';
     const vizCls = liveViz ? ' has-live-viz' : '';
     const statusText = this._streamFailed
@@ -1457,7 +1466,8 @@ class RadioPlugin {
     const sleepLeft = sleep > 0 ? this._sleepRemainingMs() : 0;
     const sleepLabel = sleep > 0 ? this._formatSleepRemain(sleepLeft || sleep * 60 * 1000) : '';
     const sleepP = this._sleepProgress();
-    const vizBars = Array.from({ length: 24 }, () => '<i style="height:12%"></i>').join('');
+    const vizBars = ''; // filled by live analyser when signal has energy
+
 
     const sleepPill = (minutes, label) => {
       const active = sleep === minutes;

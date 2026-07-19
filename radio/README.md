@@ -2,7 +2,7 @@
 
 Internet radio in the Cultiva header — a mini-player for **33** curated stations (SomaFM, Nightride synthwave, Record Eurodance / retro rave, Наше Радио & Europa Plus, plus more), or your own stream URL (including `.m3u` / `.pls`). ICY now-playing, live analyser Neo, sleep countdown, volume crossfade, Media Session, stream history, and tray.
 
-**Version:** 2.6.0 (see [CHANGELOG.md](./CHANGELOG.md))  
+**Version:** 2.6.1 (see [CHANGELOG.md](./CHANGELOG.md))  
 **minAppVersion:** `1.7.0`  
 **Author:** krwg
 

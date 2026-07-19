@@ -1,9 +1,9 @@
 {
   "id": "radio",
   "name": "Radio Widget",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "author": "krwg",
-  "description": "Internet radio in the header: 33 stations (synthwave, retro rave, RU live), ICY now-playing, live analyser Neo, sleep countdown, crossfade, custom URL + history, tray.",
+  "description": "Internet radio in the header: 33 stations (synthwave, retro rave, RU live), ICY now-playing, live analyser Neo with genre atmosphere, sleep countdown, crossfade, custom URL + history, tray.",
   "icon": "",
   "entry": "index.js",
   "styles": [

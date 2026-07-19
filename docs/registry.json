@@ -1,6 +1,6 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.6.0",
+  "version": "3.6.1",
   "plugins": [
     {
       "id": "weather",
@@ -104,7 +104,7 @@
     {
       "id": "radio",
       "name": "Radio Widget",
-      "version": "2.6.0",
+      "version": "2.6.1",
       "author": "krwg",
       "description": "When silence gets in the way and playlists feel tired, turn on Music. The plugin streams 33 curated channels — synthwave, retro rave, SomaFM, and Russian live — with ICY now-playing, live analyser Neo, sleep countdown, and crossfade.",
       "icon": "",
@@ -129,22 +129,22 @@
         "en": {
           "name": "Music",
           "tagline": "A background stream that sets the tone.",
-          "description": "33 stations with ICY now-playing, live Neo analyser, sleep countdown, crossfade, and custom .m3u/.pls streams."
+          "description": "33 stations with ICY now-playing, live Neo analyser + genre atmosphere, sleep countdown, crossfade, and custom .m3u/.pls streams."
         },
         "ru": {
           "name": "Музыка",
           "tagline": "Фоновый поток, который настраивает.",
-          "description": "33 станции, ICY «сейчас играет», живой Нео-анализатор, таймер сна с отсчётом, кроссфейд и свои потоки."
+          "description": "33 станции, ICY «сейчас играет», живой Нео с атмосферой жанра, таймер сна с отсчётом, кроссфейд и свои потоки."
         }
       },
       "sha256": {
-        "manifest.json": "0879119affa5f905950269e0078332c7b06cd2b0b56712a6151c26a753df80c1",
-        "index.js": "8ddf19b06c9694d2c26af94f3881a9b0ca41bfadfd99991c74da55a179e42da7",
+        "manifest.json": "cb4becf5b7fe279c854deb6859d6147a3126e4b381ac51716e827c4e0000ff88",
+        "index.js": "68c795b20f1b7ad977172de59a4608c6d7650208629d186fb0127902b624567e",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "9512892666b30771ee45b2cac98bb344befdeaea1cde87deb9ce28d8483e6f95"
+        "styles.css": "36d3e84c8ea414410a3f123639deca8a18076c65572876b08e6868e633479701"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-19T03:20:00+03:00",
+      "lastUpdated": "2026-07-19T03:25:00+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [],

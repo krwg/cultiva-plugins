@@ -6,6 +6,14 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [2.6.1] — 2026-07-19
+
+### Fixed
+- Radio Neo genre background and pulse animations stay on while the live analyser runs (bars layer on top instead of replacing the atmosphere)
+- Hide flat/silent analyser bars until real signal energy is present; faster CORS-silence fallback to decorative Neo
+
+---
+
 ## [2.6.0] — 2026-07-19
 
 ### Added
