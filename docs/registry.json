@@ -1,13 +1,13 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "plugins": [
     {
       "id": "weather",
       "name": "Weather Widget",
       "version": "2.7.2",
       "author": "krwg",
-      "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo with realistic solar-phase skies, sunrise/sunset, theme bypass, hourly and 7-day forecast.",
+      "description": "Current weather in the header and garden, with city search worldwide. Optional Weather Neo adds solar-phase skies plus hourly and 7-day forecast.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weather",
       "minAppVersion": "1.7.0",
@@ -29,13 +29,13 @@
       "i18n": {
         "en": {
           "name": "Weather",
-          "tagline": "Forecast with Neo polish.",
-          "description": "Current conditions in the header and garden, with hybrid city search worldwide. Optional Weather Neo with realistic solar-phase skies, sunrise/sunset, theme bypass, hourly and 7-day forecast."
+          "tagline": "Forecast in the header and garden.",
+          "description": "Current weather in the header and garden, with city search worldwide. Optional Weather Neo adds solar-phase skies plus hourly and 7-day forecast."
         },
         "ru": {
           "name": "Погода",
-          "tagline": "Прогноз с режимом Нео.",
-          "description": "Актуальная погода в шапке и саду, поиск городов по всему миру. Опциональный режим «Погода Нео» (реалистичные фазы неба по восходу/закату, анимации), обход темы, почасовой и недельный прогноз."
+          "tagline": "Прогноз в шапке и в саду.",
+          "description": "Актуальная погода в шапке и саду, поиск городов по всему миру. Опциональный режим «Погода Нео» — небо по восходу/закату, почасовой и недельный прогноз."
         }
       },
       "sha256": {
@@ -59,7 +59,7 @@
       "name": "Time Widget",
       "version": "2.2.2",
       "author": "krwg",
-      "description": "Track time without extra friction. Time places a calm digital clock in the header; tap it for a sheet with multiple time zones. Ideal when your team spans London, New York, or Tokyo — you instantly see who is starting breakfast and who is heading to bed. No tab switching — just the moment you need, one glance away.",
+      "description": "A calm digital clock in the header — tap for a sheet with multiple time zones. See who is awake across cities without leaving Cultiva.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/time",
       "minAppVersion": "1.1.0",
@@ -79,13 +79,13 @@
       "i18n": {
         "en": {
           "name": "Time",
-          "tagline": "Live clocks in the header and the world.",
-          "description": "Track time without extra friction. Time places a calm digital clock in the header; tap it for a sheet with multiple time zones. Ideal when your team spans London, New York, or Tokyo — you instantly see who is starting breakfast and who is heading to bed. No tab switching — just the moment you need, one glance away."
+          "tagline": "Clocks for here and elsewhere.",
+          "description": "A calm digital clock in the header — tap for a sheet with multiple time zones. See who is awake across cities without leaving Cultiva."
         },
         "ru": {
           "name": "Время",
-          "tagline": "Живые часы в шапке и мире.",
-          "description": "Следите за временем без лишних движений. «Время» размещает в шапке аккуратный цифровой циферблат, а если нажать на него — откроется лист-штора с поддержкой нескольких часовых поясов. Идеально, если вы работаете с командой в Лондоне, Нью-Йорке или Токио: сразу видно, кто уже завтракает, а кто собирается спать. Никаких переключений между вкладками — только нужный момент на расстоянии взгляда."
+          "tagline": "Часы здесь и в других поясах.",
+          "description": "Спокойные цифровые часы в шапке — нажмите, чтобы открыть лист с несколькими часовыми поясами. Видно, кто уже на связи в других городах, без лишних вкладок."
         }
       },
       "sha256": {
@@ -104,9 +104,9 @@
     {
       "id": "radio",
       "name": "Radio Widget",
-      "version": "2.6.1",
+      "version": "2.6.2",
       "author": "krwg",
-      "description": "When silence gets in the way and playlists feel tired, turn on Music. The plugin streams 33 curated channels — synthwave, retro rave, SomaFM, and Russian live — with ICY now-playing, live analyser Neo, sleep countdown, and crossfade.",
+      "description": "Internet radio in the header with 33 curated stations — synthwave, retro rave, SomaFM, and Russian live. ICY now-playing, live Neo visuals, sleep countdown, and your own stream URL.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/radio",
       "minAppVersion": "1.7.0",
@@ -128,23 +128,23 @@
       "i18n": {
         "en": {
           "name": "Music",
-          "tagline": "A background stream that sets the tone.",
-          "description": "33 stations with ICY now-playing, live Neo analyser + genre atmosphere, sleep countdown, crossfade, and custom .m3u/.pls streams."
+          "tagline": "Background music for focus.",
+          "description": "Internet radio in the header with 33 curated stations — synthwave, retro rave, SomaFM, and Russian live. ICY now-playing, live Neo visuals, sleep countdown, and your own stream URL."
         },
         "ru": {
           "name": "Музыка",
-          "tagline": "Фоновый поток, который настраивает.",
-          "description": "33 станции, ICY «сейчас играет», живой Нео с атмосферой жанра, таймер сна с отсчётом, кроссфейд и свои потоки."
+          "tagline": "Фоновая музыка для фокуса.",
+          "description": "Интернет-радио в шапке: 33 станции — синтвейв, ретрорейв, SomaFM и русские эфиры. ICY «сейчас играет», живой Нео, таймер сна с отсчётом и свой URL потока."
         }
       },
       "sha256": {
-        "manifest.json": "cb4becf5b7fe279c854deb6859d6147a3126e4b381ac51716e827c4e0000ff88",
+        "manifest.json": "ddca6a6f922a3c213b2e6fad0a42909da750f68aff96f0cded408a528d02ee22",
         "index.js": "68c795b20f1b7ad977172de59a4608c6d7650208629d186fb0127902b624567e",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
         "styles.css": "36d3e84c8ea414410a3f123639deca8a18076c65572876b08e6868e633479701"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-19T03:25:00+03:00",
+      "lastUpdated": "2026-07-19T03:35:00+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [],
@@ -155,7 +155,7 @@
       "name": "Pomodoro Timer",
       "version": "1.2.1",
       "author": "krwg",
-      "description": "Staying on task without drifting to tea or your phone is a skill. Timer helps with classic 25/5 intervals or your own settings. Keep it in the header while you work on habits; when it ends, a gentle chime brings you back. A perfect companion for pomodoro practice — or anyone who wants to steer their attention.",
+      "description": "A focus timer in the header with classic 25/5 intervals or your own lengths. Stay with your habits until a gentle chime brings you back.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/pomodoro",
       "minAppVersion": "1.1.0",
@@ -176,13 +176,13 @@
       "i18n": {
         "en": {
           "name": "Timer",
-          "tagline": "Short sprints for a bigger goal.",
-          "description": "Staying on task without drifting to tea or your phone is a skill. Timer helps with classic 25/5 intervals or your own settings. Keep it in the header while you work on habits; when it ends, a gentle chime brings you back. A perfect companion for pomodoro practice — or anyone who wants to steer their attention."
+          "tagline": "Short sprints, clear focus.",
+          "description": "A focus timer in the header with classic 25/5 intervals or your own lengths. Stay with your habits until a gentle chime brings you back."
         },
         "ru": {
           "name": "Таймер",
-          "tagline": "Короткие спринты для большой цели.",
-          "description": "Сконцентрироваться на задаче, не отвлекаясь на чай и телефон — это искусство. «Таймер» помогает в этом: классические интервалы 25/5 или ваши собственные настройки. Включите его в шапке, и он будет отсчитывать время, пока вы работаете над привычками. Когда таймер заканчивается — короткий сигнал возвращает вас в реальность. Идеальный спутник для тех, кто практикует технику «помидора» или просто хочет управлять своим вниманием."
+          "tagline": "Короткие спринты и ясный фокус.",
+          "description": "Таймер фокуса в шапке: классика 25/5 или свои интервалы. Работайте над привычками, пока мягкий сигнал не вернёт вас к моменту."
         }
       },
       "sha256": {
@@ -203,7 +203,7 @@
       "name": "Quote of the Day",
       "version": "1.6.0",
       "author": "krwg",
-      "description": "Every morning starts with a mood. Thoughts offers an inspiring line — in Russian or English, based on your language. Curated banks of 500 English and 500 authentic Russian quotes so you always find one that resonates. Save favorites and return when you doubt. A small spark that can launch an entire day.",
+      "description": "A daily quote card in the garden — English or Russian from curated banks of 500 each. Save favorites and return when you need a spark.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/quote",
       "minAppVersion": "1.7.0",
@@ -223,13 +223,13 @@
       "i18n": {
         "en": {
           "name": "Thoughts",
-          "tagline": "One quote that can shift the day.",
-          "description": "Every morning starts with a mood. Thoughts offers an inspiring line — in Russian or English, based on your language. Curated banks of 500 English and 500 authentic Russian quotes so you always find one that resonates. Save favorites and return when you doubt. A small spark that can launch an entire day."
+          "tagline": "One line to shift the day.",
+          "description": "A daily quote card in the garden — English or Russian from curated banks of 500 each. Save favorites and return when you need a spark."
         },
         "ru": {
           "name": "Мысли",
-          "tagline": "Одна цитата, которая меняет ход дня.",
-          "description": "Каждое утро начинается с настроения. «Мысли» предлагает карточку с вдохновляющей фразой — на русском или английском, в зависимости от выбранного языка. Курируемые банки: 500 английских и 500 настоящих русских цитат и пословиц. Сохраняйте понравившиеся в избранное и возвращайтесь к ним в моменты сомнений. Небольшая искра, которая может запустить целый день."
+          "tagline": "Одна строка, которая меняет день.",
+          "description": "Карточка цитаты дня в саду — на русском или английском из курируемых банков по 500. Сохраняйте избранное и возвращайтесь, когда нужна искра."
         }
       },
       "sha256": {
@@ -250,7 +250,7 @@
       "name": "Weekly Stats",
       "version": "1.0.0",
       "author": "krwg",
-      "description": "How do you know the week mattered? Summary shows clean habit completion stats for the last 7 days. A visual chart and weekly percentage reveal where you are rising and where to push. Data comes from your Cultiva 2.0 history — not abstract numbers, but your personal slice. Great for weekly reflection and momentum for the next seven days.",
+      "description": "A 7-day habit completion chart and weekly rate in the garden. Reflect on the week with your own Cultiva history — nothing leaves your device.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/weekly-stats",
       "minAppVersion": "2.0.0",
@@ -273,13 +273,13 @@
       "i18n": {
         "en": {
           "name": "Summary",
-          "tagline": "Your progress in numbers and charts.",
-          "description": "How do you know the week mattered? Summary shows clean habit completion stats for the last 7 days. A visual chart and weekly percentage reveal where you are rising and where to push. Data comes from your Cultiva 2.0 history — not abstract numbers, but your personal slice. Great for weekly reflection and momentum for the next seven days."
+          "tagline": "Your week in a clear chart.",
+          "description": "A 7-day habit completion chart and weekly rate in the garden. Reflect on the week with your own Cultiva history — nothing leaves your device."
         },
         "ru": {
           "name": "Итоги",
-          "tagline": "Ваш прогресс — в цифрах и графиках.",
-          "description": "Как понять, что неделя прошла не зря? «Итоги» показывают чистую статистику выполнения привычек за последние 7 дней. Визуальный график и процент от общей недели — вы сразу видите, где вы на подъёме, а где нужно поднажать. Данные берутся из вашей собственной истории в Cultiva 2.0, так что это не абстрактные цифры, а ваш личный срез. Отличный повод для еженедельной рефлексии и импульса для следующей недели."
+          "tagline": "Неделя на понятном графике.",
+          "description": "График выполнения привычек за 7 дней и недельный процент в саду. Рефлексия по вашей истории Cultiva — данные остаются на устройстве."
         }
       },
       "sha256": {
@@ -299,7 +299,7 @@
       "name": "Insights",
       "version": "1.0.0",
       "author": "krwg",
-      "description": "Habits rarely live alone. Correlations finds quiet links in your Cultiva history — which habits rise together, which weekday breaks your streaks, and which pair holds the longest shared run. Everything stays on your device: no network, no telemetry, just patterns from your own garden.",
+      "description": "Finds quiet links in your local Cultiva history — which habits rise together and which weekdays break streaks. No network and no telemetry.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/insights",
       "minAppVersion": "2.0.0",
@@ -322,13 +322,13 @@
       "i18n": {
         "en": {
           "name": "Correlations",
-          "tagline": "Quiet links between your habits.",
-          "description": "Habits rarely live alone. Correlations finds quiet links in your Cultiva history — which habits rise together, which weekday breaks your streaks, and which pair holds the longest shared run. Everything stays on your device: no network, no telemetry, just patterns from your own garden."
+          "tagline": "Quiet links between habits.",
+          "description": "Finds quiet links in your local Cultiva history — which habits rise together and which weekdays break streaks. No network and no telemetry."
         },
         "ru": {
           "name": "Связи",
           "tagline": "Тихие связи между привычками.",
-          "description": "Привычки редко живут поодиночке. «Связи» находят тихие закономерности в вашей истории Cultiva — какие привычки растут вместе, в какой день недели чаще срываются серии и какая пара держит самую длинную общую серию. Всё остаётся на устройстве: без сети и телеметрии, только паттерны из вашего сада."
+          "description": "Находит тихие связи в вашей локальной истории Cultiva — какие привычки растут вместе и в какие дни чаще срываются серии. Без сети и телеметрии."
         }
       },
       "sha256": {
@@ -348,7 +348,7 @@
       "name": "Habit Reflection",
       "version": "1.1.0",
       "author": "krwg",
-      "description": "You finished a habit — then what? Notes prompts a micro-reflection: a single short line right after you check in. Capture what you felt, what worked, or what surprised you. Not a three-page journal — just one sentence that turns routine into awareness. A week later, reread and see how your relationship with habits shifts.",
+      "description": "After you complete a habit, jot one short line about how it went. A lightweight journal of awareness — not a long diary.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/habit-reflection",
       "minAppVersion": "1.7.0",
@@ -368,13 +368,13 @@
       "i18n": {
         "en": {
           "name": "Notes",
-          "tagline": "One line after every completion.",
-          "description": "You finished a habit — then what? Notes prompts a micro-reflection: a single short line right after you check in. Capture what you felt, what worked, or what surprised you. Not a three-page journal — just one sentence that turns routine into awareness. A week later, reread and see how your relationship with habits shifts."
+          "tagline": "One note after each check-in.",
+          "description": "After you complete a habit, jot one short line about how it went. A lightweight journal of awareness — not a long diary."
         },
         "ru": {
           "name": "Заметки",
-          "tagline": "Одна строка после каждого дела.",
-          "description": "Выполнили привычку — и что дальше? «Заметки» предлагают вам мгновенную микро-рефлексию: поле для одной короткой фразы появляется сразу после отметки. Запишите, что чувствовали, что удалось или что удивило. Это не дневник на три страницы, а всего одна строка, но она превращает рутину в осознанный опыт. Через неделю вы будете перечитывать свои заметки и видеть, как меняется ваше восприятие привычек."
+          "tagline": "Одна заметка после отметки.",
+          "description": "После выполнения привычки запишите одну короткую фразу о том, как прошло. Лёгкий дневник осознанности — не длинный журнал."
         }
       },
       "sha256": {
@@ -395,7 +395,7 @@
       "name": "Morning & Evening Routine",
       "version": "1.0.0",
       "author": "krwg",
-      "description": "Morning sets the tone; evening closes the loop. Routine turns your habits into checklists that appear morning and evening. Walk the list you defined — so nothing important slips at the start, and you feel closure at the finish. Not just reminders, but a ritual that trains you to switch between on and off with purpose.",
+      "description": "Morning and evening checklists built from your habits. Start the day with intention and finish it with a clear close.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/routine",
       "minAppVersion": "2.0.0",
@@ -418,13 +418,13 @@
       "i18n": {
         "en": {
           "name": "Routine",
-          "tagline": "Start and end the day with intention.",
-          "description": "Morning sets the tone; evening closes the loop. Routine turns your habits into checklists that appear morning and evening. Walk the list you defined — so nothing important slips at the start, and you feel closure at the finish. Not just reminders, but a ritual that trains you to switch between on and off with purpose."
+          "tagline": "Morning start, evening close.",
+          "description": "Morning and evening checklists built from your habits. Start the day with intention and finish it with a clear close."
         },
         "ru": {
           "name": "Режим",
-          "tagline": "Начать и завершить день с намерением.",
-          "description": "Утро определяет день, а вечер подводит итог. «Режим» превращает ваши привычки в чеклист, который появляется утром и вечером. Пройдитесь по списку привычек, которые вы сами задали, — так вы не забудете важное на старте и почувствуете удовлетворение на финише. Это не просто напоминалка, а ритуал, который приучает вас жить осознанно, переключаясь между «включиться» и «отключиться»."
+          "tagline": "Утренний старт и вечерний финиш.",
+          "description": "Утренний и вечерний чеклисты из ваших привычек. Начните день с намерением и завершите его ясным финишем."
         }
       },
       "sha256": {
@@ -444,7 +444,7 @@
       "name": "Gentle Nudge",
       "version": "1.0.0",
       "author": "krwg",
-      "description": "You set a goal, then life crowded it out. Reminders gently bring you back. After your chosen hour, if planned habits are still open, the plugin sends a soft signal — not nagging, more like a friend whispering. Set the time and let it support you until the cycle is complete.",
+      "description": "A soft reminder after your chosen hour if planned habits are still open. Friendly support when the day gets busy — not spam.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/gentle-nudge",
       "minAppVersion": "2.0.0",
@@ -466,13 +466,13 @@
       "i18n": {
         "en": {
           "name": "Reminders",
-          "tagline": "A quiet call when you drift.",
-          "description": "You set a goal, then life crowded it out. Reminders gently bring you back. After your chosen hour, if planned habits are still open, the plugin sends a soft signal — not nagging, more like a friend whispering. Set the time and let it support you until the cycle is complete."
+          "tagline": "A soft call when you drift.",
+          "description": "A soft reminder after your chosen hour if planned habits are still open. Friendly support when the day gets busy — not spam."
         },
         "ru": {
           "name": "Напоминания",
-          "tagline": "Тихий зов, когда вы отвлеклись.",
-          "description": "Вы поставили цель, но в пылу дел забыли о привычках? «Напоминания» мягко возвращают вас в нужное русло. После выбранного вами часа, если вы ещё не выполнили запланированные привычки, плагин подаст лёгкий сигнал — не раздражающий, не навязчивый, похожий на шёпот друга. Это не спам, а поддержка для тех моментов, когда жизнь закручивается. Установите время, и плагин будет бережно напоминать, пока вы не завершите цикл."
+          "tagline": "Мягкий зов, если вы отвлеклись.",
+          "description": "Мягкое напоминание после выбранного часа, если запланированные привычки ещё не отмечены. Поддержка в плотный день — без спама."
         }
       },
       "sha256": {

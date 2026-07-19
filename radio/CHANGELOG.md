@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [2.6.2] — 2026-07-19
+
+### Changed
+- Store/manifest description aligned with the catalog voice (two clear sentences for first-time users)
+
+---
+
 ## [2.6.1] — 2026-07-19
 
 ### Fixed

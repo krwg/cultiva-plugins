@@ -4,7 +4,7 @@
 
 **Official sandboxed extension registry for [Cultiva](https://github.com/krwg/cultiva) — widgets, timers, and garden tools that stay on your device.**
 
-[![Registry](https://img.shields.io/badge/registry-3.6.1-34c759?style=flat-square)](registry.json)
+[![Registry](https://img.shields.io/badge/registry-3.6.2-34c759?style=flat-square)](registry.json)
 [![License](https://img.shields.io/badge/license-MIT-af52de?style=flat-square)](LICENSE)
 [![Cultiva](https://img.shields.io/badge/Cultiva-2.0%2B%20Rowan-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
 [![Plugins](https://img.shields.io/badge/plugins-9-ffcc00?style=flat-square)](#catalog)
@@ -21,6 +21,8 @@
 This repository is the **single source of truth** for Cultiva desktop plugins. The app downloads `registry.json`, verifies **sha256 integrity** for every file, installs into a local sandbox, and runs extensions without Node.js or npm on the user side.
 
 **No store account. No telemetry. No habit data leaves your machine.**
+
+Store blurbs (EN/RU) use the same shape for every plugin: a short tagline plus **two clear sentences** so a first-time visitor knows what it does and where it appears.
 
 ---
 
@@ -42,7 +44,7 @@ This repository is the **single source of truth** for Cultiva desktop plugins. T
 | Plugin | Min Cultiva | Surface | Description |
 |--------|-------------|---------|-------------|
 | [**Time**](time/) | 1.1.0 | Header | Live clock and time zones in a polished sheet (v2.2.2) |
-| [**Radio**](radio/) | 1.7.0 | Header | 33 stations, ICY now-playing, live Neo, sleep countdown (v2.6.1) |
+| [**Radio**](radio/) | 1.7.0 | Header | 33 stations, ICY now-playing, live Neo, sleep countdown (v2.6.2) |
 | [**Pomodoro**](pomodoro/) | 1.1.0 | Header | Classic 25/5 focus timer in the header (v1.2.1) |
 | [**Weather**](weather/) | 1.7.0 | Header + garden | Open-Meteo + 1100+ Russian cities offline search (v2.3.2) |
 | [**Quote**](quote/) | 1.7.0 | Garden | 500 EN + 500 RU curated quotes, favorites (v1.6.0) |
