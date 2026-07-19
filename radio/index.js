@@ -34,6 +34,8 @@ class RadioPlugin {
     this._vizSilentFrames = 0;
     this._fadeToken = 0;
     this._wiredAudio = null;
+    this._pendingPlay = null;
+    this._playSwitchTail = null;
     this._baseStations = {
       groovesalad: {
         name: 'Groove Salad',
@@ -975,6 +977,19 @@ class RadioPlugin {
     this._vizMode = 'off';
   }
 
+  /** Hard-reset Web Audio — rapid station switches can leave a wedged MediaElementSource graph. */
+  _resetAudioContext() {
+    this._detachAudioGraph();
+    if (this._audioCtx) {
+      try {
+        void this._audioCtx.close();
+      } catch {
+        void 0;
+      }
+      this._audioCtx = null;
+    }
+  }
+
   _ensureAudioContext() {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return null;
@@ -1175,9 +1190,9 @@ class RadioPlugin {
   onDisable() {
     this._playId += 1;
     this._fadeToken += 1;
+    this._pendingPlay = null;
     this._stopIcy();
-    this._stopViz();
-    void this._stopAudio({ fade: false });
+    void this._stopAudio({ fade: false, hardReset: true });
     this._clearMediaSession();
     this._nowPlayingMeta = '';
     try {
@@ -1222,15 +1237,20 @@ class RadioPlugin {
 
   async _stopAudio(opts) {
     const fade = !opts || opts.fade !== false;
+    const hardReset = opts && opts.hardReset === true;
     await this._cancelPlayPromise();
     const audio = this.audio;
     this.audio = null;
     this._stopIcy();
-    this._detachAudioGraph();
+    if (hardReset || !fade) {
+      this._resetAudioContext();
+    } else {
+      this._detachAudioGraph();
+    }
     if (!audio) return;
     if (fade) {
       const from = Number.isFinite(audio.volume) ? audio.volume : 0;
-      await this._fadeVolume(audio, from, 0, 240);
+      await this._fadeVolume(audio, from, 0, 180);
     }
     try {
       audio.onerror = null;
@@ -1247,7 +1267,33 @@ class RadioPlugin {
     }
   }
 
+  /**
+   * Coalesce rapid station taps: only the latest request plays.
+   * Hard-stops the previous stream (no long fade) so play() AbortError races cannot wedge playback.
+   */
   async playStation(stationId, notify) {
+    this._pendingPlay = { stationId, notify };
+    if (this._playSwitchTail) {
+      return this._playSwitchTail;
+    }
+    this._playSwitchTail = (async () => {
+      try {
+        while (this._pendingPlay) {
+          const job = this._pendingPlay;
+          this._pendingPlay = null;
+          await this._playStationNow(job.stationId, job.notify);
+        }
+      } finally {
+        this._playSwitchTail = null;
+        if (this._pendingPlay) {
+          void this.playStation(this._pendingPlay.stationId, this._pendingPlay.notify);
+        }
+      }
+    })();
+    return this._playSwitchTail;
+  }
+
+  async _playStationNow(stationId, notify) {
     this._syncStationsMap();
     if (stationId === 'custom' && this.settings.customUrl) {
       const resolved = await this._resolveStreamUrls(this.settings.customUrl);
@@ -1264,7 +1310,9 @@ class RadioPlugin {
     await this.context.storage.set('settings', this.settings);
 
     const playId = ++this._playId;
-    await this._stopAudio({ fade: true });
+    this._fadeToken += 1;
+    // Hard cut on switch — keeps stop→play reliable under rapid taps (crossfade only on stopRadio).
+    await this._stopAudio({ fade: false, hardReset: true });
     if (playId !== this._playId) return;
 
     await this._tryPlayUrls(playId, stationId, station, urls, 0, notify);
@@ -1289,7 +1337,6 @@ class RadioPlugin {
     }
 
     this._streamFailed = false;
-    await this._stopAudio({ fade: false });
     if (playId !== this._playId) return;
 
     const targetVol = this.settings.volume;
@@ -1305,6 +1352,10 @@ class RadioPlugin {
 
     const fail = async (err) => {
       if (!isCurrent()) return;
+      // Superseded play() — not a stream failure.
+      if (err && (err.name === 'AbortError' || /abort|interrupt/i.test(String(err.message || '')))) {
+        return;
+      }
       try {
         audio.pause();
       } catch {
@@ -1342,8 +1393,23 @@ class RadioPlugin {
       this.settings.station = stationId;
       this.settings.playing = true;
       this._connectAnalyser(audio);
-      await this._fadeVolume(audio, 0, targetVol, 280);
-      if (!isCurrent()) return;
+      if (!isCurrent()) {
+        try {
+          audio.pause();
+        } catch {
+          void 0;
+        }
+        return;
+      }
+      await this._fadeVolume(audio, 0, targetVol, 200);
+      if (!isCurrent()) {
+        try {
+          audio.pause();
+        } catch {
+          void 0;
+        }
+        return;
+      }
       this._setMediaSession(station);
       this._scheduleIcy(urls[index]);
       this._updateHeader();
@@ -1389,8 +1455,9 @@ class RadioPlugin {
   async stopRadio(notify) {
     this._playId += 1;
     this._fadeToken += 1;
+    this._pendingPlay = null;
     this._nowPlayingMeta = '';
-    await this._stopAudio({ fade: true });
+    await this._stopAudio({ fade: true, hardReset: true });
     this._clearMediaSession();
     this._streamFailed = false;
     this._lastFailReason = null;

@@ -6,6 +6,13 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [2.6.3] — 2026-07-19
+
+### Fixed
+- Rapid station switching could wedge playback (fade/play AbortError race + AudioContext graph); coalesce taps to the latest station, hard-reset Web Audio on switch, ignore superseded AbortError
+
+---
+
 ## [2.6.2] — 2026-07-19
 
 ### Changed
