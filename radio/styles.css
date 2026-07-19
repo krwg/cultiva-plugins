@@ -88,6 +88,58 @@
   margin-bottom: 12px;
 }
 
+.radio-viz {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  height: 52px;
+  margin: 14px auto 0;
+  max-width: 280px;
+  padding: 0 8px;
+}
+
+.radio-viz i {
+  display: block;
+  flex: 1 1 0;
+  min-width: 3px;
+  max-width: 8px;
+  height: 12%;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(180deg, var(--accent-blue, #0a84ff) 0%, rgba(10, 132, 255, 0.35) 100%);
+  transition: height 0.05s linear;
+}
+
+.cultiva-sheet-card--radio.has-live-viz .radio-viz i {
+  background: linear-gradient(180deg, #5ac8fa 0%, rgba(10, 132, 255, 0.45) 100%);
+}
+
+.radio-sleep-pill {
+  position: relative;
+  min-width: 64px;
+  padding-left: 28px !important;
+  overflow: visible;
+}
+
+.radio-sleep-ring {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  border-radius: 50%;
+  background:
+    conic-gradient(var(--accent-blue, #0a84ff) calc(var(--sleep-p, 0) * 1turn), rgba(128, 128, 128, 0.28) 0);
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2px));
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2px));
+}
+
+.radio-sleep-label {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
 .radio-custom-row {
   display: flex;
   gap: 8px;
@@ -286,6 +338,26 @@ input[type='range'][data-cultiva-change-act='volume'] {
     linear-gradient(168deg, rgba(160, 120, 90, 0.22) 0%, var(--bg-primary) 70%);
 }
 
+.radio-neo.radio-genre--synthwave::before {
+  background:
+    radial-gradient(ellipse 80% 55% at 15% 0%, rgba(255, 60, 160, 0.42) 0%, transparent 50%),
+    radial-gradient(circle at 85% 18%, rgba(80, 200, 255, 0.35) 0%, transparent 42%),
+    linear-gradient(165deg, rgba(40, 20, 90, 0.45) 0%, var(--bg-primary) 72%);
+}
+
+.radio-neo.radio-genre--retrorave::before {
+  background:
+    radial-gradient(circle at 20% 8%, rgba(255, 220, 40, 0.4) 0%, transparent 44%),
+    radial-gradient(circle at 78% 12%, rgba(255, 40, 120, 0.38) 0%, transparent 46%),
+    linear-gradient(155deg, rgba(120, 20, 160, 0.35) 0%, var(--bg-primary) 70%);
+}
+
+.radio-neo.radio-genre--russian::before {
+  background:
+    radial-gradient(ellipse 85% 60% at 50% 0%, rgba(220, 60, 60, 0.32) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(40, 60, 120, 0.28) 0%, var(--bg-primary) 72%);
+}
+
 .radio-neo.radio-genre--custom::before {
   background:
     radial-gradient(ellipse 80% 60% at 50% 0%, rgba(10, 132, 255, 0.35) 0%, transparent 55%),
@@ -355,6 +427,10 @@ input[type='range'][data-cultiva-change-act='volume'] {
   }
 
   .radio-ctrl {
+    transition: none;
+  }
+
+  .radio-viz i {
     transition: none;
   }
 }

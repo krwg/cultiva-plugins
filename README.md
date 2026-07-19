@@ -4,9 +4,9 @@
 
 **Official sandboxed extension registry for [Cultiva](https://github.com/krwg/cultiva) — widgets, timers, and garden tools that stay on your device.**
 
-[![Registry](https://img.shields.io/badge/registry-3.5.1-34c759?style=flat-square)](registry.json)
+[![Registry](https://img.shields.io/badge/registry-3.6.0-34c759?style=flat-square)](registry.json)
 [![License](https://img.shields.io/badge/license-MIT-af52de?style=flat-square)](LICENSE)
-[![Cultiva](https://img.shields.io/badge/Cultiva-2.0.2%2B%20Rowan-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
+[![Cultiva](https://img.shields.io/badge/Cultiva-2.0%2B%20Rowan-0071e3?style=flat-square&logo=electron&logoColor=white)](https://github.com/krwg/cultiva)
 [![Plugins](https://img.shields.io/badge/plugins-9-ffcc00?style=flat-square)](#catalog)
 [![Integrity](https://img.shields.io/badge/sha256-enforced-5856d6?style=flat-square)](#security)
 [![Pages](https://img.shields.io/badge/docs-GitHub%20Pages-0071e3?style=flat-square)](https://krwg.github.io/cultiva-plugins/)
@@ -42,7 +42,7 @@ This repository is the **single source of truth** for Cultiva desktop plugins. T
 | Plugin | Min Cultiva | Surface | Description |
 |--------|-------------|---------|-------------|
 | [**Time**](time/) | 1.1.0 | Header | Live clock and time zones in a polished sheet (v2.2.2) |
-| [**Radio**](radio/) | 1.1.0 | Header | SomaFM streams, sleep timer, glass UI (v2.2.0) |
+| [**Radio**](radio/) | 1.7.0 | Header | 33 stations, ICY now-playing, live Neo, sleep countdown (v2.6.0) |
 | [**Pomodoro**](pomodoro/) | 1.1.0 | Header | Classic 25/5 focus timer in the header (v1.2.1) |
 | [**Weather**](weather/) | 1.7.0 | Header + garden | Open-Meteo + 1100+ Russian cities offline search (v2.3.2) |
 | [**Quote**](quote/) | 1.7.0 | Garden | 500 EN + 500 RU curated quotes, favorites (v1.6.0) |
@@ -90,13 +90,15 @@ flowchart LR
 5. For first-time plugins, user taps **Install** after **Get** to activate the sandbox.
 6. Plugin code runs in an **opaque-origin iframe** with declared permissions only.
 
-Requires **Cultiva 2.0.2 · Rowan** (recommended; PLE1 from 2.0.0) for the best experience. The catalog still lists per-plugin `minAppVersion` floors (1.1.0 header widgets, 1.7.0 garden/hooks, 2.0.0 habit analytics).
+Requires **Cultiva 2.0+ · Rowan** (recommended; PLE1 from 2.0.0) for the best experience. Per-plugin `minAppVersion` floors still apply (1.1.0 header widgets, 1.7.0 garden/hooks/Radio, 2.0.0 habit analytics).
+
+> **Deprecation:** Cultiva **1.7** still runs many catalog plugins, but **1.7 will soon stop being supported**. Move to **2.0+** when you can — current plugins and PE2 APIs target Rowan.
 
 ---
 
 ## For Cultiva users
 
-1. Install **[Cultiva 2.0.2+](https://github.com/krwg/cultiva/releases/latest)** (Windows, macOS, or Linux build).
+1. Install **[Cultiva 2.0+](https://github.com/krwg/cultiva/releases/latest)** (Windows, macOS, or Linux build). **1.7 still works for some plugins but will soon stop being supported.**
 2. Open **Settings → Plugins** and enable plugins if needed.
 3. Under **Browse Plugins**, tap **Install** on any catalog entry.
 4. Header widgets appear in the garden bar; garden widgets render in the home view.

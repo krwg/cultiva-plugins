@@ -6,10 +6,25 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
+## [2.6.0] — 2026-07-19
+
+### Added
+- **33 curated stations** — +9: Nightride FM, Chill Synth, Dark Synth (synthwave), Record Eurodance (retro rave), Наше Радио & Europa Plus (RU), Digitalis, Suburbs of Goa, SF 10-33
+- **ICY now-playing** — real `Artist – Track` from stream metadata (polled; SomaFM / Nightride / RU ice verified)
+- **Live Radio Neo** — `AudioContext` + `AnalyserNode` frequency bars tied to the real signal; silent/CORS fail → decorative genre Neo fallback
+- Sleep timer **mm:ss countdown** + thin progress ring on the active pill
+- **Volume crossfade** (~240–280 ms) on stop/start to soften station switches
+
+### Changed
+- Removed **Stop** and **Neo on/off** from the player sheet — pause via transport; Neo only in plugin settings
+- `minAppVersion` → **1.7.0** (tray APIs remain best-effort on older PE2 hosts)
+
+---
+
 ## [2.5.1] — 2026-07-19
 
 ### Fixed
-- Store install integrity: registry SHA-256 now matches GitHub raw (LF) bytes — Integrity check failed for index.js on Windows CRLF hashes
+- Store install integrity: LF line endings so registry sha256 matches GitHub raw
 
 ---
 
@@ -88,25 +103,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 
 ---
 
-## [2.0.0] — 2026-05-12
+## [2.0.0] — 2026-07-07
 
 ### Added
-- SomaFM stations, volume control, and sleep timer
-- Sandbox sheet UI via main-window bridge
-
-### Changed
-- Major rewrite for Cultiva **0.4.0+** plugin host
-
----
-
-## [1.0.1] — 2026-05-12
-
-### Changed
-- Description notes Cultiva **0.4.0+**
-
----
-
-## [1.0.0] — 2026-04-15
-
-### Added
-- Radio Widget streaming plugin
+- Header radio widget with SomaFM stations and sleep timer

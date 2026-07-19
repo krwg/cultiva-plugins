@@ -21,6 +21,19 @@ class RadioPlugin {
     this._playPromise = null;
     this._customResolvedUrls = null;
     this._stationFilter = '';
+    this._sleepEndsAt = 0;
+    this._sleepTick = null;
+    this._nowPlayingMeta = '';
+    this._icyAbort = null;
+    this._icyTimer = null;
+    this._audioCtx = null;
+    this._analyser = null;
+    this._mediaSource = null;
+    this._vizRaf = null;
+    this._vizMode = 'off';
+    this._vizSilentFrames = 0;
+    this._fadeToken = 0;
+    this._wiredAudio = null;
     this._baseStations = {
       groovesalad: {
         name: 'Groove Salad',
@@ -243,6 +256,84 @@ class RadioPlugin {
           'https://ice6.somafm.com/missioncontrol-128-mp3',
           'https://ice2.somafm.com/missioncontrol-128-mp3'
         ]
+      },
+      nightride: {
+        name: 'Nightride FM',
+        tag: 'Synthwave',
+        genre: 'synthwave',
+        urls: [
+          'https://stream.nightride.fm/nightride.mp3'
+        ]
+      },
+      chillsynth: {
+        name: 'Chill Synth',
+        tag: 'Synthwave',
+        genre: 'synthwave',
+        urls: [
+          'https://stream.nightride.fm/chillsynth.mp3'
+        ]
+      },
+      darksynth: {
+        name: 'Dark Synth',
+        tag: 'Synthwave',
+        genre: 'synthwave',
+        urls: [
+          'https://stream.nightride.fm/darksynth.mp3'
+        ]
+      },
+      eurodance: {
+        name: 'Record Eurodance',
+        tag: 'Retro Rave',
+        genre: 'retrorave',
+        urls: [
+          'https://radiorecord.hostingradio.ru/eurodance96.aacp'
+        ]
+      },
+      nashe: {
+        name: 'Наше Радио',
+        tag: 'Русский рок',
+        genre: 'russian',
+        urls: [
+          'https://nashe1.hostingradio.ru/nashe-128.mp3'
+        ]
+      },
+      europaplus: {
+        name: 'Europa Plus',
+        tag: 'Поп',
+        genre: 'russian',
+        urls: [
+          'https://ep128.hostingradio.ru:8030/ep128'
+        ]
+      },
+      digitalis: {
+        name: 'Digitalis',
+        tag: 'Analog',
+        genre: 'electronic',
+        urls: [
+          'https://ice6.somafm.com/digitalis-128-mp3',
+          'https://ice2.somafm.com/digitalis-128-mp3',
+          'https://ice1.somafm.com/digitalis-128-mp3'
+        ]
+      },
+      suburbsofgoa: {
+        name: 'Suburbs of Goa',
+        tag: 'World',
+        genre: 'downtempo',
+        urls: [
+          'https://ice6.somafm.com/suburbsofgoa-128-mp3',
+          'https://ice2.somafm.com/suburbsofgoa-128-mp3',
+          'https://ice1.somafm.com/suburbsofgoa-128-mp3'
+        ]
+      },
+      sf1033: {
+        name: 'SF 10-33',
+        tag: 'Ambient',
+        genre: 'ambient',
+        urls: [
+          'https://ice6.somafm.com/sf1033-128-mp3',
+          'https://ice2.somafm.com/sf1033-128-mp3',
+          'https://ice1.somafm.com/sf1033-128-mp3'
+        ]
       }
     };
     this.stations = { ...this._baseStations };
@@ -253,7 +344,7 @@ class RadioPlugin {
       radio: 'Радио',
       onAir: 'В эфире',
       title: 'Радио',
-      sub: 'Интернет-станции · SomaFM и др.',
+      sub: '33 станции · синтвейв, ретрорейв и др.',
       stop: 'Стоп',
       play: 'Играть',
       pause: 'Пауза',
@@ -273,7 +364,7 @@ class RadioPlugin {
       customClearHistory: 'Очистить',
       resolving: 'Разбор плейлиста…',
       invalidUrl: 'Не удалось найти рабочий поток в этой ссылке.',
-      footnote: 'Потоки SomaFM, Radio Paradise, Chillhop. Нужен интернет.',
+      footnote: '33 станции · SomaFM, Nightride, Record, русские эфиры. Нужен интернет.',
       playing: 'Играет',
       stopped: 'Остановлено',
       nowPlaying: 'Сейчас играет',
@@ -291,7 +382,7 @@ class RadioPlugin {
       radio: 'Radio',
       onAir: 'On air',
       title: 'Radio',
-      sub: 'Internet streams · SomaFM & more',
+      sub: '33 stations · synthwave, retro rave & more',
       stop: 'Stop',
       play: 'Play',
       pause: 'Pause',
@@ -311,7 +402,7 @@ class RadioPlugin {
       customClearHistory: 'Clear',
       resolving: 'Resolving playlist…',
       invalidUrl: 'Could not find a playable stream in that link.',
-      footnote: 'Streams from SomaFM, Radio Paradise, Chillhop. Requires network.',
+      footnote: '33 stations · SomaFM, Nightride, Record, RU live. Requires network.',
       playing: 'Playing',
       stopped: 'Stopped',
       nowPlaying: 'Now playing',
@@ -458,9 +549,12 @@ class RadioPlugin {
     const playing = !!this.settings.playing && station;
     try {
       if (playing) {
-        this.context.ui.setTrayTooltip?.(`♪ ${station.name}`);
+        const tip = this._nowPlayingMeta
+          ? `♪ ${this._nowPlayingMeta}`
+          : `♪ ${station.name}`;
+        this.context.ui.setTrayTooltip?.(tip);
         this.context.ui.registerTrayItems?.([
-          { id: 'radio-now', label: `♪ ${station.name}`, enabled: true },
+          { id: 'radio-now', label: tip, enabled: true },
           { id: 'radio-toggle', label: this._t('pause'), enabled: true }
         ]);
       } else {
@@ -542,6 +636,12 @@ class RadioPlugin {
       return this._failMessage();
     }
     if (!this.settings.playing) return this._t('radio');
+    if (this._nowPlayingMeta) {
+      const short = this._nowPlayingMeta.length > 36
+        ? `${this._nowPlayingMeta.slice(0, 33)}…`
+        : this._nowPlayingMeta;
+      return short;
+    }
     const s = this._currentStation();
     return s ? s.name : this._t('onAir');
   }
@@ -553,6 +653,21 @@ class RadioPlugin {
 
   _refreshSheet() {
     this.context.ui.openMainSheet(this._buildSheetHtml());
+    if (this._vizMode === 'live' && this.settings.visualFx) {
+      this._ensureVizLoop();
+    }
+  }
+
+  _patchSheet(selector, html) {
+    if (this.context.ui && typeof this.context.ui.patchMainSheet === 'function') {
+      try {
+        this.context.ui.patchMainSheet(selector, html);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+    return false;
   }
 
   _optimisticSelect(stationId) {
@@ -560,15 +675,18 @@ class RadioPlugin {
     this._lastFailReason = null;
     this.settings.station = stationId;
     this.settings.playing = true;
+    this._nowPlayingMeta = '';
     this._updateHeader();
   }
 
   _setMediaSession(station) {
     if (typeof navigator === 'undefined' || !navigator.mediaSession) return;
     try {
+      const title = this._nowPlayingMeta || station?.name || this._t('radio');
+      const artist = this._nowPlayingMeta ? (station?.name || 'Cultiva Radio') : 'Cultiva Radio';
       navigator.mediaSession.metadata = new MediaMetadata({
-        title: station?.name || this._t('radio'),
-        artist: 'Cultiva Radio'
+        title,
+        artist
       });
       navigator.mediaSession.setActionHandler('play', () => {
         if (this.settings.station) {
@@ -606,17 +724,375 @@ class RadioPlugin {
     }
   }
 
+  _sleepRemainingMs() {
+    if (!this._sleepEndsAt) return 0;
+    return Math.max(0, this._sleepEndsAt - Date.now());
+  }
+
+  _formatSleepRemain(ms) {
+    const total = Math.ceil(ms / 1000);
+    const m = Math.floor(total / 60);
+    const s = total % 60;
+    return `${m}:${String(s).padStart(2, '0')}`;
+  }
+
+  _sleepProgress() {
+    const m = this.settings.sleepMinutes | 0;
+    if (m <= 0 || !this._sleepEndsAt) return 0;
+    const total = m * 60 * 1000;
+    const left = this._sleepRemainingMs();
+    return Math.max(0, Math.min(1, 1 - (left / total)));
+  }
+
+  _patchSleepCountdown() {
+    const m = this.settings.sleepMinutes | 0;
+    if (m <= 0) return;
+    const left = this._sleepRemainingMs();
+    const label = this._formatSleepRemain(left);
+    const p = this._sleepProgress();
+    const html = `<span class="radio-sleep-ring" style="--sleep-p:${p.toFixed(4)}"></span><span class="radio-sleep-label">${this._escapeHtml(label)}</span>`;
+    if (!this._patchSheet(`.radio-sleep-pill[data-minutes="${m}"]`, html)) {
+      // Older hosts without patch: countdown appears on next full sheet open.
+    }
+  }
+
   _armSleep() {
     if (this.sleepTimer) {
       clearTimeout(this.sleepTimer);
       this.sleepTimer = null;
     }
+    if (this._sleepTick) {
+      clearInterval(this._sleepTick);
+      this._sleepTick = null;
+    }
     const m = this.settings.sleepMinutes | 0;
-    if (m <= 0) return;
+    if (m <= 0) {
+      this._sleepEndsAt = 0;
+      return;
+    }
+    this._sleepEndsAt = Date.now() + m * 60 * 1000;
     this.sleepTimer = setTimeout(() => {
       void this.stopRadio(true);
       this._notify(this._t('sleepDone'));
     }, m * 60 * 1000);
+    this._sleepTick = setInterval(() => {
+      this._patchSleepCountdown();
+    }, 1000);
+    this._patchSleepCountdown();
+  }
+
+  async _fadeVolume(audio, from, to, ms) {
+    if (!audio) return;
+    const token = ++this._fadeToken;
+    const steps = Math.max(6, Math.round(ms / 40));
+    const dt = ms / steps;
+    for (let i = 1; i <= steps; i += 1) {
+      if (token !== this._fadeToken) return;
+      try {
+        audio.volume = from + ((to - from) * (i / steps));
+      } catch {
+        return;
+      }
+      await new Promise((resolve) => setTimeout(resolve, dt));
+    }
+    try {
+      audio.volume = to;
+    } catch {
+      void 0;
+    }
+  }
+
+  _stopIcy() {
+    if (this._icyTimer) {
+      clearTimeout(this._icyTimer);
+      this._icyTimer = null;
+    }
+    if (this._icyAbort) {
+      try {
+        this._icyAbort.abort();
+      } catch {
+        void 0;
+      }
+      this._icyAbort = null;
+    }
+  }
+
+  _applyNowPlayingMeta(title) {
+    const next = String(title || '').replace(/\0/g, '').trim();
+    if (!next || next === this._nowPlayingMeta) return;
+    this._nowPlayingMeta = next;
+    this._updateHeader();
+    this._setMediaSession(this._currentStation());
+    this._patchSheet('.radio-now-tag', this._escapeHtml(next));
+  }
+
+  async _pollIcyOnce(url) {
+    const ctrl = new AbortController();
+    this._icyAbort = ctrl;
+    try {
+      const res = await fetch(url, {
+        method: 'GET',
+        cache: 'no-store',
+        signal: ctrl.signal,
+        headers: {
+          'Icy-MetaData': '1',
+          'User-Agent': 'CultivaRadio/2.6'
+        }
+      });
+      const metaInt = parseInt(res.headers.get('icy-metaint') || '0', 10);
+      if (!metaInt || !res.body || typeof res.body.getReader !== 'function') {
+        return false;
+      }
+      const reader = res.body.getReader();
+      let pending = new Uint8Array(0);
+      let needAudio = metaInt;
+      const deadline = Date.now() + 12000;
+      while (Date.now() < deadline) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        if (!value || !value.length) continue;
+        const merged = new Uint8Array(pending.length + value.length);
+        merged.set(pending, 0);
+        merged.set(value, pending.length);
+        pending = merged;
+        while (pending.length >= needAudio + 1) {
+          pending = pending.subarray(needAudio);
+          const metaLen = pending[0] * 16;
+          pending = pending.subarray(1);
+          if (pending.length < metaLen) {
+            needAudio = 0;
+            break;
+          }
+          if (metaLen > 0) {
+            const meta = new TextDecoder('utf-8').decode(pending.subarray(0, metaLen));
+            const m = meta.match(/StreamTitle='([^']*)'/i) || meta.match(/StreamTitle="([^"]*)"/i);
+            if (m && m[1]) {
+              this._applyNowPlayingMeta(m[1]);
+              try {
+                await reader.cancel();
+              } catch {
+                void 0;
+              }
+              return true;
+            }
+          }
+          pending = pending.subarray(metaLen);
+          needAudio = metaInt;
+        }
+        if (needAudio === 0 && pending.length > 0) {
+          needAudio = metaInt;
+        }
+      }
+      try {
+        await reader.cancel();
+      } catch {
+        void 0;
+      }
+      return false;
+    } catch {
+      return false;
+    } finally {
+      if (this._icyAbort === ctrl) {
+        this._icyAbort = null;
+      }
+    }
+  }
+
+  _scheduleIcy(url) {
+    this._stopIcy();
+    if (!url) return;
+    const run = async () => {
+      if (!this.settings.playing) return;
+      await this._pollIcyOnce(url);
+      if (!this.settings.playing) return;
+      this._icyTimer = setTimeout(() => {
+        void run();
+      }, 14000);
+    };
+    void run();
+  }
+
+  _teardownVizGraph() {
+    if (this._vizRaf) {
+      cancelAnimationFrame(this._vizRaf);
+      this._vizRaf = null;
+    }
+    try {
+      if (this._analyser) {
+        this._analyser.disconnect();
+      }
+    } catch {
+      void 0;
+    }
+    try {
+      if (this._mediaSource) {
+        this._mediaSource.disconnect();
+      }
+    } catch {
+      void 0;
+    }
+    this._analyser = null;
+    this._vizSilentFrames = 0;
+  }
+
+  _stopViz() {
+    if (this._vizRaf) {
+      cancelAnimationFrame(this._vizRaf);
+      this._vizRaf = null;
+    }
+    try {
+      if (this._analyser) {
+        this._analyser.disconnect();
+      }
+    } catch {
+      void 0;
+    }
+    this._analyser = null;
+    this._vizMode = 'off';
+    this._vizSilentFrames = 0;
+    // Keep MediaElementSource → destination so playback does not go silent.
+    if (this._mediaSource && this._audioCtx) {
+      try {
+        this._mediaSource.disconnect();
+        this._mediaSource.connect(this._audioCtx.destination);
+      } catch {
+        void 0;
+      }
+    }
+  }
+
+  _detachAudioGraph() {
+    this._teardownVizGraph();
+    try {
+      if (this._mediaSource) {
+        this._mediaSource.disconnect();
+      }
+    } catch {
+      void 0;
+    }
+    this._mediaSource = null;
+    this._wiredAudio = null;
+    this._vizMode = 'off';
+  }
+
+  _ensureAudioContext() {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    if (!this._audioCtx) {
+      try {
+        this._audioCtx = new AC();
+      } catch {
+        return null;
+      }
+    }
+    if (this._audioCtx.state === 'suspended') {
+      void this._audioCtx.resume();
+    }
+    return this._audioCtx;
+  }
+
+  _connectAnalyser(audio) {
+    if (this._vizRaf) {
+      cancelAnimationFrame(this._vizRaf);
+      this._vizRaf = null;
+    }
+    if (!this.settings.visualFx || !audio) {
+      this._stopViz();
+      return;
+    }
+    const ctx = this._ensureAudioContext();
+    if (!ctx) {
+      this._vizMode = 'decorative';
+      return;
+    }
+    try {
+      audio.crossOrigin = 'anonymous';
+      if (!this._mediaSource || this._wiredAudio !== audio) {
+        try {
+          if (this._mediaSource) {
+            this._mediaSource.disconnect();
+          }
+        } catch {
+          void 0;
+        }
+        this._mediaSource = ctx.createMediaElementSource(audio);
+        this._wiredAudio = audio;
+      } else {
+        try {
+          this._mediaSource.disconnect();
+        } catch {
+          void 0;
+        }
+      }
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 256;
+      analyser.smoothingTimeConstant = 0.72;
+      this._mediaSource.connect(analyser);
+      analyser.connect(ctx.destination);
+      this._analyser = analyser;
+      this._vizMode = 'live';
+      this._vizSilentFrames = 0;
+      this._ensureVizLoop();
+    } catch {
+      this._vizMode = 'decorative';
+      this._mediaSource = null;
+      this._wiredAudio = null;
+      this._analyser = null;
+    }
+  }
+
+  _renderVizBars(heights) {
+    const html = heights.map((h) => `<i style="height:${Math.max(6, Math.round(h))}%"></i>`).join('');
+    this._patchSheet('.radio-viz', html);
+  }
+
+  _ensureVizLoop() {
+    if (this._vizRaf) return;
+    if (this._vizMode !== 'live' || !this._analyser) return;
+    const bins = 24;
+    const data = new Uint8Array(this._analyser.frequencyBinCount);
+    const tick = () => {
+      this._vizRaf = null;
+      if (this._vizMode !== 'live' || !this._analyser || !this.settings.playing) {
+        return;
+      }
+      this._analyser.getByteFrequencyData(data);
+      let sum = 0;
+      const heights = [];
+      const step = Math.max(1, Math.floor(data.length / bins));
+      for (let i = 0; i < bins; i += 1) {
+        let v = 0;
+        const start = i * step;
+        for (let j = 0; j < step && start + j < data.length; j += 1) {
+          v += data[start + j];
+        }
+        v /= step;
+        sum += v;
+        heights.push(8 + (v / 255) * 92);
+      }
+      if (sum < 8) {
+        this._vizSilentFrames += 1;
+        if (this._vizSilentFrames > 90) {
+          this._teardownVizGraph();
+          // Passthrough so audio keeps playing; fall back to decorative Neo CSS.
+          if (this._mediaSource && this._audioCtx) {
+            try {
+              this._mediaSource.connect(this._audioCtx.destination);
+            } catch {
+              void 0;
+            }
+          }
+          this._vizMode = 'decorative';
+          this._refreshSheet();
+          return;
+        }
+      } else {
+        this._vizSilentFrames = 0;
+      }
+      this._renderVizBars(heights);
+      this._vizRaf = requestAnimationFrame(tick);
+    };
+    this._vizRaf = requestAnimationFrame(tick);
   }
 
   async onEnable() {
@@ -668,6 +1144,17 @@ class RadioPlugin {
     if (this.audio) {
       this.audio.volume = this.settings.volume;
     }
+    if (this.settings.playing && this.audio) {
+      if (this.settings.visualFx) {
+        if (!this.audio.crossOrigin) {
+          void this.playStation(this.settings.station, false);
+        } else {
+          this._connectAnalyser(this.audio);
+        }
+      } else {
+        this._stopViz();
+      }
+    }
     this._armSleep();
     await this.context.storage.set('settings', this.settings);
     if (this.settings.playing && prevStation !== this.settings.station) {
@@ -680,8 +1167,12 @@ class RadioPlugin {
 
   onDisable() {
     this._playId += 1;
-    void this._stopAudio();
+    this._fadeToken += 1;
+    this._stopIcy();
+    this._stopViz();
+    void this._stopAudio({ fade: false });
     this._clearMediaSession();
+    this._nowPlayingMeta = '';
     try {
       this.context.ui.setTrayTooltip?.('');
       this.context.ui.clearTrayItems?.();
@@ -692,6 +1183,11 @@ class RadioPlugin {
       clearTimeout(this.sleepTimer);
       this.sleepTimer = null;
     }
+    if (this._sleepTick) {
+      clearInterval(this._sleepTick);
+      this._sleepTick = null;
+    }
+    this._sleepEndsAt = 0;
   }
 
   _stationUrls(stationId) {
@@ -717,11 +1213,18 @@ class RadioPlugin {
     }
   }
 
-  async _stopAudio() {
+  async _stopAudio(opts) {
+    const fade = !opts || opts.fade !== false;
     await this._cancelPlayPromise();
     const audio = this.audio;
     this.audio = null;
+    this._stopIcy();
+    this._detachAudioGraph();
     if (!audio) return;
+    if (fade) {
+      const from = Number.isFinite(audio.volume) ? audio.volume : 0;
+      await this._fadeVolume(audio, from, 0, 240);
+    }
     try {
       audio.onerror = null;
       audio.onplay = null;
@@ -754,7 +1257,7 @@ class RadioPlugin {
     await this.context.storage.set('settings', this.settings);
 
     const playId = ++this._playId;
-    await this._stopAudio();
+    await this._stopAudio({ fade: true });
     if (playId !== this._playId) return;
 
     await this._tryPlayUrls(playId, stationId, station, urls, 0, notify);
@@ -779,12 +1282,16 @@ class RadioPlugin {
     }
 
     this._streamFailed = false;
-    await this._stopAudio();
+    await this._stopAudio({ fade: false });
     if (playId !== this._playId) return;
 
+    const targetVol = this.settings.volume;
     const audio = new Audio();
     audio.preload = 'none';
-    audio.volume = this.settings.volume;
+    if (this.settings.visualFx) {
+      audio.crossOrigin = 'anonymous';
+    }
+    audio.volume = 0;
     this.audio = audio;
 
     const isCurrent = () => playId === this._playId && this.audio === audio;
@@ -827,13 +1334,18 @@ class RadioPlugin {
       this._lastFailReason = null;
       this.settings.station = stationId;
       this.settings.playing = true;
+      this._connectAnalyser(audio);
+      await this._fadeVolume(audio, 0, targetVol, 280);
+      if (!isCurrent()) return;
       this._setMediaSession(station);
+      this._scheduleIcy(urls[index]);
       this._updateHeader();
       this._armSleep();
       if (notify !== false) {
         this._notify(`${this._t('playing')}: ${station.name}`);
       }
       await this.context.storage.set('settings', this.settings);
+      this._refreshSheet();
     };
 
     audio.addEventListener('error', () => {
@@ -869,7 +1381,9 @@ class RadioPlugin {
 
   async stopRadio(notify) {
     this._playId += 1;
-    await this._stopAudio();
+    this._fadeToken += 1;
+    this._nowPlayingMeta = '';
+    await this._stopAudio({ fade: true });
     this._clearMediaSession();
     this._streamFailed = false;
     this._lastFailReason = null;
@@ -880,6 +1394,11 @@ class RadioPlugin {
       clearTimeout(this.sleepTimer);
       this.sleepTimer = null;
     }
+    if (this._sleepTick) {
+      clearInterval(this._sleepTick);
+      this._sleepTick = null;
+    }
+    this._sleepEndsAt = 0;
     if (notify) {
       this._notify(this._t('stopped'));
     }
@@ -906,6 +1425,9 @@ class RadioPlugin {
 
   openRadioModal() {
     this.context.ui.openMainSheet(this._buildSheetHtml());
+    if (this._vizMode === 'live' && this.settings.visualFx) {
+      this._ensureVizLoop();
+    }
   }
 
   _genreClass(station) {
@@ -920,16 +1442,30 @@ class RadioPlugin {
     const customVal = this._escapeAttr(this.settings.customUrl || '');
     const station = this._currentStation();
     const stationName = station ? station.name : this._t('radio');
-    const stationTag = station ? station.tag : '';
+    const stationTag = this._nowPlayingMeta || (station ? station.tag : '');
     const playing = !!this.settings.playing;
     const visualFx = this.settings.visualFx === true;
     const genreCls = this._genreClass(station);
-    const neoCls = visualFx ? ` radio-neo ${genreCls}` : '';
+    const liveViz = visualFx && this._vizMode === 'live';
+    const neoCls = visualFx && !liveViz ? ` radio-neo ${genreCls}` : '';
     const playingCls = playing && visualFx ? ' is-playing' : '';
+    const vizCls = liveViz ? ' has-live-viz' : '';
     const statusText = this._streamFailed
       ? this._failMessage()
       : (playing ? this._t('nowPlaying') : this._t('radio'));
     const filter = String(this._stationFilter || '').trim().toLowerCase();
+    const sleepLeft = sleep > 0 ? this._sleepRemainingMs() : 0;
+    const sleepLabel = sleep > 0 ? this._formatSleepRemain(sleepLeft || sleep * 60 * 1000) : '';
+    const sleepP = this._sleepProgress();
+    const vizBars = Array.from({ length: 24 }, () => '<i style="height:12%"></i>').join('');
+
+    const sleepPill = (minutes, label) => {
+      const active = sleep === minutes;
+      if (!active || minutes === 0) {
+        return `<button type="button" class="cultiva-pill${active ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="${minutes}">${label}</button>`;
+      }
+      return `<button type="button" class="cultiva-pill radio-sleep-pill is-active" data-cultiva-act="sleep" data-minutes="${minutes}"><span class="radio-sleep-ring" style="--sleep-p:${sleepP.toFixed(4)}"></span><span class="radio-sleep-label">${this._escapeHtml(sleepLabel)}</span></button>`;
+    };
 
     const rows = Object.entries(this.stations)
       .filter(([, s]) => {
@@ -962,7 +1498,7 @@ class RadioPlugin {
 
     return `
 <div class="cultiva-sheet-overlay" data-cultiva-act="close"></div>
-<div class="cultiva-sheet-card cultiva-sheet-card--radio${neoCls}${playingCls}">
+<div class="cultiva-sheet-card cultiva-sheet-card--radio${neoCls}${playingCls}${vizCls}">
   <div class="cultiva-sheet-grabber"></div>
   <div class="cultiva-sheet-head">
     <div>
@@ -976,25 +1512,22 @@ class RadioPlugin {
       <div class="radio-now-status">${this._escapeHtml(statusText)}</div>
       <div class="radio-now-title">${this._escapeHtml(stationName)}</div>
       <div class="radio-now-tag">${this._escapeHtml(stationTag)}</div>
+      ${liveViz ? `<div class="radio-viz" aria-hidden="true">${vizBars}</div>` : ''}
     </div>
     <div class="radio-transport">
       <button type="button" class="radio-ctrl radio-ctrl--side" data-cultiva-act="prev" aria-label="${this._escapeAttr(this._t('prev'))}">‹</button>
       <button type="button" class="radio-ctrl radio-ctrl--primary" data-cultiva-act="toggle" aria-label="${this._escapeAttr(playing ? this._t('pause') : this._t('play'))}">${playing ? '❚❚' : '▶'}</button>
       <button type="button" class="radio-ctrl radio-ctrl--side" data-cultiva-act="next" aria-label="${this._escapeAttr(this._t('next'))}">›</button>
     </div>
-    <div class="radio-toolbar">
-      <button type="button" class="cultiva-sheet-secondary" data-cultiva-act="stop">${this._t('stop')}</button>
-      <button type="button" class="cultiva-sheet-secondary" data-cultiva-act="toggleVisualFx">${visualFx ? this._t('visualFxOn') : this._t('visualFxOff')}</button>
-    </div>
     <label class="cultiva-field-label">${this._t('output')}</label>
     <input type="range" name="vol" min="0" max="1" step="0.03" value="${this.settings.volume}" data-cultiva-change-act="volume" />
     <div class="cultiva-range-meta"><span>${vol}%</span></div>
     <label class="cultiva-field-label">${this._t('sleep')}</label>
     <div class="cultiva-pill-row">
-      <button type="button" class="cultiva-pill${sleep === 0 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="0">${this._t('off')}</button>
-      <button type="button" class="cultiva-pill${sleep === 15 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="15">15m</button>
-      <button type="button" class="cultiva-pill${sleep === 30 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="30">30m</button>
-      <button type="button" class="cultiva-pill${sleep === 60 ? ' is-active' : ''}" data-cultiva-act="sleep" data-minutes="60">60m</button>
+      ${sleepPill(0, this._t('off'))}
+      ${sleepPill(15, '15m')}
+      ${sleepPill(30, '30m')}
+      ${sleepPill(60, '60m')}
     </div>
     <label class="cultiva-field-label">${this._t('customUrl')}</label>
     <div class="radio-custom-row">
@@ -1022,12 +1555,6 @@ class RadioPlugin {
       this.settings.sleepMinutes = parseInt(payload.minutes, 10) || 0;
       await this.context.storage.set('settings', this.settings);
       this._armSleep();
-      this._refreshSheet();
-      return;
-    }
-    if (action === 'toggleVisualFx') {
-      this.settings.visualFx = !this.settings.visualFx;
-      await this.context.storage.set('settings', this.settings);
       this._refreshSheet();
       return;
     }
@@ -1100,11 +1627,6 @@ class RadioPlugin {
     }
     if (action === 'next') {
       await this._stepStation(1);
-      return;
-    }
-    if (action === 'stop') {
-      await this.stopRadio(true);
-      this._refreshSheet();
       return;
     }
     if (action === 'refreshSheet') {

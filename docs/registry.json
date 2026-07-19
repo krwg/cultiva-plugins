@@ -1,6 +1,6 @@
 {
   "name": "Cultiva Plugins Registry",
-  "version": "3.5.9",
+  "version": "3.6.0",
   "plugins": [
     {
       "id": "weather",
@@ -104,12 +104,12 @@
     {
       "id": "radio",
       "name": "Radio Widget",
-      "version": "2.5.1",
+      "version": "2.6.0",
       "author": "krwg",
-      "description": "When silence gets in the way and playlists feel tired, turn on Music. The plugin streams trusted SomaFM channels right from your garden. Adjust volume, set a sleep timer, and enjoy a glassy minimal interface. Whether you are focusing, reading, or setting a mood — let background sound become part of your ritual.",
+      "description": "When silence gets in the way and playlists feel tired, turn on Music. The plugin streams 33 curated channels — synthwave, retro rave, SomaFM, and Russian live — with ICY now-playing, live analyser Neo, sleep countdown, and crossfade.",
       "icon": "",
       "baseUrl": "https://raw.githubusercontent.com/krwg/cultiva-plugins/main/radio",
-      "minAppVersion": "2.3.2",
+      "minAppVersion": "1.7.0",
       "permissions": [
         "network",
         "storage",
@@ -129,22 +129,22 @@
         "en": {
           "name": "Music",
           "tagline": "A background stream that sets the tone.",
-          "description": "Internet radio with SomaFM, custom .m3u/.pls streams, stream history, and tray now-playing."
+          "description": "33 stations with ICY now-playing, live Neo analyser, sleep countdown, crossfade, and custom .m3u/.pls streams."
         },
         "ru": {
           "name": "Музыка",
           "tagline": "Фоновый поток, который настраивает.",
-          "description": "Интернет-радио SomaFM, свои потоки (.m3u/.pls), история URL и текущая станция в трее."
+          "description": "33 станции, ICY «сейчас играет», живой Нео-анализатор, таймер сна с отсчётом, кроссфейд и свои потоки."
         }
       },
       "sha256": {
-        "manifest.json": "6485e4a12d7ed7669b7f6a07e71524b5f74dc77f09e5be15aebeb464ee133773",
-        "index.js": "741a995c880404149d7c89d7c3d0f1762258c87b708dbb55315e853bd7ce516e",
+        "manifest.json": "0879119affa5f905950269e0078332c7b06cd2b0b56712a6151c26a753df80c1",
+        "index.js": "8ddf19b06c9694d2c26af94f3881a9b0ca41bfadfd99991c74da55a179e42da7",
         "cultiva-sheet-base.css": "25fdcaf0029bec215bcddc9596b3d5eac6a92cb8a7cae95fa10f03e0e9c6f288",
-        "styles.css": "2400154d81c06452ed792609aa45de4e99435a5a6265329e4058ad07e64025a3"
+        "styles.css": "9512892666b30771ee45b2cac98bb344befdeaea1cde87deb9ce28d8483e6f95"
       },
       "storeFlow": "direct",
-      "lastUpdated": "2026-07-19T02:55:00+03:00",
+      "lastUpdated": "2026-07-19T03:20:00+03:00",
       "changelog": "CHANGELOG.md",
       "featured": true,
       "screenshots": [],
